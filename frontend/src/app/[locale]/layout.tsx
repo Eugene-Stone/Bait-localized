@@ -1,4 +1,6 @@
 import type { Metadata, Viewport } from 'next';
+import { notFound } from 'next/navigation';
+
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import ButtonScrollTop from '@/components/layout/ButtonScrollTop';
@@ -9,9 +11,10 @@ import ThemeScript from '@/components/layout/ThemeScript';
 import LoadingContextProvider from '@/context/LoadingContext';
 import ThemeContextProvider from '@/context/ThemeContext';
 
-import '../styles/style.scss';
-import '../styles/dark.scss';
+import '../../styles/style.scss';
+import '../../styles/dark.scss';
 import ProviderRedux from '@/redux/ProviderRedux';
+import { Locale, locales } from '@/i18n/config';
 
 const themeInitializerScript = `
   (function() {
@@ -33,6 +36,33 @@ export const viewport: Viewport = {
 	width: 'device-width',
 	initialScale: 1,
 };
+
+/**
+ * Какие локали существуют в приложении.
+ *
+ * Нужно для генерации маршрутов:
+ *
+ * /ru
+ * /en
+ */
+export function generateStaticParams() {
+	return locales.map((locale) => ({
+		locale,
+	}));
+}
+
+/**
+ * Проверяем locale, который пришел из URL.
+ */
+export async function resolveLocale(params: Promise<{ locale: string }>): Promise<Locale> {
+	const { locale } = await params;
+
+	if (!locales.includes(locale as Locale)) {
+		notFound();
+	}
+
+	return locale as Locale;
+}
 
 export const metadata: Metadata = {
 	metadataBase: new URL(FRONTEND_URL),
@@ -72,14 +102,18 @@ export const metadata: Metadata = {
 	},
 };
 
-export default function RootLayout({
+export default async function RootLayout({
 	children,
+	params,
 }: Readonly<{
 	children: React.ReactNode;
+	params: Promise<{ locale: Locale }>;
 }>) {
+	const locale = await resolveLocale(params);
+
 	return (
 		// suppressHydrationWarning - позволяет атрибутам элемента <html> изменяться внешними скриптами (до гидратации) и их не нужно сверять.
-		<html lang="ru" data-scroll-behavior="smooth" suppressHydrationWarning>
+		<html lang={locale} data-scroll-behavior="smooth" suppressHydrationWarning>
 			{/* <head>
 				<ThemeScript />
 			</head> */}

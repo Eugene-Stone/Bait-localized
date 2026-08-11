@@ -1,0 +1,12 @@
+{
+	"header": {
+		"courses": "Курсы",
+		"blog": "Блог",
+		"contacts": "Контакты"
+	},
+
+	"buttons": {
+		"readMore": "Подробнее",
+		"send": "Отправить"
+	}
+}

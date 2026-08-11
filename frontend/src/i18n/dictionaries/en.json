@@ -1,0 +1,12 @@
+{
+	"header": {
+		"courses": "Courses",
+		"blog": "Blog",
+		"contacts": "Contacts"
+	},
+
+	"buttons": {
+		"readMore": "Read more",
+		"send": "Send"
+	}
+}
