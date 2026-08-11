@@ -29,6 +29,7 @@
     "strapi-5-sitemap-plugin": "^1.0.8",
     "strapi-code-editor-custom-field": "^1.1.0",
     "strapi-dz-component-duplicator": "^0.1.6",
+    "strapi-llm-translator": "^0.11.0",
     "strapi-plugin-content-manager-organizer": "^2.0.1",
     "strapi-plugin-gen-types": "^0.0.16",
     "strapi-plugin-navigation": "^3.3.7",
