@@ -1,0 +1,54 @@
+{
+  "name": "backend",
+  "version": "0.1.0",
+  "private": true,
+  "description": "A Strapi application",
+  "scripts": {
+    "build": "strapi build",
+    "console": "strapi console",
+    "deploy": "strapi deploy",
+    "dev": "strapi develop",
+    "develop": "strapi develop",
+    "start": "strapi start",
+    "strapi": "strapi",
+    "upgrade": "npx @strapi/upgrade latest",
+    "upgrade:dry": "npx @strapi/upgrade latest --dry"
+  },
+  "dependencies": {
+    "@_sh/strapi-plugin-ckeditor": "^7.1.1",
+    "@strapi/plugin-cloud": "5.50.1",
+    "@strapi/plugin-documentation": "^5.50.1",
+    "@strapi/plugin-users-permissions": "5.50.1",
+    "@strapi/provider-email-nodemailer": "^5.50.1",
+    "@strapi/strapi": "5.50.1",
+    "better-sqlite3": "12.8.0",
+    "monaco-editor": "^0.56.0",
+    "react": "^18.0.0",
+    "react-dom": "^18.0.0",
+    "react-router-dom": "^6.0.0",
+    "strapi-5-sitemap-plugin": "^1.0.8",
+    "strapi-code-editor-custom-field": "^1.1.0",
+    "strapi-dz-component-duplicator": "^0.1.6",
+    "strapi-plugin-content-manager-organizer": "^2.0.1",
+    "strapi-plugin-gen-types": "^0.0.16",
+    "strapi-plugin-navigation": "^3.3.7",
+    "strapi-plugin-preview-button": "^3.0.2",
+    "strapi-plugin-seo-vitals": "^1.0.4",
+    "styled-components": "^6.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20",
+    "@types/react": "^18",
+    "@types/react-dom": "^18",
+    "typescript": "^5",
+    "vite-plugin-monaco-editor": "^1.1.0"
+  },
+  "engines": {
+    "node": ">=20.0.0 <=26.x.x",
+    "npm": ">=6.0.0"
+  },
+  "strapi": {
+    "uuid": "470f89a1-7098-4b07-a973-9ba11c73de50",
+    "installId": "59637fefe2c2c3fb30fca542ef31475f5b2bbc01cc4413ebbf41f6bd228fa9e2"
+  }
+}

@@ -1,0 +1,36 @@
+// ============================================
+// NEOBRUTALISM DESIGN SYSTEM
+// ============================================
+
+// Variables
+$tr: transparent;
+
+$nb-black: #000000;
+$nb-white: #ffffff;
+$nb-yellow: #FFD700;
+$nb-pink: #FF6B6B;
+$nb-blue: #4ECDC4;
+$nb-purple: #A78BFA;
+$nb-green: #4ADE80;
+$nb-orange: #FB923C;
+$nb-red: #EF4444;
+
+$nb-shadow-sm: 4px 4px 0px $nb-black;
+$nb-shadow-md: 6px 6px 0px $nb-black;
+$nb-shadow-lg: 8px 8px 0px $nb-black;
+$nb-shadow-hover: 2px 2px 0px $nb-black;
+
+$nb-border: 3px solid $nb-black;
+$nb-border-thick: 4px solid $nb-black;
+
+@import url('https://fonts.googleapis.com/css2?family=Kurale&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&family=JetBrains+Mono:wght@100;200;300;400;500;600;700;800&display=swap');
+
+$font-mono: 'Kurale', serif;
+$font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+
+// $font-mono: 'Courier New', 'IBM Plex Mono', 'JetBrains Mono', monospace;
+// $font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+
+$nb-transition: 0.15s ease;
+$nb-bounce: cubic-bezier(0.68, -0.55, 0.265, 1.55);

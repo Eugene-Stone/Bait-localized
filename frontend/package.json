@@ -1,0 +1,36 @@
+{
+	"name": "frontend",
+	"version": "0.1.0",
+	"private": true,
+	"scripts": {
+		"dev": "next dev -H 0.0.0.0",
+		"devCustom": "next dev -p 5173",
+		"build": "next build",
+		"start": "next dev",
+		"lint": "eslint"
+	},
+	"dependencies": {
+		"@radix-ui/react-dialog": "^1.1.23",
+		"@reduxjs/toolkit": "^2.12.0",
+		"next": "16.2.10",
+		"qs": "^6.15.3",
+		"react": "19.2.4",
+		"react-dom": "19.2.4",
+		"react-hook-form": "^7.82.0",
+		"react-redux": "^9.3.0",
+		"react-scroll": "^1.9.3",
+		"swiper": "^14.0.6",
+		"yet-another-react-lightbox": "^3.32.1"
+	},
+	"devDependencies": {
+		"@types/node": "^20",
+		"@types/qs": "^6.15.1",
+		"@types/react": "^19",
+		"@types/react-dom": "^19",
+		"@types/react-scroll": "^1.8.10",
+		"eslint": "^9",
+		"eslint-config-next": "16.2.10",
+		"sass": "^1.101.0",
+		"typescript": "^5"
+	}
+}

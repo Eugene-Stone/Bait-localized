@@ -1,0 +1,268 @@
+'use client';
+
+import { BACKEND_URL } from '@/constants';
+import { useLoadingContext } from '@/context/LoadingContext';
+import { Course } from '@backend-types/course';
+import { Direction } from '@backend-types/direction';
+import { Level } from '@backend-types/level';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { useState } from 'react';
+
+type Props = {
+	filters: {
+		directions: Direction[];
+		levels: Level[];
+		allCourses: Course[];
+	};
+};
+
+const sortList = [
+	{
+		title: 'Сначала новые',
+		value: 'createdAt:desc',
+	},
+	{
+		title: 'Сначала старые',
+		value: 'createdAt:asc',
+	},
+	{
+		title: 'Сначала дешевле',
+		value: 'price:asc',
+	},
+	{
+		title: 'Сначала дороже',
+		value: 'price:desc',
+	},
+];
+
+export default function CoursesSidebar({ filters }: Props) {
+	const pathname = usePathname();
+	const router = useRouter();
+	const searchParams = useSearchParams();
+	const { startLoading } = useLoadingContext();
+
+	const { directions, levels, allCourses = [] } = filters;
+
+	// Инициализация состояний из URL
+	const [search, setSearch] = useState(searchParams.get('search') || '');
+	const sorting = searchParams.get('sort') || sortList[0].value;
+	const directionsActive = searchParams.getAll('direction');
+	const levelsActive = searchParams.getAll('level');
+
+	// Функция обновления URL
+	const updateQueryParams = (updates: Record<string, string | string[] | null>) => {
+		const params = new URLSearchParams(searchParams.toString());
+
+		// При изменении фильтров сбрасываем страницу на первую
+		params.delete('page');
+
+		Object.entries(updates).forEach(([key, value]) => {
+			params.delete(key);
+
+			if (Array.isArray(value)) {
+				value.forEach((val) => {
+					if (val) params.append(key, val);
+				});
+			} else if (value) {
+				params.set(key, value);
+			}
+		});
+
+		startLoading();
+		router.push(`${pathname}?${params.toString()}`, {
+			scroll: false,
+		});
+	};
+
+	// Обработчик чекбоксов
+	const handleCheckboxChange = (key: 'direction' | 'level', value: string, checked: boolean) => {
+		const currentValues = key === 'direction' ? directionsActive : levelsActive;
+		const updatedValues = checked
+			? [...currentValues, value]
+			: currentValues.filter((item) => item !== value);
+
+		updateQueryParams({ [key]: updatedValues });
+	};
+
+	// Обработчик отправки формы поиска
+	const handleSearchSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+		e.preventDefault();
+		updateQueryParams({ search: search.trim() || null });
+	};
+
+	// 1. Фильтруем курсы по поисковому запросу (если есть)
+	const searchFilteredCourses = allCourses.filter((course) => {
+		if (!search) return true;
+		return course.title?.toLowerCase().includes(search.toLowerCase());
+	});
+
+	// 2. Функция подсчета доступных курсов для направления (с учетом выбранных levels)
+	const getDirectionCount = (directionSlug: string) => {
+		return searchFilteredCourses.filter((course) => {
+			const matchesDirection = course.direction?.slug === directionSlug;
+			const matchesLevel =
+				levelsActive.length === 0 ||
+				(course.level?.slug && levelsActive.includes(course.level.slug));
+
+			return matchesDirection && matchesLevel;
+		}).length;
+	};
+
+	// 3. Функция подсчета доступных курсов для уровня (с учетом выбранных directions)
+	const getLevelCount = (levelSlug: string) => {
+		return searchFilteredCourses.filter((course) => {
+			const matchesLevel = course.level?.slug === levelSlug;
+			const matchesDirection =
+				directionsActive.length === 0 ||
+				(course.direction?.slug && directionsActive.includes(course.direction.slug));
+
+			return matchesLevel && matchesDirection;
+		}).length;
+	};
+
+	// Проверяем, активен ли хотя бы один фильтр (поиск, направления, уровень или нестиндартная сортировка)
+	const hasActiveFilters =
+		Boolean(searchParams.get('search')) ||
+		directionsActive.length > 0 ||
+		levelsActive.length > 0 ||
+		Boolean(searchParams.get('sort'));
+
+	// Функция полного сброса
+	const handleResetFilters = () => {
+		setSearch('');
+		startLoading();
+		// Переходим на чистый URL без query-параметров
+		router.push(pathname, { scroll: false });
+	};
+
+	return (
+		<aside className="nw-blog-sidebar">
+			<div className="nw-widget">
+				<h3 className="nw-widget-title">Поиск</h3>
+				<form className="nw-search-form" onSubmit={handleSearchSubmit}>
+					<input
+						className="nw-search-input"
+						placeholder="Поиск по курсам..."
+						type="text"
+						name="search"
+						value={search}
+						onChange={(e) => setSearch(e.target.value)}
+					/>
+					<button className="nw-search-button" type="submit">
+						Найти
+					</button>
+				</form>
+			</div>
+			<div className="nw-widget">
+				<h3 className="nw-widget-title">Сортировка</h3>
+				<select
+					className="nw-sort-select"
+					value={sorting}
+					onChange={(e) => updateQueryParams({ sort: e.target.value })}>
+					{sortList.map((item, i) => {
+						return (
+							<option key={i} value={item.value}>
+								{item.title}
+							</option>
+						);
+					})}
+				</select>
+			</div>
+			<div className="nw-widget">
+				<h3 className="nw-widget-title">Направления</h3>
+
+				{directions && (
+					<ul className="nw-filter-list">
+						{directions.map((filter, i) => {
+							if (!filter.slug) return null;
+							const count = getDirectionCount(filter.slug);
+
+							// Если с текущими фильтрами курсов 0 — можно не рендерить или дизейблить
+							// if (count === 0 && !directionsActive.includes(filter.slug)) return null;
+
+							return (
+								<li key={i}>
+									<label className="nw-filter-label">
+										<input
+											className="nw-filter-checkbox"
+											type="checkbox"
+											value={filter.slug}
+											checked={directionsActive.includes(filter.slug!)}
+											disabled={
+												count === 0 &&
+												!directionsActive.includes(filter.slug)
+											}
+											onChange={(e) =>
+												handleCheckboxChange(
+													'direction',
+													filter.slug!,
+													e.target.checked,
+												)
+											}
+										/>
+										<span>
+											{filter.title} ({count})
+										</span>
+									</label>
+								</li>
+							);
+						})}
+					</ul>
+				)}
+			</div>
+			<div className="nw-widget">
+				<h3 className="nw-widget-title">Уровень</h3>
+
+				{levels && (
+					<ul className="nw-filter-list">
+						{levels.map((filter, i) => {
+							if (!filter.slug) return null;
+							const count = getLevelCount(filter.slug);
+
+							// Если с текущими фильтрами курсов 0 — можно не рендерить или дизейблить
+							// if (count === 0 && !levelsActive.includes(filter.slug)) return null;
+
+							return (
+								<li key={i}>
+									<label className="nw-filter-label">
+										<input
+											className="nw-filter-checkbox"
+											type="checkbox"
+											value={filter.slug}
+											checked={levelsActive.includes(filter.slug!)}
+											disabled={
+												count === 0 &&
+												!directionsActive.includes(filter.slug)
+											}
+											onChange={(e) =>
+												handleCheckboxChange(
+													'level',
+													filter.slug!,
+													e.target.checked,
+												)
+											}
+										/>
+										<span>
+											{filter.title} ({count})
+										</span>
+									</label>
+								</li>
+							);
+						})}
+					</ul>
+				)}
+			</div>
+
+			{hasActiveFilters && (
+				<div className="nw-widget">
+					<button
+						type="button"
+						className="btn nw-reset-button"
+						onClick={handleResetFilters}>
+						Сбросить все фильтры
+					</button>
+				</div>
+			)}
+		</aside>
+	);
+}
