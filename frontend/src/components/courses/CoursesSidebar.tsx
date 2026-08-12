@@ -2,6 +2,8 @@
 
 import { BACKEND_URL } from '@/constants';
 import { useLoadingContext } from '@/context/LoadingContext';
+import { Locale } from '@/i18n/config';
+import { Dictionary, getDictionary } from '@/i18n/getDictionary';
 import { Course } from '@backend-types/course';
 import { Direction } from '@backend-types/direction';
 import { Level } from '@backend-types/level';
@@ -9,6 +11,7 @@ import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useState } from 'react';
 
 type Props = {
+	dict: Dictionary;
 	filters: {
 		directions: Direction[];
 		levels: Level[];
@@ -16,32 +19,32 @@ type Props = {
 	};
 };
 
-const sortList = [
-	{
-		title: 'Сначала новые',
-		value: 'createdAt:desc',
-	},
-	{
-		title: 'Сначала старые',
-		value: 'createdAt:asc',
-	},
-	{
-		title: 'Сначала дешевле',
-		value: 'price:asc',
-	},
-	{
-		title: 'Сначала дороже',
-		value: 'price:desc',
-	},
-];
-
-export default function CoursesSidebar({ filters }: Props) {
+export default function CoursesSidebar({ dict, filters }: Props) {
 	const pathname = usePathname();
 	const router = useRouter();
 	const searchParams = useSearchParams();
 	const { startLoading } = useLoadingContext();
 
 	const { directions, levels, allCourses = [] } = filters;
+
+	const sortList = [
+		{
+			title: dict.courses.sorting.newFirst,
+			value: 'createdAt:desc',
+		},
+		{
+			title: dict.courses.sorting.oldFirst,
+			value: 'createdAt:asc',
+		},
+		{
+			title: dict.courses.sorting.cheaperFirst,
+			value: 'price:asc',
+		},
+		{
+			title: dict.courses.sorting.expensiveFirst,
+			value: 'price:desc',
+		},
+	];
 
 	// Инициализация состояний из URL
 	const [search, setSearch] = useState(searchParams.get('search') || '');
@@ -138,23 +141,23 @@ export default function CoursesSidebar({ filters }: Props) {
 	return (
 		<aside className="nw-blog-sidebar">
 			<div className="nw-widget">
-				<h3 className="nw-widget-title">Поиск</h3>
+				<h3 className="nw-widget-title">{dict.titles.search}</h3>
 				<form className="nw-search-form" onSubmit={handleSearchSubmit}>
 					<input
 						className="nw-search-input"
-						placeholder="Поиск по курсам..."
+						placeholder={dict.courses.searchPlaceholder}
 						type="text"
 						name="search"
 						value={search}
 						onChange={(e) => setSearch(e.target.value)}
 					/>
 					<button className="nw-search-button" type="submit">
-						Найти
+						{dict.buttons.search}
 					</button>
 				</form>
 			</div>
 			<div className="nw-widget">
-				<h3 className="nw-widget-title">Сортировка</h3>
+				<h3 className="nw-widget-title">{dict.titles.sort}</h3>
 				<select
 					className="nw-sort-select"
 					value={sorting}
@@ -169,7 +172,7 @@ export default function CoursesSidebar({ filters }: Props) {
 				</select>
 			</div>
 			<div className="nw-widget">
-				<h3 className="nw-widget-title">Направления</h3>
+				<h3 className="nw-widget-title">{dict.titles.direction}</h3>
 
 				{directions && (
 					<ul className="nw-filter-list">
@@ -211,7 +214,7 @@ export default function CoursesSidebar({ filters }: Props) {
 				)}
 			</div>
 			<div className="nw-widget">
-				<h3 className="nw-widget-title">Уровень</h3>
+				<h3 className="nw-widget-title">{dict.titles.level}</h3>
 
 				{levels && (
 					<ul className="nw-filter-list">
@@ -259,7 +262,7 @@ export default function CoursesSidebar({ filters }: Props) {
 						type="button"
 						className="btn nw-reset-button"
 						onClick={handleResetFilters}>
-						Сбросить все фильтры
+						{dict.buttons.resetFilters}
 					</button>
 				</div>
 			)}

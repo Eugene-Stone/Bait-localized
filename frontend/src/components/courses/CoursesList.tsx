@@ -4,8 +4,15 @@ import Image from 'next/image';
 import { Course } from '@backend-types/course';
 import { BACKEND_URL } from '@/constants';
 import { imageSrcSet } from '@/utils/imageSrcSet';
+import { Locale } from '@/i18n/config';
+import { Dictionary } from '@/i18n/getDictionary';
 
-export default function CourseList({ courses }: { courses: Course[] }) {
+type Props = {
+	locale: Locale;
+	dict: Dictionary;
+	courses: Course[];
+};
+export default function CourseList({ locale, dict, courses }: Props) {
 	return (
 		<main className="nw-articles-grid">
 			{courses.map((course) => {
@@ -18,7 +25,9 @@ export default function CourseList({ courses }: { courses: Course[] }) {
 
 				return (
 					<article key={course.slug} className="nw-article-card">
-						<Link className="nw-article-img-wrapper" href={`/courses/${course.slug}`}>
+						<Link
+							className="nw-article-img-wrapper"
+							href={`/${locale}/courses/${course.slug}`}>
 							<picture>
 								{srcSetString && (
 									<source
@@ -48,7 +57,7 @@ export default function CourseList({ courses }: { courses: Course[] }) {
 										fontWeight: 900,
 										fontSize: 16,
 									}}>
-									{course.price} грн
+									{course.price} {dict.courses.currency}
 								</span>
 								<span style={{ marginLeft: 12, fontSize: 13 }}>
 									• {course.duration} •{' '}
@@ -57,11 +66,15 @@ export default function CourseList({ courses }: { courses: Course[] }) {
 							</div>
 
 							<h3 className="nw-article-card-title">
-								<Link href={`/courses/${course.slug}`}>{course.title}</Link>
+								<Link href={`/${locale}/courses/${course.slug}`}>
+									{course.title}
+								</Link>
 							</h3>
 							<p className="nw-article-excerpt">{course.description}</p>
-							<Link className="nw-article-more" href={`/courses/${course.slug}`}>
-								Подробнее о курсе
+							<Link
+								className="nw-article-more"
+								href={`/${locale}/courses/${course.slug}`}>
+								{dict.courses.readMore}
 							</Link>
 						</div>
 					</article>

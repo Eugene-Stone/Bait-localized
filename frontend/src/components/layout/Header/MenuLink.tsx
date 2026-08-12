@@ -21,7 +21,7 @@ export default function MenuLink({ className, menuItem, children, locale }: Prop
 	return (
 		// <li className={pathname === menuItem.path ? 'active-li' : ''}>
 		<li className={isActive ? 'active-li' : ''}>
-			<Link className={className} href={`/${locale}/${menuItem.path}`}>
+			<Link className={className} href={`/${locale}${menuItem.path}`}>
 				{children}
 			</Link>
 		</li>

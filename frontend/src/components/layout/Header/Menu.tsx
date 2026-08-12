@@ -40,10 +40,16 @@ export default function Menu({ menu, locale }: Props) {
 					})}
 
 					<li>
-						<Link style={{ zoom: 0.75 }} href="/ru">
+						<Link
+							className={locale === 'ru' ? 'active-lang' : ''}
+							style={{ zoom: 0.75 }}
+							href="/ru">
 							RU
 						</Link>
-						<Link style={{ zoom: 0.75 }} href="/en">
+						<Link
+							className={locale === 'en' ? 'active-lang' : ''}
+							style={{ zoom: 0.75 }}
+							href="/en">
 							EN
 						</Link>
 					</li>

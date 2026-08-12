@@ -15,14 +15,16 @@ import { getCourseBySlug } from '@/api/api-server';
 import Comment from '@/components/Comment';
 import CommentForm from '@/components/Comment/CommentForm';
 import { Media } from '@backend-types/media';
+import { Locale } from '@/i18n/config';
+import { getDictionary } from '@/i18n/getDictionary';
 
 export async function generateMetadata({
 	params,
 }: {
-	params: Promise<{ slug: string }>;
+	params: Promise<{ locale: Locale; slug: string }>;
 }): Promise<Metadata> {
-	const { slug } = await params;
-	const dataPage = await getCourseBySlug(slug);
+	const { locale, slug } = await params;
+	const dataPage = await getCourseBySlug(locale, slug);
 
 	const page = dataPage.data?.[0];
 
@@ -84,7 +86,7 @@ export async function generateMetadata({
 			siteName: SITE_TITLE,
 			// eslint-disable-next-line
 			type: (ogType as any) || 'website',
-			locale: 'ru_RU',
+			locale: locale === 'ru' ? 'ru_RU' : locale === 'en' ? 'en_EN' : 'ru_RU',
 			images: [
 				{
 					url: ogImageUrl,
@@ -103,11 +105,15 @@ export async function generateMetadata({
 	};
 }
 
-export default async function CourseBySlug({ params }: { params: Promise<{ slug: string }> }) {
-	const { slug } = await params;
+export default async function CourseBySlug({
+	params,
+}: {
+	params: Promise<{ locale: Locale; slug: string }>;
+}) {
+	const { locale, slug } = await params;
 	const user = await getMe();
 
-	const dataPage = await getCourseBySlug(slug);
+	const dataPage = await getCourseBySlug(locale, slug);
 	const page: Course = dataPage.data?.[0];
 
 	if (!page) {
@@ -118,6 +124,8 @@ export default async function CourseBySlug({ params }: { params: Promise<{ slug:
 	const { srcSetString } = imageSrcSet(page.image);
 
 	const structuredData = page?.seo?.structuredData;
+
+	const dict = await getDictionary(locale);
 
 	return (
 		<>
@@ -134,7 +142,8 @@ export default async function CourseBySlug({ params }: { params: Promise<{ slug:
 				<article className="nw-post-container">
 					<header className="nw-post-header">
 						<div className="nw-post-meta">
-							Опубликовано: {formatDate(page.createdAt!)} • {page.direction?.title}
+							{dict.courses.published}: {formatDate(locale, page.createdAt!)} •{' '}
+							{page.direction?.title}
 						</div>
 						<h1 className="nw-post-title">{title}</h1>
 					</header>
@@ -161,7 +170,7 @@ export default async function CourseBySlug({ params }: { params: Promise<{ slug:
 
 					<RichText className="nw-post-body">{text}</RichText>
 
-					<h3 className="nw-comments-title">Обсуждение курса</h3>
+					<h3 className="nw-comments-title">{dict.courses.discussion}</h3>
 					{comments && (
 						<ul className="nw-comments-list">
 							{comments.map((comment, i) => {
@@ -191,7 +200,7 @@ export default async function CourseBySlug({ params }: { params: Promise<{ slug:
 
 					<footer className="nw-post-footer">
 						<Link className="nw-post-back-link" href="/courses">
-							← Назад ко всем курсам
+							← {dict.courses.goBack}
 						</Link>
 					</footer>
 				</article>

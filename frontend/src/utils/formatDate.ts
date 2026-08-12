@@ -1,11 +1,20 @@
-export function formatDate(value: string | Date | undefined, time?: 'withTime') {
-	if (value === undefined) return '0,0,0';
+import { Locale } from '@/i18n/config';
+
+export function formatDate(locale: Locale, value: string | Date | undefined, time?: 'withTime') {
+	if (!value) return '';
 
 	const date = new Date(value);
 
+	// Защита от невалидной даты (Invalid Date)
+	if (isNaN(date.getTime())) {
+		return '';
+	}
+
+	const localeTimeFormat = locale === 'ru' ? 'ru-RU' : locale === 'en' ? 'en-US' : 'ru-RU';
+
 	let formatter;
 	if (time === 'withTime') {
-		formatter = new Intl.DateTimeFormat('ru-RU', {
+		formatter = new Intl.DateTimeFormat(localeTimeFormat, {
 			day: 'numeric',
 			month: 'long',
 			year: 'numeric',
@@ -13,7 +22,7 @@ export function formatDate(value: string | Date | undefined, time?: 'withTime') 
 			minute: '2-digit',
 		});
 	} else {
-		formatter = new Intl.DateTimeFormat('ru-RU', {
+		formatter = new Intl.DateTimeFormat(localeTimeFormat, {
 			day: 'numeric',
 			month: 'long',
 			year: 'numeric',

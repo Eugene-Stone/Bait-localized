@@ -67,10 +67,11 @@ export async function resolveLocale(params: Promise<{ locale: string }>): Promis
 export const metadata: Metadata = {
 	metadataBase: new URL(FRONTEND_URL),
 
-	title: {
-		default: 'БАЙТ | Школа программирования',
-		template: `%s | ${SITE_TITLE}`,
-	},
+	// title: {
+	// 	default: 'БАЙТ | Школа программирования',
+	// 	template: `%s | ${SITE_TITLE}`,
+	// },
+	title: 'БАЙТ | Школа программирования',
 
 	description: 'Школа программирования БАЙТ. Обучаем Python, JavaScript и веб-разработке.',
 	keywords: ['школа программирования', 'Python', 'JavaScript', 'веб-разработка'],
@@ -107,7 +108,7 @@ export default async function RootLayout({
 	params,
 }: Readonly<{
 	children: React.ReactNode;
-	params: Promise<{ locale: Locale }>;
+	params: Promise<{ locale: string }>;
 }>) {
 	const locale = await resolveLocale(params);
 

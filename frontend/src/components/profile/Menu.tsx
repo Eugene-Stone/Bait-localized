@@ -2,8 +2,14 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import LogoutButton from './LogoutButton';
+import { Locale } from '@/i18n/config';
+import { detectActiveLink } from '@/utils/detectActiveLink';
 
-export default function Menu() {
+type Props = {
+	locale: Locale;
+};
+
+export default function Menu({ locale }: Props) {
 	const pathname = usePathname();
 
 	const menu = [
@@ -24,7 +30,9 @@ export default function Menu() {
 	return (
 		<ul className="nw-profile-menu">
 			{menu.map((item, i) => {
-				const isActive = item.href === pathname || pathname.startsWith(`${item.href}/`);
+				// const isActive = item.href === pathname || pathname.startsWith(`${item.href}/`);
+				const isActive = detectActiveLink(locale, pathname, item.href);
+
 				return (
 					<li
 						key={i}
@@ -35,7 +43,7 @@ export default function Menu() {
 						}>
 						<Link
 							className="nw-profile-menu-link"
-							href={item.href}
+							href={`/${locale}/${item.href}`}
 							data-discover="true">
 							{item.title}
 						</Link>

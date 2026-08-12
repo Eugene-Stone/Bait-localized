@@ -47,9 +47,9 @@ export default async function Header({ locale }: { locale: Locale }) {
 						<ToggleMenu className="head-cell">
 							<Menu menu={menuData} locale={locale} />
 
-							<Suspense fallback={null}>
-								<LoginLink locale={locale} />
-							</Suspense>
+							{/* <Suspense fallback={null}> */}
+							<LoginLink locale={locale} />
+							{/* </Suspense> */}
 
 							<ThemeToggleButton />
 						</ToggleMenu>

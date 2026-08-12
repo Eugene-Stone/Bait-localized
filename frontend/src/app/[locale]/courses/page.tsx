@@ -5,6 +5,7 @@ import Pagination from '@/components/courses/Pagination';
 import Preloader from '@/components/layout/Preloader';
 import { BACKEND_URL } from '@/constants';
 import { Locale } from '@/i18n/config';
+import { getDictionary } from '@/i18n/getDictionary';
 import { Meta } from '@/types';
 import { buildQuery } from '@/utils/buildQuery';
 import { Course } from '@backend-types/course';
@@ -136,27 +137,28 @@ export default async function Courses({
 }) {
 	const { locale } = await params;
 	const resolvedSearchParams = await searchParams;
-	console.log(locale);
+
+	const dict = await getDictionary(locale);
 
 	const { dataPage, pageSize } = await getPageData(locale, resolvedSearchParams);
 	const { directions, levels, allCourses } = await getFiltersData(locale);
 	const { data: courses, meta }: { data: Course[]; meta: Meta } = dataPage;
 
 	// console.log('params', params);
-	console.log('courses', courses);
+	// console.log('courses', courses);
 	// console.log(meta.pagination);
 
 	return (
 		// <Suspense fallback={<Preloader />}>
 		<section className="nw-blog-section">
 			<div className="nw-blog-container">
-				<h2 className="nw-auth-title">Наши курсы</h2>
+				<h2 className="nw-auth-title">{dict.titles.courses}</h2>
 
 				<div className="nw-blog-grid">
 					{/* <Suspense fallback={null}></Suspense> */}
-					<CoursesSidebar filters={{ directions, levels, allCourses }} />
+					<CoursesSidebar dict={dict} filters={{ directions, levels, allCourses }} />
 
-					<CourseList courses={courses} />
+					<CourseList locale={locale} dict={dict} courses={courses} />
 				</div>
 
 				{/* При вызове useSearchParams() в клиентском компоненте Next.js может потребовать обернуть этот компонент в <Suspense></Suspense> */}
