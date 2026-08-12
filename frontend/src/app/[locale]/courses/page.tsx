@@ -4,6 +4,7 @@ import CoursesSidebar from '@/components/courses/CoursesSidebar';
 import Pagination from '@/components/courses/Pagination';
 import Preloader from '@/components/layout/Preloader';
 import { BACKEND_URL } from '@/constants';
+import { Locale } from '@/i18n/config';
 import { Meta } from '@/types';
 import { buildQuery } from '@/utils/buildQuery';
 import { Course } from '@backend-types/course';
@@ -14,21 +15,28 @@ import { Suspense } from 'react';
 export const dynamic = 'force-dynamic';
 export const revalidate = 60; // Пересборка каждые 60 секунд
 
-export async function generateMetadata(): Promise<Metadata> {
+export async function generateMetadata({
+	params,
+}: {
+	params: Promise<{ locale: Locale }>;
+}): Promise<Metadata> {
+	const { locale } = await params;
+
 	return {
-		title: 'Наши курсы',
+		title: locale === 'ru' ? 'Наши курсы' : locale === 'en' ? 'Our courses' : 'Наши курсы',
 	};
 }
 
-async function getPageData(params: {
-	search?: string;
-	sort?: string;
-	page?: string;
-	direction?: string | string[];
-	level?: string | string[];
-}) {
-	// console.log(params.level);
-
+async function getPageData(
+	locale: Locale = 'ru',
+	params: {
+		search?: string;
+		sort?: string;
+		page?: string;
+		direction?: string | string[];
+		level?: string | string[];
+	},
+) {
 	const filtersDirectionActive = Array.isArray(params.direction)
 		? params.direction
 		: params.direction
@@ -89,7 +97,7 @@ async function getPageData(params: {
 		populate: '*',
 	});
 
-	const response = await fetch(`${BACKEND_URL}/api/courses?${queryPage}`, {
+	const response = await fetch(`${BACKEND_URL}/api/courses?locale=${locale}&${queryPage}`, {
 		cache: 'no-store', // Отключение кеша
 		// next: { revalidate: 600 },
 	});
@@ -114,8 +122,10 @@ async function getPageData(params: {
 }
 
 export default async function Courses({
+	params,
 	searchParams,
 }: {
+	params: Promise<{ locale: Locale }>;
 	searchParams: Promise<{
 		search?: string;
 		sort?: string;
@@ -124,13 +134,16 @@ export default async function Courses({
 		level?: string | string[];
 	}>;
 }) {
-	const params = await searchParams;
-	const { dataPage, pageSize } = await getPageData(params);
-	const { directions, levels, allCourses } = await getFiltersData();
+	const { locale } = await params;
+	const resolvedSearchParams = await searchParams;
+	console.log(locale);
+
+	const { dataPage, pageSize } = await getPageData(locale, resolvedSearchParams);
+	const { directions, levels, allCourses } = await getFiltersData(locale);
 	const { data: courses, meta }: { data: Course[]; meta: Meta } = dataPage;
 
 	// console.log('params', params);
-	// console.log(courses);
+	console.log('courses', courses);
 	// console.log(meta.pagination);
 
 	return (

@@ -1,5 +1,6 @@
 'use client';
 
+import { Locale } from '@/i18n/config';
 import type { TreeNavigationItem } from '@/types';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
@@ -10,14 +11,15 @@ type Props = {
 	className: string;
 	menuItem: TreeNavigationItem;
 	children: React.ReactNode;
+	locale: Locale;
 };
 
-export default function MenuLinkAnchor({ className, menuItem, children }: Props) {
+export default function MenuLinkAnchor({ className, menuItem, children, locale }: Props) {
 	const pathname = usePathname();
 	const [isActive, setIsActive] = useState(false);
 	const sectionId = menuItem.path.replace('/', '').replace('#', '');
 
-	if (pathname === '/') {
+	if (pathname === '/' + locale) {
 		return (
 			<li className={isActive ? 'active-li' : ''}>
 				<LinkScroller
@@ -38,7 +40,7 @@ export default function MenuLinkAnchor({ className, menuItem, children }: Props)
 	} else {
 		return (
 			<li>
-				<Link className={className} href={`/#${sectionId}`}>
+				<Link className={className} href={`/${locale}//#${sectionId}`}>
 					{children}
 				</Link>
 			</li>

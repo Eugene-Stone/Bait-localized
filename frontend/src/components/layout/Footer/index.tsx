@@ -7,11 +7,13 @@ import Link from 'next/link';
 import FooterMenu from './FooterMenu';
 import { TreeNavigationItem } from '@/types';
 import ButtonScrollTop from '../ButtonScrollTop';
+import { Locale } from '@/i18n/config';
 
-export default async function Footer() {
-	const { data }: { data: FooterType } = await getFooterData();
+export default async function Footer({ locale }: { locale: Locale }) {
+	const menuData: TreeNavigationItem[] = await getFooterMenu(locale);
+
+	const { data }: { data: FooterType } = await getFooterData(locale);
 	const { logo, topText, bottomText, copyright } = data;
-	const menuData: TreeNavigationItem[] = await getFooterMenu();
 
 	return (
 		<footer className="foot-general">
@@ -19,7 +21,7 @@ export default async function Footer() {
 				<div className="foot-line">
 					<div className="foot-cell">
 						<div className="logo-wrap">
-							<Link href="/" className="logo">
+							<Link href={`/${locale}/`} className="logo">
 								<Image
 									alt={logo?.alternativeText || 'Байт'}
 									width={logo?.width}
@@ -33,7 +35,7 @@ export default async function Footer() {
 						<RichText className="f-itm">{topText}</RichText>
 						<div className="flex-line">
 							<div className="copyright">{copyright}</div>
-							<FooterMenu menu={menuData} />
+							<FooterMenu menu={menuData} locale={locale} />
 						</div>
 						<RichText className="f-itm">{bottomText}</RichText>
 					</div>

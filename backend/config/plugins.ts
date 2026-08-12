@@ -73,6 +73,15 @@ const config = ({ env }: Core.Config.Shared.ConfigParams): Core.Config.Plugin =>
 						url: `${process.env.FRONTEND}/{slug}`,
 					},
 				},
+				{
+					uid: 'api::course.course',
+					draft: {
+						url: `${process.env.FRONTEND}/{slug}`,
+					},
+					published: {
+						url: `${process.env.FRONTEND}/{slug}`,
+					},
+				},
 				// {
 				// 	uid: 'api::post.post',
 				// 	draft: {

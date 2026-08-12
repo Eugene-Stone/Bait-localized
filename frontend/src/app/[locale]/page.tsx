@@ -2,17 +2,29 @@ import { getHomePageData } from '@/api/api-server';
 import DynamicSections from '@/components/sections/DynamicSections';
 
 import { BACKEND_URL, FRONTEND_URL, SITE_TITLE } from '@/constants';
+import { Locale, locales } from '@/i18n/config';
 import HomeDetect from '@/utils/HomeDetect';
 import { Media } from '@backend-types/media';
 import { SharedSeo } from '@backend-types/sharedSeo';
 
 import { Metadata } from 'next';
+import { notFound } from 'next/navigation';
 
 export const dynamic = 'force-dynamic';
 export const revalidate = 60; // Пересборка каждые 60 секунд
 
-export async function generateMetadata(): Promise<Metadata> {
-	const { responseData: dataPage } = await getHomePageData();
+export async function generateMetadata({
+	params,
+}: {
+	params: Promise<{ locale: Locale }>;
+}): Promise<Metadata> {
+	const { locale } = await params;
+
+	if (!locales.includes(locale as Locale)) {
+		notFound();
+	}
+
+	const { responseData: dataPage } = await getHomePageData(locale);
 
 	const pageTitle = dataPage?.data?.title;
 	const seo: SharedSeo = dataPage?.data?.seo || {};
@@ -68,7 +80,7 @@ export async function generateMetadata(): Promise<Metadata> {
 			siteName: SITE_TITLE,
 			// eslint-disable-next-line
 			type: (ogType as any) || 'website',
-			locale: 'ru_RU',
+			locale: locale === 'ru' ? 'ru_RU' : 'en_US',
 			images: [
 				{
 					url: ogImageUrl,
@@ -87,8 +99,14 @@ export async function generateMetadata(): Promise<Metadata> {
 	};
 }
 
-export default async function Home() {
-	const { home, responseData: dataPage } = await getHomePageData();
+export default async function Home({ params }: { params: Promise<{ locale: Locale }> }) {
+	const { locale } = await params;
+
+	if (!locales.includes(locale as Locale)) {
+		notFound();
+	}
+
+	const { home, responseData: dataPage } = await getHomePageData(locale);
 	const { sections } = dataPage.data;
 	const structuredData = dataPage?.data?.seo?.structuredData;
 

@@ -2,6 +2,7 @@ import { cookies } from 'next/headers';
 import { notFound } from 'next/navigation';
 import { BACKEND_URL } from '@/constants';
 import { buildQuery } from '@/utils/buildQuery';
+import { Locale } from '@/i18n/config';
 
 export async function getMe() {
 	const cookieStore = await cookies();
@@ -80,9 +81,9 @@ const queryPage = buildQuery({
 	},
 });
 
-export async function getHomePageData() {
+export async function getHomePageData(locale: Locale | null = 'ru') {
 	try {
-		const response = await fetch(`${BACKEND_URL}/api/homepage?${queryPage}`, {
+		const response = await fetch(`${BACKEND_URL}/api/homepage?locale=${locale}&${queryPage}`, {
 			// cache: 'no-store', // Отключение кеша
 			next: { revalidate: 600 },
 		});
@@ -107,13 +108,13 @@ export async function getHomePageData() {
 	}
 }
 
-export async function getPageBySlug(slug: string) {
+export async function getPageBySlug(locale: Locale | null = 'ru', slug: string) {
 	let result;
 
 	try {
 		console.log(queryPage);
 		const response = await fetch(
-			`${BACKEND_URL}/api/pages?filters[slug][$eq]=${encodeURIComponent(slug)}&${queryPage}`,
+			`${BACKEND_URL}/api/pages?locale=${locale}&filters[slug][$eq]=${encodeURIComponent(slug)}&${queryPage}`,
 			{
 				cache: 'no-store', // Отключение кеша
 				// next: { revalidate: 600 },
@@ -137,7 +138,7 @@ export async function getPageBySlug(slug: string) {
 	return result;
 }
 
-export async function getCourseBySlug(slug: string) {
+export async function getCourseBySlug(locale: Locale | null = 'ru', slug: string) {
 	const query = buildQuery({
 		populate: {
 			seo: {
@@ -162,7 +163,7 @@ export async function getCourseBySlug(slug: string) {
 	try {
 		const response = await fetch(
 			// `${BACKEND_URL}/api/courses?filters[slug][$eq]=${slug}&populate[seo][populate][ogImage]=true&populate[image]=true`,
-			`${BACKEND_URL}/api/courses?filters[slug][$eq]=${encodeURIComponent(slug)}&${query}`,
+			`${BACKEND_URL}/api/courses?locale=${locale}&filters[slug][$eq]=${encodeURIComponent(slug)}&${query}`,
 			{
 				cache: 'no-store', // Отключение кеша
 				// next: { revalidate: 600 },
@@ -188,9 +189,9 @@ export async function getCourseBySlug(slug: string) {
 	return result;
 }
 
-export async function getFooterData() {
+export async function getFooterData(locale: Locale | null = 'ru') {
 	try {
-		const response = await fetch(`${BACKEND_URL}/api/footer?populate=*`, {
+		const response = await fetch(`${BACKEND_URL}/api/footer?locale=${locale}&populate=*`, {
 			next: { revalidate: 600 },
 		});
 
@@ -206,10 +207,10 @@ export async function getFooterData() {
 	}
 }
 
-export async function getFooterMenu() {
+export async function getFooterMenu(locale: Locale | null = 'ru') {
 	try {
 		const response = await fetch(
-			`${BACKEND_URL}/api/navigation/render/footer-navigation?type=TREE&locale=ru`,
+			`${BACKEND_URL}/api/navigation/render/footer-navigation?type=TREE&locale=${locale}`,
 			{
 				next: { revalidate: 600 },
 			},
@@ -226,9 +227,9 @@ export async function getFooterMenu() {
 	}
 }
 
-export async function getHeaderData() {
+export async function getHeaderData(locale: Locale | null = 'ru') {
 	try {
-		const response = await fetch(`${BACKEND_URL}/api/header?populate=*`, {
+		const response = await fetch(`${BACKEND_URL}/api/header?locale=${locale}&populate=*`, {
 			next: { revalidate: 600 },
 		});
 
@@ -244,10 +245,10 @@ export async function getHeaderData() {
 	}
 }
 
-export async function getHeaderMenu() {
+export async function getHeaderMenu(locale: Locale | null = 'ru') {
 	try {
 		const response = await fetch(
-			`${BACKEND_URL}/api/navigation/render/header-navigation?type=TREE&locale=ru`,
+			`${BACKEND_URL}/api/navigation/render/header-navigation?type=TREE&locale=${locale}`,
 			{
 				next: { revalidate: 600 },
 			},
@@ -264,7 +265,7 @@ export async function getHeaderMenu() {
 	}
 }
 
-export async function getFiltersData() {
+export async function getFiltersData(locale: Locale | null = 'ru') {
 	try {
 		const headers = { 'Content-Type': 'application/json' };
 		const [directionsRes, levelsRes, allCoursesRes] = await Promise.all([

@@ -11,11 +11,18 @@ import ThemeToggleButton from './ThemeToggleButton';
 
 import LoginLink from './LoginLink';
 import { Suspense } from 'react';
+import { Locale } from '@/i18n/config';
+import { getDictionary } from '@/i18n/getDictionary';
 
-export default async function Header() {
-	const { data }: { data: HeaderType } = await getHeaderData();
+export default async function Header({ locale }: { locale: Locale }) {
+	const menuData: TreeNavigationItem[] = await getHeaderMenu(locale);
+
+	const { data }: { data: HeaderType } = await getHeaderData(locale);
 	const { title, logo } = data;
-	const menuData: TreeNavigationItem[] = await getHeaderMenu();
+
+	const dict = await getDictionary(locale);
+	// console.log(dict);
+	// console.log(locale);
 
 	return (
 		<header className="head-general">
@@ -25,7 +32,7 @@ export default async function Header() {
 						<div className="head-cell">
 							<div className="logo-wrap">
 								{/* eslint-disable-next-line */}
-								<a className="logo" href="/">
+								<a className="logo" href={`/${locale}/`}>
 									<Image
 										alt={title ? title : ''}
 										width={logo?.width}
@@ -38,10 +45,10 @@ export default async function Header() {
 							</div>
 						</div>
 						<ToggleMenu className="head-cell">
-							<Menu menu={menuData} />
+							<Menu menu={menuData} locale={locale} />
 
 							<Suspense fallback={null}>
-								<LoginLink />
+								<LoginLink locale={locale} />
 							</Suspense>
 
 							<ThemeToggleButton />

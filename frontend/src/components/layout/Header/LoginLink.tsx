@@ -1,14 +1,18 @@
 import Link from 'next/link';
 import { getMe } from '@/api/api-server';
+import { Locale } from '@/i18n/config';
 
-export default async function LoginLink() {
+export default async function LoginLink({ locale }: { locale: Locale }) {
 	const user = await getMe();
 	// console.log(user);
 
 	return (
 		<div className="login-link">
 			{user ? (
-				<Link aria-label="Личный кабинет студента" href="/profile" data-discover="true">
+				<Link
+					aria-label="Личный кабинет студента"
+					href={`/${locale}/profile`}
+					data-discover="true">
 					<svg
 						fill="none"
 						height={30}
@@ -24,7 +28,10 @@ export default async function LoginLink() {
 					</svg>
 				</Link>
 			) : (
-				<Link aria-label="Личный кабинет студента" href="/login" data-discover="true">
+				<Link
+					aria-label="Личный кабинет студента"
+					href={`/${locale}/login`}
+					data-discover="true">
 					<svg
 						fill="none"
 						height={30}

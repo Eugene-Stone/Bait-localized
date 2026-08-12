@@ -124,14 +124,14 @@ export default async function RootLayout({
 					<ProviderRedux>
 						<div className="wrapper">
 							{/* <ReloadToTop /> */}
-							<Header />
+							<Header locale={locale} />
 
 							<LoadingContextProvider className="layout">
 								{children}
 								{/* <ViewTransition>{children}</ViewTransition> */}
 							</LoadingContextProvider>
 
-							<Footer />
+							<Footer locale={locale} />
 						</div>
 					</ProviderRedux>
 				</ThemeContextProvider>
