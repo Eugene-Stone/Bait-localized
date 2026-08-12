@@ -5,14 +5,19 @@ import { BACKEND_URL, SITE_TITLE } from '@/constants';
 import DynamicSections from '@/components/sections/DynamicSections';
 import { notFound } from 'next/navigation';
 import { Media } from '@backend-types/media';
+import { Locale, locales } from '@/i18n/config';
 
 export async function generateMetadata({
 	params,
 }: {
-	params: Promise<{ slug: string }>;
+	params: Promise<{ locale: Locale; slug: string }>;
 }): Promise<Metadata> {
-	const { slug } = await params;
-	const dataPage = await getPageBySlug(slug);
+	const { locale, slug } = await params;
+	if (!locales.includes(locale as Locale)) {
+		notFound();
+	}
+
+	const dataPage = await getPageBySlug(locale, slug);
 
 	const pageTitle = dataPage.data[0].title;
 	const seo: SharedSeo = dataPage?.data[0]?.seo || {};
@@ -68,7 +73,8 @@ export async function generateMetadata({
 			siteName: SITE_TITLE,
 			// eslint-disable-next-line
 			type: (ogType as any) || 'website',
-			locale: 'ru_RU',
+			// locale: 'ru_RU',
+			locale: locale === 'ru' ? 'ru_RU' : locale === 'en' ? 'en_EN' : 'ru_RU',
 			images: [
 				{
 					url: ogImageUrl,
@@ -87,10 +93,14 @@ export async function generateMetadata({
 	};
 }
 
-export default async function PageBySlug({ params }: { params: Promise<{ slug: string }> }) {
-	const { slug } = await params;
+export default async function PageBySlug({
+	params,
+}: {
+	params: Promise<{ locale: Locale; slug: string }>;
+}) {
+	const { locale, slug } = await params;
 
-	const dataPage = await getPageBySlug(slug);
+	const dataPage = await getPageBySlug(locale, slug);
 	const page = dataPage.data?.[0];
 
 	if (!page) {

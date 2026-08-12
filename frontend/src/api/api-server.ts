@@ -112,7 +112,9 @@ export async function getPageBySlug(locale: Locale | null = 'ru', slug: string) 
 	let result;
 
 	try {
-		console.log(queryPage);
+		// console.log(queryPage);
+		// console.log('locale', locale);
+		// console.log('slug', slug);
 		const response = await fetch(
 			`${BACKEND_URL}/api/pages?locale=${locale}&filters[slug][$eq]=${encodeURIComponent(slug)}&${queryPage}`,
 			{
@@ -122,7 +124,7 @@ export async function getPageBySlug(locale: Locale | null = 'ru', slug: string) 
 		);
 
 		if (!response.ok) {
-			throw new Error('Failed to fetch home page data');
+			throw new Error('Failed to fetch page data');
 		}
 
 		result = await response.json();

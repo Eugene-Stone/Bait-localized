@@ -2,6 +2,7 @@
 
 import { Locale } from '@/i18n/config';
 import { TreeNavigationItem } from '@/types';
+import { detectActiveLink } from '@/utils/detectActiveLink';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
@@ -15,11 +16,7 @@ type Props = {
 export default function MenuLink({ className, menuItem, children, locale }: Props) {
 	const pathname = usePathname();
 
-	// Проверка с учетом границ вложенных путей
-	const isActive =
-		menuItem.path === '/'
-			? pathname === '/'
-			: pathname === menuItem.path || pathname.startsWith(`${menuItem.path}/`);
+	const isActive = detectActiveLink(locale, pathname, menuItem.path);
 
 	return (
 		// <li className={pathname === menuItem.path ? 'active-li' : ''}>
