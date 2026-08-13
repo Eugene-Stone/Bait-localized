@@ -5,7 +5,8 @@ import { BACKEND_URL, SITE_TITLE } from '@/constants';
 import DynamicSections from '@/components/sections/DynamicSections';
 import { notFound } from 'next/navigation';
 import { Media } from '@backend-types/media';
-import { Locale, locales } from '@/i18n/config';
+import { defaultLocale, Locale, locales } from '@/i18n/config';
+import { CourseExtended } from '@/types';
 
 export async function generateMetadata({
 	params,
@@ -13,14 +14,27 @@ export async function generateMetadata({
 	params: Promise<{ locale: Locale; slug: string }>;
 }): Promise<Metadata> {
 	const { locale, slug } = await params;
+	const isDefaultLocale = locale === defaultLocale;
+
 	if (!locales.includes(locale as Locale)) {
 		notFound();
 	}
 
-	const dataPage = await getPageBySlug(locale, slug);
+	const dataPage = await getPageBySlug(locale, slug, isDefaultLocale);
+	// console.log(dataPage);
 
-	const pageTitle = dataPage.data[0].title;
-	const seo: SharedSeo = dataPage?.data[0]?.seo || {};
+	// const page = dataPage.data?.[0];
+	const page = isDefaultLocale
+		? dataPage.data?.[0]
+		: // eslint-disable-next-line
+			dataPage.data?.[0].localizations?.find((loc: any) => loc.locale === locale);
+
+	if (!page) {
+		notFound();
+	}
+
+	const pageTitle = page.title;
+	const seo: SharedSeo = page.seo || {};
 
 	const {
 		canonicalUrl,
@@ -58,7 +72,7 @@ export async function generateMetadata({
 		title: metaTitle || pageTitle,
 		description: metaDescription,
 		keywords: keywords,
-		viewport: metaViewport,
+		// viewport: metaViewport,
 		alternates: {
 			canonical: canonicalUrl || '/',
 		},
@@ -100,8 +114,15 @@ export default async function PageBySlug({
 }) {
 	const { locale, slug } = await params;
 
-	const dataPage = await getPageBySlug(locale, slug);
-	const page = dataPage.data?.[0];
+	const isDefaultLocale = locale === defaultLocale;
+
+	const dataPage = await getPageBySlug(locale, slug, isDefaultLocale);
+
+	// const page = dataPage.data?.[0];
+	const page = isDefaultLocale
+		? dataPage.data?.[0]
+		: // eslint-disable-next-line
+			dataPage.data?.[0].localizations?.find((loc: any) => loc.locale === locale);
 
 	if (!page) {
 		notFound();

@@ -65,7 +65,7 @@ export async function generateMetadata({
 		title: metaTitle || pageTitle,
 		description: metaDescription,
 		keywords: keywords,
-		viewport: metaViewport,
+		// viewport: metaViewport,
 		alternates: {
 			// canonical: canonicalUrl || '/',
 			canonical: `/${locale}`,

@@ -78,6 +78,54 @@ const queryPage = buildQuery({
 				'sections.text-section': { populate: '*' },
 			},
 		},
+		localizations: {
+			populate: {
+				seo: {
+					populate: {
+						ogImage: true,
+					},
+				},
+				sections: {
+					on: {
+						'sections.about': { populate: '*' },
+						'sections.gallery': {
+							populate: {
+								gallery: {
+									populate: {
+										images: true,
+									},
+								},
+							},
+						},
+						'sections.hero': { populate: '*' },
+						'sections.request': {
+							populate: {
+								form: {
+									populate: {
+										fields: {
+											on: {
+												'forms.form-checkboxes': { populate: '*' },
+												'forms.form-input': { populate: '*' },
+												'forms.form-select': { populate: '*' },
+												'forms.form-submit': { populate: '*' },
+												'forms.form-textarea': { populate: '*' },
+												'forms.form-agree': { populate: '*' },
+											},
+										},
+									},
+								},
+							},
+						},
+						'sections.reviews': {
+							populate: '*',
+						},
+						'sections.schedule': { populate: '*' },
+						'sections.service': { populate: '*' },
+						'sections.text-section': { populate: '*' },
+					},
+				},
+			},
+		},
 	},
 });
 
@@ -108,20 +156,24 @@ export async function getHomePageData(locale: Locale | null = 'ru') {
 	}
 }
 
-export async function getPageBySlug(locale: Locale | null = 'ru', slug: string) {
+export async function getPageBySlug(
+	locale: Locale | null = 'ru',
+	slug: string,
+	isDefaultLocale: boolean,
+) {
 	let result;
+	const fetchLink = isDefaultLocale
+		? `${BACKEND_URL}/api/pages?locale=${locale}&filters[slug][$eq]=${encodeURIComponent(slug)}&${queryPage}`
+		: `${BACKEND_URL}/api/pages?locale=${defaultLocale}&filters[slug][$eq]=${encodeURIComponent(slug)}&${queryPage}`;
 
 	try {
 		// console.log(queryPage);
 		// console.log('locale', locale);
 		// console.log('slug', slug);
-		const response = await fetch(
-			`${BACKEND_URL}/api/pages?locale=${locale}&filters[slug][$eq]=${encodeURIComponent(slug)}&${queryPage}`,
-			{
-				cache: 'no-store', // Отключение кеша
-				// next: { revalidate: 600 },
-			},
-		);
+		const response = await fetch(fetchLink, {
+			cache: 'no-store', // Отключение кеша
+			// next: { revalidate: 600 },
+		});
 
 		if (!response.ok) {
 			throw new Error('Failed to fetch page data');
@@ -216,44 +268,6 @@ export async function getCourseBySlug(
 	return result;
 }
 
-export async function getFooterData(locale: Locale | null = 'ru') {
-	try {
-		const response = await fetch(`${BACKEND_URL}/api/footer?locale=${locale}&populate=*`, {
-			next: { revalidate: 600 },
-		});
-
-		if (!response.ok) {
-			throw new Error('Failed to fetch home page data');
-		}
-
-		return response.json();
-	} catch (error) {
-		console.error(error);
-
-		throw new Error('Backend unavailable');
-	}
-}
-
-export async function getFooterMenu(locale: Locale | null = 'ru') {
-	try {
-		const response = await fetch(
-			`${BACKEND_URL}/api/navigation/render/footer-navigation?type=TREE&locale=${locale}`,
-			{
-				next: { revalidate: 600 },
-			},
-		);
-		if (!response.ok) {
-			throw new Error('Failed to fetch home page data');
-		}
-
-		return response.json();
-	} catch (error) {
-		console.error(error);
-
-		throw new Error('Backend unavailable');
-	}
-}
-
 export async function getHeaderData(locale: Locale | null = 'ru') {
 	try {
 		const response = await fetch(`${BACKEND_URL}/api/header?locale=${locale}&populate=*`, {
@@ -275,7 +289,47 @@ export async function getHeaderData(locale: Locale | null = 'ru') {
 export async function getHeaderMenu(locale: Locale | null = 'ru') {
 	try {
 		const response = await fetch(
-			`${BACKEND_URL}/api/navigation/render/header-navigation?type=TREE&locale=${locale}`,
+			// `${BACKEND_URL}/api/navigation/render/header-navigation?type=TREE&locale=${locale}`,
+			`${BACKEND_URL}/api/navigation/render/header-navigation?locale=${locale}&type=TREE&populate=*`,
+			{
+				next: { revalidate: 600 },
+			},
+		);
+		if (!response.ok) {
+			throw new Error('Failed to fetch home page data');
+		}
+
+		return response.json();
+	} catch (error) {
+		console.error(error);
+
+		throw new Error('Backend unavailable');
+	}
+}
+
+export async function getFooterData(locale: Locale | null = 'ru') {
+	try {
+		const response = await fetch(`${BACKEND_URL}/api/footer?locale=${locale}&populate=*`, {
+			next: { revalidate: 600 },
+		});
+
+		if (!response.ok) {
+			throw new Error('Failed to fetch home page data');
+		}
+
+		return response.json();
+	} catch (error) {
+		console.error(error);
+
+		throw new Error('Backend unavailable');
+	}
+}
+
+export async function getFooterMenu(locale: Locale | null = 'ru') {
+	try {
+		const response = await fetch(
+			// `${BACKEND_URL}/api/navigation/render/footer-navigation?type=TREE&locale=${locale}`,
+			`${BACKEND_URL}/api/navigation/render/footer-navigation?locale=${locale}&type=TREE&populate=*`,
 			{
 				next: { revalidate: 600 },
 			},

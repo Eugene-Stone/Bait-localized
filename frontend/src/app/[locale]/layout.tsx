@@ -107,7 +107,8 @@ export default async function RootLayout({
 				<ThemeScript />
 			</head> */}
 			<body>
-				<script dangerouslySetInnerHTML={{ __html: themeInitializerScript }} />
+				<ThemeScript />
+				{/* <script dangerouslySetInnerHTML={{ __html: themeInitializerScript }} /> */}
 
 				<ThemeContextProvider>
 					<ProviderRedux>

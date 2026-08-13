@@ -15,7 +15,7 @@ import { getCourseBySlug } from '@/api/api-server';
 import Comment from '@/components/Comment';
 import CommentForm from '@/components/Comment/CommentForm';
 import { Media } from '@backend-types/media';
-import { defaultLocale, Locale } from '@/i18n/config';
+import { defaultLocale, Locale, locales } from '@/i18n/config';
 import { getDictionary } from '@/i18n/getDictionary';
 import { CourseExtended } from '@/types';
 
@@ -26,6 +26,10 @@ export async function generateMetadata({
 }): Promise<Metadata> {
 	const { locale, slug } = await params;
 	const isDefaultLocale = locale === defaultLocale;
+
+	if (!locales.includes(locale as Locale)) {
+		notFound();
+	}
 
 	const dataPage = await getCourseBySlug(locale, slug, isDefaultLocale);
 
@@ -77,7 +81,7 @@ export async function generateMetadata({
 		title: metaTitle || pageTitle,
 		description: metaDescription,
 		keywords: keywords,
-		viewport: metaViewport,
+		// viewport: metaViewport,
 		alternates: {
 			canonical: canonicalUrl || `${FRONTEND_URL}/${locale}/courses/${slug}`,
 			languages: {
