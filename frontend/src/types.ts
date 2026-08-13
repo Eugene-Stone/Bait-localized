@@ -111,6 +111,8 @@ export interface CommentExtended extends Comment {
 }
 export interface CourseExtended extends Course {
 	documentId?: string;
+	localizations?: CourseExtended[];
+	locale?: string;
 }
 
 export interface UserExtended extends User {

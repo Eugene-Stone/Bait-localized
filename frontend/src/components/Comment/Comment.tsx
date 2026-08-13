@@ -15,7 +15,9 @@ type Props = {
 	comment: CommentType;
 };
 export default function Comment({ user, comment }: Props) {
-	const formattedDate = formatDate(comment.createdAt, 'withTime');
+	const locale = 'en';
+
+	const formattedDate = formatDate(locale, comment.createdAt, 'withTime');
 
 	return (
 		<li className="nw-comment-item">

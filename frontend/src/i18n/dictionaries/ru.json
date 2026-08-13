@@ -1,13 +1,31 @@
 {
-
-	"header": {
+	"titles": {
 		"courses": "Курсы",
-		"blog": "Блог",
-		"contacts": "Контакты"
+		"search": "Поиск",
+		"sort": "Сортировка",
+		"direction": "Направления",
+		"level": "Уровень"
+	},
+
+	"courses": {
+		"published": "Опубликовано",
+		"currency": "грн",
+		"readMore": "Подробнее о курсе",
+		"discussion": "Обсуждение курса",
+		"goBack": "Назад ко всем курсам",
+		"searchPlaceholder": "Поиск по курсам...",
+		"sorting": {
+			"newFirst": "Сначала новые",
+			"oldFirst": "Сначала старые",
+			"cheaperFirst": "Сначала дешевле",
+			"expensiveFirst": "Сначала дороже"
+		}
 	},
 
 	"buttons": {
-		"readMore": "Подробнее",
-		"send": "Отправить"
+		"showMore": "Показать больше",
+		"resetFilters": "Сбросить все фильтры",
+		"search": "Найти",
+		"send": "Отправить заявку"
 	}
 }

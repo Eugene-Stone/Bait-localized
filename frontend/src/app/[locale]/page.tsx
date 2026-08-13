@@ -67,7 +67,12 @@ export async function generateMetadata({
 		keywords: keywords,
 		viewport: metaViewport,
 		alternates: {
-			canonical: canonicalUrl || '/',
+			// canonical: canonicalUrl || '/',
+			canonical: `/${locale}`,
+			languages: {
+				ru: '/ru',
+				en: '/en',
+			},
 		},
 		robots: {
 			index: !isNoIndex,
@@ -126,7 +131,7 @@ export default async function Home({ params }: { params: Promise<{ locale: Local
 				{/* {sections && <DynamicSections sections={sections} />} */}
 				{sections && (
 					// <Suspense fallback={<Preloader />}>
-					<DynamicSections sections={sections} />
+					<DynamicSections locale={locale} sections={sections} />
 					// </Suspense>
 				)}
 			</div>

@@ -120,7 +120,7 @@ export default async function PageBySlug({
 					}}
 				/>
 			)}
-			{sections && <DynamicSections sections={sections} />}
+			{sections && <DynamicSections locale={locale} sections={sections} />}
 		</>
 	);
 }

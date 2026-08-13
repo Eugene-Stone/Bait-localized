@@ -4,30 +4,40 @@ import Image from 'next/image';
 import { Course } from '@backend-types/course';
 import { BACKEND_URL } from '@/constants';
 import { imageSrcSet } from '@/utils/imageSrcSet';
-import { Locale } from '@/i18n/config';
+import { defaultLocale, Locale } from '@/i18n/config';
 import { Dictionary } from '@/i18n/getDictionary';
+import { CourseExtended } from '@/types';
 
 type Props = {
 	locale: Locale;
 	dict: Dictionary;
-	courses: Course[];
+	courses: CourseExtended[];
 };
 export default function CourseList({ locale, dict, courses }: Props) {
 	return (
 		<main className="nw-articles-grid">
 			{courses.map((course) => {
-				// const imageFormats = course.image && imageSrcSet(course.image);
-				// const srcSetString = imageFormats
-				// 	?.map((format) => `${BACKEND_URL}${format.url} ${format.width}w`)
-				// 	.join(', ');
-
 				const { srcSetString } = imageSrcSet(course.image);
+
+				const isDefaultLocale = course.locale === defaultLocale;
+
+				// const localizedDefaultItem = course.localizations?.find(
+				// 	(item) => item.locale === defaultLocale,
+				// );
+				// console.log(course);
+
+				const defaultLocaleSlug = course.localizations?.find(
+					(item) => item.locale === defaultLocale,
+				)?.slug;
+
+				const linkHref = isDefaultLocale
+					? `/${locale}/courses/${course.slug}`
+					: // : `/${locale}/courses/${localizedDefaultItem?.slug}`;
+						`/${locale}/courses/${defaultLocaleSlug}`;
 
 				return (
 					<article key={course.slug} className="nw-article-card">
-						<Link
-							className="nw-article-img-wrapper"
-							href={`/${locale}/courses/${course.slug}`}>
+						<Link className="nw-article-img-wrapper" href={linkHref}>
 							<picture>
 								{srcSetString && (
 									<source

@@ -1,12 +1,16 @@
 import { SectionsGallery } from '@backend-types/sectionsGallery';
 import GalleryList from './GalleryList';
+import { Locale } from '@/i18n/config';
+import { getDictionary } from '@/i18n/getDictionary';
 
 type Props = {
 	data: SectionsGallery;
+	locale: Locale;
 };
 
-export default function Gallery({ data }: Props) {
+export default async function Gallery({ data, locale }: Props) {
 	const { title, gallery } = data;
+	const dict = await getDictionary(locale);
 
 	return (
 		<section id="gallery" className="sect-gallery bg-color-1">
@@ -17,7 +21,7 @@ export default function Gallery({ data }: Props) {
 					</div>
 				</div>
 
-				{gallery && <GalleryList gallery={gallery} />}
+				{gallery && <GalleryList dict={dict} gallery={gallery} />}
 			</div>
 		</section>
 	);

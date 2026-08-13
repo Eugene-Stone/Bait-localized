@@ -6,16 +6,22 @@ import Reviews from '@/components/sections/Reviews';
 import Schedule from '@/components/sections/Schedule';
 import Service from '@/components/sections/Service';
 import TextSection from '@/components/sections/TextSection';
+import { Locale } from '@/i18n/config';
 
-// eslint-disable-next-line
-export default function DynamicSections({ sections }: any) {
+type Props = {
+	locale: Locale;
+
+	// eslint-disable-next-line
+	sections: any;
+};
+export default function DynamicSections({ locale, sections }: Props) {
 	// eslint-disable-next-line
 	return sections.map((sect: any, i: number) => {
 		switch (sect.__component) {
 			case 'sections.about':
 				return <About key={i} data={sect} />;
 			case 'sections.gallery':
-				return <Gallery key={i} data={sect} />;
+				return <Gallery key={i} data={sect} locale={locale} />;
 			case 'sections.hero':
 				return <Hero key={i} data={sect} />;
 			case 'sections.request':

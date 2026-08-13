@@ -24,7 +24,7 @@ export default function Review({ tagName = 'div', user, review }: Props) {
 			</div>
 			<div className="review-slide-txt">
 				Оценка <strong>{review.rating}</strong>{' '}
-				{review.rating === 5 ? 'звезд!!!' : 'звезды'}
+				{review.rating === 5 ? 'звезд!!!' : review.rating === 1 ? 'звезда' : 'звезды'}
 				<br />
 				{review.text}
 				{user && (

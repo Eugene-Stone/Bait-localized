@@ -15,6 +15,7 @@ import '../../styles/style.scss';
 import '../../styles/dark.scss';
 import ProviderRedux from '@/redux/ProviderRedux';
 import { Locale, locales } from '@/i18n/config';
+import { resolveLocale } from '@/utils/resolveLocale';
 
 const themeInitializerScript = `
   (function() {
@@ -51,19 +52,6 @@ export function generateStaticParams() {
 	}));
 }
 
-/**
- * Проверяем locale, который пришел из URL.
- */
-export async function resolveLocale(params: Promise<{ locale: string }>): Promise<Locale> {
-	const { locale } = await params;
-
-	if (!locales.includes(locale as Locale)) {
-		notFound();
-	}
-
-	return locale as Locale;
-}
-
 export const metadata: Metadata = {
 	metadataBase: new URL(FRONTEND_URL),
 
@@ -91,7 +79,7 @@ export const metadata: Metadata = {
 		title: SITE_TITLE,
 		siteName: SITE_TITLE,
 		type: 'website',
-		locale: 'ru_RU',
+		// locale: 'ru_RU',
 		description: 'Школа программирования БАЙТ. Обучаем Python, JavaScript и веб-разработке.',
 		images: [
 			{

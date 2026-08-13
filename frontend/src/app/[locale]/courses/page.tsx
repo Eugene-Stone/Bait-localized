@@ -6,7 +6,7 @@ import Preloader from '@/components/layout/Preloader';
 import { BACKEND_URL } from '@/constants';
 import { Locale } from '@/i18n/config';
 import { getDictionary } from '@/i18n/getDictionary';
-import { Meta } from '@/types';
+import { CourseExtended, Meta } from '@/types';
 import { buildQuery } from '@/utils/buildQuery';
 import { Course } from '@backend-types/course';
 import { Metadata } from 'next';
@@ -96,6 +96,11 @@ async function getPageData(
 			pageSize: pageSize,
 		},
 		populate: '*',
+		// populate: {
+		// 	localizations: {
+		// 		populate: '*',
+		// 	},
+		// },
 	});
 
 	const response = await fetch(`${BACKEND_URL}/api/courses?locale=${locale}&${queryPage}`, {
@@ -142,7 +147,7 @@ export default async function Courses({
 
 	const { dataPage, pageSize } = await getPageData(locale, resolvedSearchParams);
 	const { directions, levels, allCourses } = await getFiltersData(locale);
-	const { data: courses, meta }: { data: Course[]; meta: Meta } = dataPage;
+	const { data: courses, meta }: { data: CourseExtended[]; meta: Meta } = dataPage;
 
 	// console.log('params', params);
 	// console.log('courses', courses);

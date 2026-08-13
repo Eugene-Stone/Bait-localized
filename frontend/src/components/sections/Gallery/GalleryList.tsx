@@ -14,14 +14,16 @@ import { BACKEND_URL } from '@/constants';
 import { imageSrcSet } from '@/utils/imageSrcSet';
 import { Gallery } from '@backend-types/gallery';
 import Image from 'next/image';
+import { Dictionary } from '@/i18n/getDictionary';
 
 type Props = {
+	dict: Dictionary;
 	gallery: Gallery;
 };
 
 const IMAGES_PER_CLICK = 3;
 
-export default function GalleryList({ gallery }: Props) {
+export default function GalleryList({ dict, gallery }: Props) {
 	const { images } = gallery;
 
 	const [visibleCount, setVisibleCount] = useState(IMAGES_PER_CLICK);
@@ -94,7 +96,7 @@ export default function GalleryList({ gallery }: Props) {
 							onClick={() =>
 								setVisibleCount((prevCount) => prevCount + IMAGES_PER_CLICK)
 							}>
-							Показать больше
+							{dict.buttons.showMore}
 						</button>
 					</div>
 				)}

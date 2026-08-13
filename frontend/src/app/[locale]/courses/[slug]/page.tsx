@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import type { SharedSeo } from '@backend-types/sharedSeo';
-import { BACKEND_URL, SITE_TITLE } from '@/constants';
+import { BACKEND_URL, FRONTEND_URL, SITE_TITLE } from '@/constants';
 import DynamicSections from '@/components/sections/DynamicSections';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
@@ -15,8 +15,9 @@ import { getCourseBySlug } from '@/api/api-server';
 import Comment from '@/components/Comment';
 import CommentForm from '@/components/Comment/CommentForm';
 import { Media } from '@backend-types/media';
-import { Locale } from '@/i18n/config';
+import { defaultLocale, Locale } from '@/i18n/config';
 import { getDictionary } from '@/i18n/getDictionary';
+import { CourseExtended } from '@/types';
 
 export async function generateMetadata({
 	params,
@@ -24,16 +25,21 @@ export async function generateMetadata({
 	params: Promise<{ locale: Locale; slug: string }>;
 }): Promise<Metadata> {
 	const { locale, slug } = await params;
-	const dataPage = await getCourseBySlug(locale, slug);
+	const isDefaultLocale = locale === defaultLocale;
 
-	const page = dataPage.data?.[0];
+	const dataPage = await getCourseBySlug(locale, slug, isDefaultLocale);
+
+	// const page = dataPage.data?.[0];
+	const page = isDefaultLocale
+		? dataPage.data?.[0]
+		: dataPage.data?.[0].localizations?.find((loc: CourseExtended) => loc.locale === locale);
 
 	if (!page) {
 		notFound();
 	}
 
-	const pageTitle = dataPage.data[0].title;
-	const seo: SharedSeo = dataPage?.data[0]?.seo || {};
+	const pageTitle = page.title;
+	const seo: SharedSeo = page.seo || {};
 
 	const {
 		canonicalUrl,
@@ -73,7 +79,11 @@ export async function generateMetadata({
 		keywords: keywords,
 		viewport: metaViewport,
 		alternates: {
-			canonical: canonicalUrl || '/',
+			canonical: canonicalUrl || `${FRONTEND_URL}/${locale}/courses/${slug}`,
+			languages: {
+				ru: `/ru/courses/${slug}`,
+				en: `/en/courses/${slug}`,
+			},
 		},
 		robots: {
 			index: !isNoIndex,
@@ -113,8 +123,16 @@ export default async function CourseBySlug({
 	const { locale, slug } = await params;
 	const user = await getMe();
 
-	const dataPage = await getCourseBySlug(locale, slug);
-	const page: Course = dataPage.data?.[0];
+	const isDefaultLocale = locale === defaultLocale;
+
+	const dataPage = await getCourseBySlug(locale, slug, isDefaultLocale);
+
+	// const page: CourseExtended = dataPage.data?.[0];
+	const page: CourseExtended = isDefaultLocale
+		? dataPage.data?.[0]
+		: dataPage.data?.[0].localizations?.find((loc: CourseExtended) => loc.locale === locale);
+
+	// console.log(page);
 
 	if (!page) {
 		notFound();
@@ -189,17 +207,17 @@ export default async function CourseBySlug({
 								Чтобы задать вопрос или оставить комментарий,{' '}
 								{/* Символ # в query-параметрах отсекается браузером как хэш текущего URL, если его не закодировать. Нужно завернуть значение callbackUrl в encodeURIComponent: */}
 								<Link
-									href={`/login?callbackUrl=${encodeURIComponent(`/courses/${slug}#comment-form-area`)}`}>
+									href={`/${locale}/login?callbackUrl=${encodeURIComponent(`/${locale}/courses/${slug}#comment-form-area`)}`}>
 									авторизируйтесь
 								</Link>{' '}
-								или <Link href="/registration">зарегистрируйтесь</Link>{' '}
+								или <Link href={`/${locale}/registration`}>зарегистрируйтесь</Link>{' '}
 								на&nbsp;сайте.
 							</p>
 						</div>
 					)}
 
 					<footer className="nw-post-footer">
-						<Link className="nw-post-back-link" href="/courses">
+						<Link className="nw-post-back-link" href={'/' + locale + '/courses'}>
 							← {dict.courses.goBack}
 						</Link>
 					</footer>

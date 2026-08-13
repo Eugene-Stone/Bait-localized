@@ -2,7 +2,7 @@ import { cookies } from 'next/headers';
 import { notFound } from 'next/navigation';
 import { BACKEND_URL } from '@/constants';
 import { buildQuery } from '@/utils/buildQuery';
-import { Locale } from '@/i18n/config';
+import { defaultLocale, Locale } from '@/i18n/config';
 
 export async function getMe() {
 	const cookieStore = await cookies();
@@ -140,7 +140,13 @@ export async function getPageBySlug(locale: Locale | null = 'ru', slug: string) 
 	return result;
 }
 
-export async function getCourseBySlug(locale: Locale | null = 'ru', slug: string) {
+export async function getCourseBySlug(
+	locale: Locale | null = 'ru',
+	slug: string,
+	isDefaultLocale: boolean,
+) {
+	// console.log('isDefaultLocale', isDefaultLocale);
+
 	const query = buildQuery({
 		populate: {
 			seo: {
@@ -157,20 +163,39 @@ export async function getCourseBySlug(locale: Locale | null = 'ru', slug: string
 			comments: {
 				populate: '*',
 			},
+			localizations: {
+				// populate: '*',
+				populate: {
+					seo: {
+						populate: {
+							ogImage: true,
+						},
+					},
+					image: {
+						populate: '*',
+					},
+					direction: true,
+					level: true,
+					formats: true,
+					comments: {
+						populate: '*',
+					},
+				},
+			},
 		},
 	});
 
 	let result;
 
+	const fetchLink = isDefaultLocale
+		? `${BACKEND_URL}/api/courses?locale=${locale}&filters[slug][$eq]=${encodeURIComponent(slug)}&${query}`
+		: `${BACKEND_URL}/api/courses?locale=${defaultLocale}&filters[slug][$eq]=${encodeURIComponent(slug)}&${query}`;
+
 	try {
-		const response = await fetch(
-			// `${BACKEND_URL}/api/courses?filters[slug][$eq]=${slug}&populate[seo][populate][ogImage]=true&populate[image]=true`,
-			`${BACKEND_URL}/api/courses?locale=${locale}&filters[slug][$eq]=${encodeURIComponent(slug)}&${query}`,
-			{
-				cache: 'no-store', // Отключение кеша
-				// next: { revalidate: 600 },
-			},
-		);
+		const response = await fetch(fetchLink, {
+			cache: 'no-store', // Отключение кеша
+			// next: { revalidate: 600 },
+		});
 
 		if (!response.ok) {
 			throw new Error('Failed to fetch home page data');

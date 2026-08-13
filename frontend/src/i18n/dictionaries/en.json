@@ -1,30 +1,31 @@
 {
 	"titles": {
-		"courses": "Курсы",
-		"search": "Поиск",
-		"sort": "Сортировка",
-		"direction": "Направления",
-		"level": "Уровень"
+		"courses": "Courses",
+		"search": "Search",
+		"sort": "Sort",
+		"direction": "Categories",
+		"level": "Level"
 	},
 
 	"courses": {
-		"published": "Опубликовано",
-		"currency": "грн",
-		"readMore": "Подробнее о курсе",
-		"discussion": "Обсуждение курса",
-		"goBack": "Назад ко всем курсам",
-		"searchPlaceholder": "Поиск по курсам...",
+		"published": "Published",
+		"currency": "UAH",
+		"readMore": "Learn more",
+		"discussion": "Course discussion",
+		"goBack": "Back to all courses",
+		"searchPlaceholder": "Search courses...",
 		"sorting": {
-			"newFirst": "Сначала новые",
-			"oldFirst": "Сначала старые",
-			"cheaperFirst": "Сначала дешевле",
-			"expensiveFirst": "Сначала дороже"
+			"newFirst": "Newest first",
+			"oldFirst": "Oldest first",
+			"cheaperFirst": "Lowest price first",
+			"expensiveFirst": "Highest price first"
 		}
 	},
 
 	"buttons": {
-		"resetFilters": "Сбросить все фильтры",
-		"search": "Найти",
-		"send": "Отправить заявку"
+		"showMore": "Show more",
+		"resetFilters": "Reset all filters",
+		"search": "Search",
+		"send": "Submit application"
 	}
 }

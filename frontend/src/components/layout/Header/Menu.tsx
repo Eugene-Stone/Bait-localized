@@ -3,6 +3,7 @@ import Link from 'next/link';
 import MenuLink from './MenuLink';
 import MenuLinkAnchor from './MenuLinkAnchor';
 import { Locale } from '@/i18n/config';
+import LocaleChangeButtons from './LocaleChangeButtons';
 
 type Props = {
 	menu: TreeNavigationItem[];
@@ -39,20 +40,7 @@ export default function Menu({ menu, locale }: Props) {
 						}
 					})}
 
-					<li>
-						<Link
-							className={locale === 'ru' ? 'active-lang' : ''}
-							style={{ zoom: 0.75 }}
-							href="/ru">
-							RU
-						</Link>
-						<Link
-							className={locale === 'en' ? 'active-lang' : ''}
-							style={{ zoom: 0.75 }}
-							href="/en">
-							EN
-						</Link>
-					</li>
+					<LocaleChangeButtons locale={locale} />
 				</ul>
 			</div>
 		</nav>

@@ -6,6 +6,7 @@ type Props = {
 };
 export default function Request({ data }: Props) {
 	const { title, anchor, form } = data;
+	// console.log(form);
 
 	return (
 		<section id={anchor} className="sect-request bg-color-2">
