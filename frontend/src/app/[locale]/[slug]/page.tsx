@@ -24,12 +24,15 @@ export async function generateMetadata({
 	// console.log(dataPage);
 
 	// const page = dataPage.data?.[0];
-	const page = isDefaultLocale
+	let page;
+	page = isDefaultLocale
 		? dataPage.data?.[0]
 		: // eslint-disable-next-line
 			dataPage.data?.[0].localizations?.find((loc: any) => loc.locale === locale);
 
-	if (!page) {
+	if (!page && slug === dataPage.data?.[0].slug) {
+		page = dataPage.data?.[0];
+	} else if (!page) {
 		notFound();
 	}
 
@@ -119,12 +122,15 @@ export default async function PageBySlug({
 	const dataPage = await getPageBySlug(locale, slug, isDefaultLocale);
 
 	// const page = dataPage.data?.[0];
-	const page = isDefaultLocale
+	let page;
+	page = isDefaultLocale
 		? dataPage.data?.[0]
 		: // eslint-disable-next-line
 			dataPage.data?.[0].localizations?.find((loc: any) => loc.locale === locale);
 
-	if (!page) {
+	if (!page && slug === dataPage.data?.[0].slug) {
+		page = dataPage.data?.[0];
+	} else if (!page) {
 		notFound();
 	}
 

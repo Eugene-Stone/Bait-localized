@@ -156,21 +156,45 @@ export async function getHomePageData(locale: Locale | null = 'ru') {
 	}
 }
 
-export async function getPageBySlug(
-	locale: Locale | null = 'ru',
-	slug: string,
-	isDefaultLocale: boolean,
-) {
-	let result;
-	const fetchLink = isDefaultLocale
-		? `${BACKEND_URL}/api/pages?locale=${locale}&filters[slug][$eq]=${encodeURIComponent(slug)}&${queryPage}`
-		: `${BACKEND_URL}/api/pages?locale=${defaultLocale}&filters[slug][$eq]=${encodeURIComponent(slug)}&${queryPage}`;
+// export async function getPageBySlug(
+// 	locale: Locale | null = 'ru',
+// 	slug: string,
+// 	isDefaultLocale: boolean,
+// ) {
+// 	let result;
+// 	const fetchLink = isDefaultLocale
+// 		? `${BACKEND_URL}/api/pages?locale=${locale}&filters[slug][$eq]=${encodeURIComponent(slug)}&${queryPage}`
+// 		: `${BACKEND_URL}/api/pages?locale=${defaultLocale}&filters[slug][$eq]=${encodeURIComponent(slug)}&${queryPage}`;
 
+// 	try {
+// 		// console.log(queryPage);
+// 		// console.log('locale', locale);
+// 		// console.log('slug', slug);
+// 		const response = await fetch(fetchLink, {
+// 			cache: 'no-store', // Отключение кеша
+// 			// next: { revalidate: 600 },
+// 		});
+
+// 		if (!response.ok) {
+// 			throw new Error('Failed to fetch page data');
+// 		}
+
+// 		result = await response.json();
+// 	} catch (error) {
+// 		console.error(error);
+// 		throw new Error('Backend unavailable');
+// 	}
+
+// 	// Если бэкенд вернул пустой массив — вызываем 404
+// 	if (!result.data || result.data.length === 0) {
+// 		notFound();
+// 	}
+// 	return result;
+// }
+
+async function fetchPageData(url: string) {
 	try {
-		// console.log(queryPage);
-		// console.log('locale', locale);
-		// console.log('slug', slug);
-		const response = await fetch(fetchLink, {
+		const response = await fetch(url, {
 			cache: 'no-store', // Отключение кеша
 			// next: { revalidate: 600 },
 		});
@@ -179,16 +203,38 @@ export async function getPageBySlug(
 			throw new Error('Failed to fetch page data');
 		}
 
-		result = await response.json();
+		return await response.json();
 	} catch (error) {
 		console.error(error);
 		throw new Error('Backend unavailable');
 	}
+}
 
-	// Если бэкенд вернул пустой массив — вызываем 404
-	if (!result.data || result.data.length === 0) {
+export async function getPageBySlug(
+	locale: Locale | null = 'ru',
+	slug: string,
+	isDefaultLocale: boolean,
+) {
+	const encodedSlug = encodeURIComponent(slug);
+
+	const initialUrl = isDefaultLocale
+		? `${BACKEND_URL}/api/pages?locale=${locale}&filters[slug][$eq]=${encodedSlug}&${queryPage}`
+		: `${BACKEND_URL}/api/pages?locale=${defaultLocale}&filters[slug][$eq]=${encodedSlug}&${queryPage}`;
+
+	const fallbackUrl = `${BACKEND_URL}/api/pages?locale=${locale}&filters[slug][$eq]=${encodedSlug}&${queryPage}`;
+
+	let result = await fetchPageData(initialUrl);
+
+	// Если результат пустой и урлы отличаются — пробуем запрос с locale
+	if ((!result?.data || result.data.length === 0) && initialUrl !== fallbackUrl) {
+		result = await fetchPageData(fallbackUrl);
+	}
+
+	// Если после попыток данные так и не найдены — вызов 404
+	if (!result?.data || result.data.length === 0) {
 		notFound();
 	}
+
 	return result;
 }
 
@@ -199,7 +245,7 @@ export async function getCourseBySlug(
 ) {
 	// console.log('isDefaultLocale', isDefaultLocale);
 
-	const query = buildQuery({
+	const queryCourse = buildQuery({
 		populate: {
 			seo: {
 				populate: {
@@ -211,7 +257,9 @@ export async function getCourseBySlug(
 			},
 			direction: true,
 			level: true,
-			formats: true,
+			formats: {
+				populate: '*',
+			},
 			comments: {
 				populate: '*',
 			},
@@ -228,7 +276,9 @@ export async function getCourseBySlug(
 					},
 					direction: true,
 					level: true,
-					formats: true,
+					formats: {
+						populate: '*',
+					},
 					comments: {
 						populate: '*',
 					},
@@ -237,31 +287,23 @@ export async function getCourseBySlug(
 		},
 	});
 
-	let result;
+	const encodedSlug = encodeURIComponent(slug);
 
-	const fetchLink = isDefaultLocale
-		? `${BACKEND_URL}/api/courses?locale=${locale}&filters[slug][$eq]=${encodeURIComponent(slug)}&${query}`
-		: `${BACKEND_URL}/api/courses?locale=${defaultLocale}&filters[slug][$eq]=${encodeURIComponent(slug)}&${query}`;
+	const initialUrl = isDefaultLocale
+		? `${BACKEND_URL}/api/courses?locale=${locale}&filters[slug][$eq]=${encodedSlug}&${queryCourse}`
+		: `${BACKEND_URL}/api/courses?locale=${defaultLocale}&filters[slug][$eq]=${encodedSlug}&${queryCourse}`;
 
-	try {
-		const response = await fetch(fetchLink, {
-			cache: 'no-store', // Отключение кеша
-			// next: { revalidate: 600 },
-		});
+	const fallbackUrl = `${BACKEND_URL}/api/courses?locale=${locale}&filters[slug][$eq]=${encodedSlug}&${queryCourse}`;
 
-		if (!response.ok) {
-			throw new Error('Failed to fetch home page data');
-		}
+	let result = await fetchPageData(initialUrl);
 
-		result = await response.json();
-	} catch (error) {
-		console.error(error);
-
-		throw new Error('Backend unavailable');
+	// Если результат пустой и урлы отличаются — пробуем запрос с locale
+	if ((!result?.data || result.data.length === 0) && initialUrl !== fallbackUrl) {
+		result = await fetchPageData(fallbackUrl);
 	}
 
-	// Если бэкенд вернул пустой массив — вызываем 404
-	if (!result.data || result.data.length === 0) {
+	// Если после попыток данные так и не найдены — вызов 404
+	if (!result?.data || result.data.length === 0) {
 		notFound();
 	}
 

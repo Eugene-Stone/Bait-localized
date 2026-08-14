@@ -240,6 +240,19 @@ export interface SectionsTextSection extends Struct.ComponentSchema {
   };
 }
 
+export interface SharedLocaleField extends Struct.ComponentSchema {
+  collectionName: 'components_shared_locale_fields';
+  info: {
+    displayName: 'Locale Field';
+  };
+  attributes: {
+    localeKey: Schema.Attribute.String &
+      Schema.Attribute.Required &
+      Schema.Attribute.DefaultTo<'en'>;
+    localeValue: Schema.Attribute.String & Schema.Attribute.Required;
+  };
+}
+
 export interface SharedSeo extends Struct.ComponentSchema {
   collectionName: 'components_shared_seos';
   info: {
@@ -299,6 +312,7 @@ declare module '@strapi/strapi' {
       'sections.schedule': SectionsSchedule;
       'sections.service': SectionsService;
       'sections.text-section': SectionsTextSection;
+      'shared.locale-field': SharedLocaleField;
       'shared.seo': SharedSeo;
     }
   }

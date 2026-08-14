@@ -51,53 +51,54 @@ const config = ({ env }: Core.Config.Shared.ConfigParams): Core.Config.Plugin =>
 	'strapi-code-editor-custom-field': {
 		enabled: true,
 	},
-	'preview-button': {
-		config: {
-			enabled: true,
-			contentTypes: [
-				{
-					uid: 'api::homepage.homepage',
-					draft: {
-						url: `${process.env.FRONTEND}`,
-					},
-					published: {
-						url: `${process.env.FRONTEND}`,
-					},
-				},
-				{
-					uid: 'api::page.page',
-					draft: {
-						url: `${process.env.FRONTEND}/{slug}`,
-					},
-					published: {
-						url: `${process.env.FRONTEND}/{slug}`,
-					},
-				},
-				{
-					uid: 'api::course.course',
-					draft: {
-						url: `${process.env.FRONTEND}/{slug}`,
-					},
-					published: {
-						url: `${process.env.FRONTEND}/{slug}`,
-					},
-				},
-				// {
-				// 	uid: 'api::post.post',
-				// 	draft: {
-				// 		url: 'http://localhost:3000/api/preview',
-				// 		query: {
-				// 			type: 'post',
-				// 			slug: '{slug}',
-				// 		},
-				// 	},
-				// 	published: {
-				// 		url: 'http://localhost:3000/blog/{slug}',
-				// 	},
-				// },
-			],
-		},
-	},
+	// Когда включена мультиязычность работает неккоректно
+	// 'preview-button': {
+	// 	config: {
+	// 		enabled: true,
+	// 		contentTypes: [
+	// 			{
+	// 				uid: 'api::homepage.homepage',
+	// 				draft: {
+	// 					url: `${process.env.FRONTEND}`,
+	// 				},
+	// 				published: {
+	// 					url: `${process.env.FRONTEND}`,
+	// 				},
+	// 			},
+	// 			{
+	// 				uid: 'api::page.page',
+	// 				draft: {
+	// 					url: `${process.env.FRONTEND}/{slug}`,
+	// 				},
+	// 				published: {
+	// 					url: `${process.env.FRONTEND}/{slug}`,
+	// 				},
+	// 			},
+	// 			{
+	// 				uid: 'api::course.course',
+	// 				draft: {
+	// 					url: `${process.env.FRONTEND}/{slug}`,
+	// 				},
+	// 				published: {
+	// 					url: `${process.env.FRONTEND}/{slug}`,
+	// 				},
+	// 			},
+	// 			// {
+	// 			// 	uid: 'api::post.post',
+	// 			// 	draft: {
+	// 			// 		url: 'http://localhost:3000/api/preview',
+	// 			// 		query: {
+	// 			// 			type: 'post',
+	// 			// 			slug: '{slug}',
+	// 			// 		},
+	// 			// 	},
+	// 			// 	published: {
+	// 			// 		url: 'http://localhost:3000/blog/{slug}',
+	// 			// 	},
+	// 			// },
+	// 		],
+	// 	},
+	// },
 	email: {
 		config: {
 			provider: '@strapi/provider-email-nodemailer',

@@ -7,6 +7,7 @@ import { imageSrcSet } from '@/utils/imageSrcSet';
 import { defaultLocale, Locale } from '@/i18n/config';
 import { Dictionary } from '@/i18n/getDictionary';
 import { CourseExtended } from '@/types';
+import { SharedLocaleField } from '@backend-types/sharedLocaleField';
 
 type Props = {
 	locale: Locale;
@@ -20,11 +21,6 @@ export default function CourseList({ locale, dict, courses }: Props) {
 				const { srcSetString } = imageSrcSet(course.image);
 
 				const isDefaultLocale = course.locale === defaultLocale;
-
-				// const localizedDefaultItem = course.localizations?.find(
-				// 	(item) => item.locale === defaultLocale,
-				// );
-				// console.log(course);
 
 				const defaultLocaleSlug = course.localizations?.find(
 					(item) => item.locale === defaultLocale,
@@ -71,7 +67,21 @@ export default function CourseList({ locale, dict, courses }: Props) {
 								</span>
 								<span style={{ marginLeft: 12, fontSize: 13 }}>
 									• {course.duration} •{' '}
-									{course.formats?.map((f) => f.title).join(' / ')}
+									{course.formats
+										?.map((format) => {
+											const formatCurrentLocale = format.translations?.find(
+												(loc: SharedLocaleField) =>
+													loc.localeKey === locale,
+											);
+
+											const formatTitle =
+												format.translations!.length > 0
+													? formatCurrentLocale?.localeValue
+													: format.title;
+
+											return formatTitle;
+										})
+										.join(' / ')}
 								</span>
 							</div>
 

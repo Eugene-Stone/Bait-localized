@@ -7,10 +7,12 @@ import { Dictionary, getDictionary } from '@/i18n/getDictionary';
 import { Course } from '@backend-types/course';
 import { Direction } from '@backend-types/direction';
 import { Level } from '@backend-types/level';
+import { SharedLocaleField } from '@backend-types/sharedLocaleField';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useState } from 'react';
 
 type Props = {
+	locale: Locale;
 	dict: Dictionary;
 	filters: {
 		directions: Direction[];
@@ -19,7 +21,7 @@ type Props = {
 	};
 };
 
-export default function CoursesSidebar({ dict, filters }: Props) {
+export default function CoursesSidebar({ locale, dict, filters }: Props) {
 	const pathname = usePathname();
 	const router = useRouter();
 	const searchParams = useSearchParams();
@@ -51,6 +53,9 @@ export default function CoursesSidebar({ dict, filters }: Props) {
 	const sorting = searchParams.get('sort') || sortList[0].value;
 	const directionsActive = searchParams.getAll('direction');
 	const levelsActive = searchParams.getAll('level');
+
+	// console.log('directions', directions);
+	// console.log('levels', levels);
 
 	// Функция обновления URL
 	const updateQueryParams = (updates: Record<string, string | string[] | null>) => {
@@ -183,6 +188,15 @@ export default function CoursesSidebar({ dict, filters }: Props) {
 							// Если с текущими фильтрами курсов 0 — можно не рендерить или дизейблить
 							// if (count === 0 && !directionsActive.includes(filter.slug)) return null;
 
+							const filterCurrentLocale = filter.translations?.find(
+								(loc: SharedLocaleField) => loc.localeKey === locale,
+							);
+
+							const filterTitle =
+								filter.translations!.length > 0
+									? filterCurrentLocale?.localeValue
+									: filter.title;
+
 							return (
 								<li key={i}>
 									<label className="nw-filter-label">
@@ -204,7 +218,7 @@ export default function CoursesSidebar({ dict, filters }: Props) {
 											}
 										/>
 										<span>
-											{filter.title} ({count})
+											{filterTitle} ({count})
 										</span>
 									</label>
 								</li>
@@ -224,6 +238,15 @@ export default function CoursesSidebar({ dict, filters }: Props) {
 
 							// Если с текущими фильтрами курсов 0 — можно не рендерить или дизейблить
 							// if (count === 0 && !levelsActive.includes(filter.slug)) return null;
+
+							const filterCurrentLocale = filter.translations?.find(
+								(loc: SharedLocaleField) => loc.localeKey === locale,
+							);
+
+							const filterTitle =
+								filter.translations!.length > 0
+									? filterCurrentLocale?.localeValue
+									: filter.title;
 
 							return (
 								<li key={i}>
@@ -246,7 +269,7 @@ export default function CoursesSidebar({ dict, filters }: Props) {
 											}
 										/>
 										<span>
-											{filter.title} ({count})
+											{filterTitle} ({count})
 										</span>
 									</label>
 								</li>

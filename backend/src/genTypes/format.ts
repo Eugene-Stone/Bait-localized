@@ -1,4 +1,4 @@
-
+import { SharedLocaleField } from './sharedLocaleField';
 
 export interface Format {
   id?: number;
@@ -9,4 +9,5 @@ export interface Format {
   locale?: string | null;
   title?: string;
   slug?: string;
+  translations?: SharedLocaleField[] | null;
 };

@@ -95,12 +95,46 @@ async function getPageData(
 			page: pageCurrent,
 			pageSize: pageSize,
 		},
-		populate: '*',
-		// populate: {
-		// 	localizations: {
-		// 		populate: '*',
-		// 	},
-		// },
+		// populate: '*',
+		populate: {
+			seo: {
+				populate: {
+					ogImage: true,
+				},
+			},
+			image: {
+				populate: '*',
+			},
+			direction: true,
+			level: true,
+			formats: {
+				populate: '*',
+			},
+			comments: {
+				populate: '*',
+			},
+			localizations: {
+				// populate: '*',
+				populate: {
+					seo: {
+						populate: {
+							ogImage: true,
+						},
+					},
+					image: {
+						populate: '*',
+					},
+					direction: true,
+					level: true,
+					formats: {
+						populate: '*',
+					},
+					comments: {
+						populate: '*',
+					},
+				},
+			},
+		},
 	});
 
 	const response = await fetch(`${BACKEND_URL}/api/courses?locale=${locale}&${queryPage}`, {
@@ -119,7 +153,7 @@ async function getPageData(
 	// return response.json(),
 
 	const dataPage = await response.json();
-	// console.log(dataPage.data);
+	// console.log(dataPage);
 
 	return {
 		dataPage,
@@ -161,7 +195,11 @@ export default async function Courses({
 
 				<div className="nw-blog-grid">
 					{/* <Suspense fallback={null}></Suspense> */}
-					<CoursesSidebar dict={dict} filters={{ directions, levels, allCourses }} />
+					<CoursesSidebar
+						locale={locale}
+						dict={dict}
+						filters={{ directions, levels, allCourses }}
+					/>
 
 					<CourseList locale={locale} dict={dict} courses={courses} />
 				</div>

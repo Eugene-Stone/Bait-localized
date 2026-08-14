@@ -17,6 +17,11 @@
     "slug": {
       "type": "uid",
       "targetField": "title"
+    },
+    "translations": {
+      "type": "component",
+      "component": "shared.locale-field",
+      "repeatable": true
     }
   }
 }

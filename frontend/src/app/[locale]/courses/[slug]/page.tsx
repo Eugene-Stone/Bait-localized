@@ -34,11 +34,15 @@ export async function generateMetadata({
 	const dataPage = await getCourseBySlug(locale, slug, isDefaultLocale);
 
 	// const page = dataPage.data?.[0];
-	const page = isDefaultLocale
+	let page: CourseExtended;
+	page = isDefaultLocale
 		? dataPage.data?.[0]
-		: dataPage.data?.[0].localizations?.find((loc: CourseExtended) => loc.locale === locale);
+		: // eslint-disable-next-line
+			dataPage.data?.[0].localizations?.find((loc: any) => loc.locale === locale);
 
-	if (!page) {
+	if (!page && slug === dataPage.data?.[0].slug) {
+		page = dataPage.data?.[0];
+	} else if (!page) {
 		notFound();
 	}
 
@@ -132,13 +136,23 @@ export default async function CourseBySlug({
 	const dataPage = await getCourseBySlug(locale, slug, isDefaultLocale);
 
 	// const page: CourseExtended = dataPage.data?.[0];
-	const page: CourseExtended = isDefaultLocale
+	// const page: CourseExtended = isDefaultLocale
+	// 	? dataPage.data?.[0]
+	// 	: dataPage.data?.[0].localizations?.find((loc: CourseExtended) => loc.locale === locale);
+
+	// if (!page) {
+	// 	notFound();
+	// }
+
+	let page: CourseExtended;
+	page = isDefaultLocale
 		? dataPage.data?.[0]
-		: dataPage.data?.[0].localizations?.find((loc: CourseExtended) => loc.locale === locale);
+		: // eslint-disable-next-line
+			dataPage.data?.[0].localizations?.find((loc: any) => loc.locale === locale);
 
-	// console.log(page);
-
-	if (!page) {
+	if (!page && slug === dataPage.data?.[0].slug) {
+		page = dataPage.data?.[0];
+	} else if (!page) {
 		notFound();
 	}
 
