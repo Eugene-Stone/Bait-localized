@@ -17,7 +17,7 @@ import CommentForm from '@/components/Comment/CommentForm';
 import { Media } from '@backend-types/media';
 import { defaultLocale, Locale, locales } from '@/i18n/config';
 import { getDictionary } from '@/i18n/getDictionary';
-import { CourseExtended } from '@/types';
+import { CommentExtended, CourseExtended } from '@/types';
 
 export async function generateMetadata({
 	params,
@@ -32,6 +32,7 @@ export async function generateMetadata({
 	}
 
 	const dataPage = await getCourseBySlug(locale, slug, isDefaultLocale);
+	// console.log('dataPage', dataPage);
 
 	// const page = dataPage.data?.[0];
 	let page: CourseExtended;
@@ -45,6 +46,7 @@ export async function generateMetadata({
 	} else if (!page) {
 		notFound();
 	}
+	// console.log('page', page);
 
 	const pageTitle = page.title;
 	const seo: SharedSeo = page.seo || {};
@@ -134,6 +136,13 @@ export default async function CourseBySlug({
 	const isDefaultLocale = locale === defaultLocale;
 
 	const dataPage = await getCourseBySlug(locale, slug, isDefaultLocale);
+	// console.log('dataPage', dataPage);
+
+	const localizationCurrentPage = dataPage.data?.[0].localizations?.find(
+		// eslint-disable-next-line
+		(loc: any) => loc.locale === locale,
+	);
+	// console.log('localization', localization);
 
 	// const page: CourseExtended = dataPage.data?.[0];
 	// const page: CourseExtended = isDefaultLocale
@@ -144,19 +153,39 @@ export default async function CourseBySlug({
 	// 	notFound();
 	// }
 
-	let page: CourseExtended;
-	page = isDefaultLocale
-		? dataPage.data?.[0]
-		: // eslint-disable-next-line
-			dataPage.data?.[0].localizations?.find((loc: any) => loc.locale === locale);
+	// let page: CourseExtended;
+	// page = isDefaultLocale
+	// 	? dataPage.data?.[0]
+	// 	: // eslint-disable-next-line
+	// 		dataPage.data?.[0].localizations?.find((loc: any) => loc.locale === locale);
 
-	if (!page && slug === dataPage.data?.[0].slug) {
-		page = dataPage.data?.[0];
-	} else if (!page) {
+	// if (!page && slug === dataPage.data?.[0].slug) {
+	// 	page = dataPage.data?.[0];
+	// } else if (!page) {
+	// 	notFound();
+	// }
+
+	const page: CourseExtended = isDefaultLocale
+		? dataPage.data?.[0]
+		: (localizationCurrentPage ?? dataPage.data?.[0]);
+	if (!page) {
 		notFound();
 	}
 
-	const { title, image, text, comments } = page;
+	// console.log('page', page);
+
+	const localizationDefaultComments = page.localizations?.find(
+		// eslint-disable-next-line
+		(loc: any) => loc.locale === defaultLocale,
+	);
+
+	const comments = isDefaultLocale
+		? page.comments
+		: (localizationDefaultComments?.comments ?? page.comments);
+
+	// console.log('comments', comments);
+
+	const { title, image, text } = page;
 	const { srcSetString } = imageSrcSet(page.image);
 
 	const structuredData = page?.seo?.structuredData;
@@ -211,14 +240,21 @@ export default async function CourseBySlug({
 						<ul className="nw-comments-list">
 							{comments.map((comment, i) => {
 								if (comment.isApproved) {
-									return <Comment key={i} user={user} comment={comment} />;
+									return (
+										<Comment
+											key={i}
+											locale={locale}
+											user={user}
+											comment={comment}
+										/>
+									);
 								}
 							})}
 						</ul>
 					)}
 
 					{user ? (
-						<CommentForm user={user} course={page} />
+						<CommentForm locale={locale} user={user} course={page} />
 					) : (
 						<div className="reviews__leave-notice">
 							<p>

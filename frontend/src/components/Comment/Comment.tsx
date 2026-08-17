@@ -9,28 +9,42 @@ import { deleteComment } from '@/api/api-client';
 import CommentDeleteButton from './CommentDeleteButton';
 import Link from 'next/link';
 import { BACKEND_URL } from '@/constants';
+import { defaultLocale, Locale } from '@/i18n/config';
 
 type Props = {
+	locale: Locale;
 	user?: User;
 	comment: CommentType;
 };
-export default function Comment({ user, comment }: Props) {
-	const locale = 'en';
+export default function Comment({ locale, user, comment }: Props) {
+	// const locale = 'en';
+	const isDefaultLocale = locale === defaultLocale;
 
 	const formattedDate = formatDate(locale, comment.createdAt, 'withTime');
+
+	const localizationCurrentComment = comment.translations?.find(
+		// eslint-disable-next-line
+		(loc: any) => loc.localeKey === locale,
+	);
+
+	const commentCurrentText = isDefaultLocale
+		? comment.text
+		: (localizationCurrentComment?.localeValue ?? comment.text);
 
 	return (
 		<li className="nw-comment-item">
 			<div className="nw-comment-meta">
 				<span className="nw-comment-author">{comment.user?.username}</span>
-				<Link className="nw-comment-course" href={`/courses/${comment.course?.slug}`}>
+				<Link
+					className="nw-comment-course"
+					href={`/${locale}/courses/${comment.course?.slug}`}>
 					<strong>{comment.course?.title}</strong>
 				</Link>
 				<span className="nw-comment-date">
 					{comment.isApproved ? formattedDate : 'На проверке'}
 				</span>
 			</div>
-			<p className="nw-comment-text">{comment.text}</p>
+			<p className="nw-comment-text">{commentCurrentText}</p>
 
 			{comment.user?.username === user?.username && (
 				<div className="edit-comment-line">

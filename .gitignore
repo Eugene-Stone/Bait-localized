@@ -30,3 +30,4 @@ _NOTES.txt
 *.njsproj
 *.sln
 *.sw?
+/index-temp.html

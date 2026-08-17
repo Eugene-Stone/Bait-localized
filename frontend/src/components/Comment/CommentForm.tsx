@@ -13,8 +13,10 @@ import { useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { clearCommentEditableId } from '@/redux/slices/commentSlice';
+import { defaultLocale, Locale } from '@/i18n/config';
 
 type Props = {
+	locale: Locale;
 	user: User;
 	course: CourseExtended;
 	setOpen?: Dispatch<SetStateAction<boolean>>;
@@ -22,9 +24,11 @@ type Props = {
 type FormValues = {
 	comment: string;
 };
-export default function CommentForm({ user, course, setOpen }: Props) {
+export default function CommentForm({ locale, user, course, setOpen }: Props) {
 	const [status, setStatus] = useState<FormStatus>('idle');
 	const [serverError, setServerError] = useState('');
+
+	const isDefaultLocale = locale === defaultLocale;
 
 	// const [defaultComment, setDefaultComment] = useState('');
 	const dispatch = useDispatch();
@@ -45,6 +49,14 @@ export default function CommentForm({ user, course, setOpen }: Props) {
 			comment: '',
 		},
 	});
+
+	// eslint-disable-next-line
+	const localization = course.localizations?.find((loc: any) => loc.locale === defaultLocale);
+
+	const courseTitle = isDefaultLocale ? course.title : (localization?.title ?? course.title);
+	const courseId = isDefaultLocale
+		? course.documentId
+		: (localization?.documentId ?? course.documentId);
 
 	useEffect(() => {
 		async function fetchCommentEditable(commentId: string | null) {
@@ -92,10 +104,10 @@ export default function CommentForm({ user, course, setOpen }: Props) {
 		setStatus('loading');
 
 		const commentData = {
-			title: course.title!,
+			title: courseTitle || '',
 			text: data.comment,
 			user: user.id!,
-			course: course.documentId!,
+			course: courseId!,
 		};
 		console.log(commentData);
 

@@ -466,6 +466,7 @@ export interface ApiCommentComment extends Struct.CollectionTypeSchema {
     publishedAt: Schema.Attribute.DateTime;
     text: Schema.Attribute.Text;
     title: Schema.Attribute.String;
+    translations: Schema.Attribute.Component<'shared.locale-field', true>;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
@@ -1054,6 +1055,10 @@ export interface ApiReviewReview extends Struct.CollectionTypeSchema {
     rating: Schema.Attribute.Integer;
     text: Schema.Attribute.RichText;
     title: Schema.Attribute.String;
+    translations: Schema.Attribute.Component<
+      'shared.locale-field-comment',
+      true
+    >;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;

@@ -57,7 +57,13 @@ export default function CommentEditButton({ user, comment }: Props) {
 							dispatch(clearCommentEditableId());
 						}
 					}}>
-					{user && <CommentForm user={user} course={comment.course!} setOpen={setOpen} />}
+					{user && (
+						<CommentForm
+							user={user}
+							course={comment.course! as CourseExtended}
+							setOpen={setOpen}
+						/>
+					)}
 				</Modal>
 			) : (
 				<button className="edit-btn" onClick={() => editComment(comment.documentId || '1')}>

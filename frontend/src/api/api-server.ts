@@ -282,6 +282,27 @@ export async function getCourseBySlug(
 					comments: {
 						populate: '*',
 					},
+					localizations: {
+						// populate: '*',
+						populate: {
+							seo: {
+								populate: {
+									ogImage: true,
+								},
+							},
+							image: {
+								populate: '*',
+							},
+							direction: true,
+							level: true,
+							formats: {
+								populate: '*',
+							},
+							comments: {
+								populate: '*',
+							},
+						},
+					},
 				},
 			},
 		},

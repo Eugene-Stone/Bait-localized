@@ -1,3 +1,4 @@
+import { SharedLocaleFieldComment } from './sharedLocaleFieldComment';
 import { User } from './user';
 
 export interface Review {
@@ -10,6 +11,7 @@ export interface Review {
   title?: string;
   rating?: number;
   text?: string;
+  translations?: SharedLocaleFieldComment[] | null;
   isApproved?: boolean;
   user?: User | null;
 };

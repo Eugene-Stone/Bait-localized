@@ -1,3 +1,4 @@
+import { SharedLocaleField } from './sharedLocaleField';
 import { User } from './user';
 import { Course } from './course';
 
@@ -10,6 +11,7 @@ export interface Comment {
   locale?: string | null;
   title?: string;
   text?: string;
+  translations?: SharedLocaleField[] | null;
   isApproved?: boolean;
   user?: User | null;
   course?: Course | null;

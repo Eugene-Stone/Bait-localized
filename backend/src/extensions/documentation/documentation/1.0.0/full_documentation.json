@@ -14,7 +14,7 @@
       "name": "Apache 2.0",
       "url": "https://www.apache.org/licenses/LICENSE-2.0.html"
     },
-    "x-generation-date": "2026-08-14T10:17:40.648Z"
+    "x-generation-date": "2026-08-17T12:09:48.819Z"
   },
   "x-strapi-config": {
     "plugins": [
@@ -7664,6 +7664,12 @@
               "text": {
                 "type": "string"
               },
+              "translations": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/SharedLocaleFieldComponent"
+                }
+              },
               "isApproved": {
                 "type": "boolean"
               },
@@ -7766,6 +7772,12 @@
           },
           "text": {
             "type": "string"
+          },
+          "translations": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SharedLocaleFieldComponent"
+            }
           },
           "isApproved": {
             "type": "boolean"
@@ -8716,6 +8728,12 @@
                     "text": {
                       "type": "string"
                     },
+                    "translations": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/SharedLocaleFieldCommentComponent"
+                      }
+                    },
                     "isApproved": {
                       "type": "boolean"
                     },
@@ -9302,6 +9320,12 @@
                     },
                     "text": {
                       "type": "string"
+                    },
+                    "translations": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/SharedLocaleFieldComponent"
+                      }
                     },
                     "isApproved": {
                       "type": "boolean"
@@ -10248,6 +10272,30 @@
             "type": "string"
           },
           "localeValue": {
+            "type": "string"
+          }
+        }
+      },
+      "SharedLocaleFieldCommentComponent": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "number"
+              }
+            ]
+          },
+          "localeKey": {
+            "type": "string"
+          },
+          "localTitle": {
+            "type": "string"
+          },
+          "localText": {
             "type": "string"
           }
         }
@@ -12469,6 +12517,12 @@
                           "text": {
                             "type": "string"
                           },
+                          "translations": {
+                            "type": "array",
+                            "items": {
+                              "$ref": "#/components/schemas/SharedLocaleFieldComponent"
+                            }
+                          },
                           "isApproved": {
                             "type": "boolean"
                           },
@@ -12770,6 +12824,12 @@
                                     },
                                     "text": {
                                       "type": "string"
+                                    },
+                                    "translations": {
+                                      "type": "array",
+                                      "items": {
+                                        "$ref": "#/components/schemas/SharedLocaleFieldCommentComponent"
+                                      }
                                     },
                                     "isApproved": {
                                       "type": "boolean"
@@ -15171,6 +15231,12 @@
                       "text": {
                         "type": "string"
                       },
+                      "translations": {
+                        "type": "array",
+                        "items": {
+                          "$ref": "#/components/schemas/SharedLocaleFieldComponent"
+                        }
+                      },
                       "isApproved": {
                         "type": "boolean"
                       },
@@ -15472,6 +15538,12 @@
                                 },
                                 "text": {
                                   "type": "string"
+                                },
+                                "translations": {
+                                  "type": "array",
+                                  "items": {
+                                    "$ref": "#/components/schemas/SharedLocaleFieldCommentComponent"
+                                  }
                                 },
                                 "isApproved": {
                                   "type": "boolean"
@@ -26468,6 +26540,12 @@
                       "text": {
                         "type": "string"
                       },
+                      "translations": {
+                        "type": "array",
+                        "items": {
+                          "$ref": "#/components/schemas/SharedLocaleFieldComponent"
+                        }
+                      },
                       "isApproved": {
                         "type": "boolean"
                       },
@@ -26769,6 +26847,12 @@
                                 },
                                 "text": {
                                   "type": "string"
+                                },
+                                "translations": {
+                                  "type": "array",
+                                  "items": {
+                                    "$ref": "#/components/schemas/SharedLocaleFieldCommentComponent"
+                                  }
                                 },
                                 "isApproved": {
                                   "type": "boolean"
@@ -27813,6 +27897,12 @@
               "text": {
                 "type": "string"
               },
+              "translations": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/SharedLocaleFieldCommentComponent"
+                }
+              },
               "isApproved": {
                 "type": "boolean"
               },
@@ -27907,6 +27997,12 @@
           },
           "text": {
             "type": "string"
+          },
+          "translations": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SharedLocaleFieldCommentComponent"
+            }
           },
           "isApproved": {
             "type": "boolean"
@@ -28857,6 +28953,12 @@
                     "text": {
                       "type": "string"
                     },
+                    "translations": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/SharedLocaleFieldCommentComponent"
+                      }
+                    },
                     "isApproved": {
                       "type": "boolean"
                     },
@@ -29443,6 +29545,12 @@
                     },
                     "text": {
                       "type": "string"
+                    },
+                    "translations": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/SharedLocaleFieldComponent"
+                      }
                     },
                     "isApproved": {
                       "type": "boolean"

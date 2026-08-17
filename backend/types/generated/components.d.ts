@@ -249,7 +249,21 @@ export interface SharedLocaleField extends Struct.ComponentSchema {
     localeKey: Schema.Attribute.String &
       Schema.Attribute.Required &
       Schema.Attribute.DefaultTo<'en'>;
-    localeValue: Schema.Attribute.String & Schema.Attribute.Required;
+    localeValue: Schema.Attribute.Text & Schema.Attribute.Required;
+  };
+}
+
+export interface SharedLocaleFieldComment extends Struct.ComponentSchema {
+  collectionName: 'components_shared_locale_field_comments';
+  info: {
+    displayName: 'Locale Field Review';
+  };
+  attributes: {
+    localeKey: Schema.Attribute.String &
+      Schema.Attribute.Required &
+      Schema.Attribute.DefaultTo<'en'>;
+    localText: Schema.Attribute.RichText & Schema.Attribute.Required;
+    localTitle: Schema.Attribute.String & Schema.Attribute.Required;
   };
 }
 
@@ -313,6 +327,7 @@ declare module '@strapi/strapi' {
       'sections.service': SectionsService;
       'sections.text-section': SectionsTextSection;
       'shared.locale-field': SharedLocaleField;
+      'shared.locale-field-comment': SharedLocaleFieldComment;
       'shared.seo': SharedSeo;
     }
   }
