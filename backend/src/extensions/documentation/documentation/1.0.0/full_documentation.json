@@ -14,7 +14,7 @@
       "name": "Apache 2.0",
       "url": "https://www.apache.org/licenses/LICENSE-2.0.html"
     },
-    "x-generation-date": "2026-08-17T12:09:48.819Z"
+    "x-generation-date": "2026-08-17T12:49:39.810Z"
   },
   "x-strapi-config": {
     "plugins": [
@@ -8731,7 +8731,7 @@
                     "translations": {
                       "type": "array",
                       "items": {
-                        "$ref": "#/components/schemas/SharedLocaleFieldCommentComponent"
+                        "$ref": "#/components/schemas/SharedLocaleFieldReviewComponent"
                       }
                     },
                     "isApproved": {
@@ -10276,7 +10276,7 @@
           }
         }
       },
-      "SharedLocaleFieldCommentComponent": {
+      "SharedLocaleFieldReviewComponent": {
         "type": "object",
         "properties": {
           "id": {
@@ -10292,10 +10292,10 @@
           "localeKey": {
             "type": "string"
           },
-          "localTitle": {
+          "localeTitle": {
             "type": "string"
           },
-          "localText": {
+          "localeText": {
             "type": "string"
           }
         }
@@ -12828,7 +12828,7 @@
                                     "translations": {
                                       "type": "array",
                                       "items": {
-                                        "$ref": "#/components/schemas/SharedLocaleFieldCommentComponent"
+                                        "$ref": "#/components/schemas/SharedLocaleFieldReviewComponent"
                                       }
                                     },
                                     "isApproved": {
@@ -15542,7 +15542,7 @@
                                 "translations": {
                                   "type": "array",
                                   "items": {
-                                    "$ref": "#/components/schemas/SharedLocaleFieldCommentComponent"
+                                    "$ref": "#/components/schemas/SharedLocaleFieldReviewComponent"
                                   }
                                 },
                                 "isApproved": {
@@ -26851,7 +26851,7 @@
                                 "translations": {
                                   "type": "array",
                                   "items": {
-                                    "$ref": "#/components/schemas/SharedLocaleFieldCommentComponent"
+                                    "$ref": "#/components/schemas/SharedLocaleFieldReviewComponent"
                                   }
                                 },
                                 "isApproved": {
@@ -27900,7 +27900,7 @@
               "translations": {
                 "type": "array",
                 "items": {
-                  "$ref": "#/components/schemas/SharedLocaleFieldCommentComponent"
+                  "$ref": "#/components/schemas/SharedLocaleFieldReviewComponent"
                 }
               },
               "isApproved": {
@@ -28001,7 +28001,7 @@
           "translations": {
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/SharedLocaleFieldCommentComponent"
+              "$ref": "#/components/schemas/SharedLocaleFieldReviewComponent"
             }
           },
           "isApproved": {
@@ -28956,7 +28956,7 @@
                     "translations": {
                       "type": "array",
                       "items": {
-                        "$ref": "#/components/schemas/SharedLocaleFieldCommentComponent"
+                        "$ref": "#/components/schemas/SharedLocaleFieldReviewComponent"
                       }
                     },
                     "isApproved": {

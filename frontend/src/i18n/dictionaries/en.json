@@ -35,6 +35,14 @@
 		"sendErrorOccurred": "An error occurred while sending"
 	},
 
+	"reviews": {
+		"grade": "Grade",
+		"underReview": "Under review",
+		"star": "star",
+		"stars": "stars",
+		"stars_": "stars"
+	},
+
 	"buttons": {
 		"showMore": "Show more",
 		"resetFilters": "Reset all filters",

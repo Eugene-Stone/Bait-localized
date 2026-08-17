@@ -13,41 +13,22 @@ import { useEffect, useState } from 'react';
 import { BACKEND_URL } from '@/constants';
 import { Meta } from '@/types';
 import Review from '@/components/Review';
+import { Locale } from '@/i18n/config';
+import { Dictionary } from '@/i18n/getDictionary';
 
 type Props = {
+	localePack: {
+		locale: Locale;
+		dict: Dictionary;
+	};
 	reviewsData: {
 		data: ReviewType[];
 		meta: Meta;
 	};
 };
 
-export default function ReviewsSlider({ reviewsData }: Props) {
+export default function ReviewsSlider({ localePack, reviewsData }: Props) {
 	const { data: reviews } = reviewsData;
-
-	// const [tempData, setTempData] = useState();
-	// useEffect(() => {
-	// 	async function fetchReviews() {
-	// 		try {
-	// 			const response = await fetch(`${BACKEND_URL}/api/reviews?populate=*`, {
-	// 				method: 'GET',
-	// 			});
-
-	// 			if (!response.ok) {
-	// 				throw new Error('Failed to fetch home page data');
-	// 			}
-
-	// 			// Await the JSON parsing
-	// 			const data = await response.json();
-	// 			// Pass the resolved data to state
-	// 			setTempData(data);
-	// 		} catch (error) {
-	// 			console.log(error instanceof Error ? error.message : 'Unknown error');
-	// 		}
-	// 	}
-
-	// 	fetchReviews();
-	// }, []);
-	// console.log(tempData);
 
 	return (
 		<div className="reviews__slider swiper__slider">
@@ -90,7 +71,7 @@ export default function ReviewsSlider({ reviewsData }: Props) {
 					return (
 						<SwiperSlide key={i}>
 							<div className="review-slide-itm">
-								<Review review={review} />
+								<Review localePack={localePack} review={review} />
 							</div>
 						</SwiperSlide>
 					);

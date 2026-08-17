@@ -27,7 +27,7 @@ export default function DynamicSections({ locale, sections }: Props) {
 			case 'sections.request':
 				return <Request key={i} data={sect} />;
 			case 'sections.reviews':
-				return <Reviews key={i} data={sect} />;
+				return <Reviews key={i} data={sect} locale={locale} />;
 			case 'sections.schedule':
 				return <Schedule key={i} data={sect} />;
 			case 'sections.service':

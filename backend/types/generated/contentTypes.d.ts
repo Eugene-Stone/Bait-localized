@@ -1056,7 +1056,7 @@ export interface ApiReviewReview extends Struct.CollectionTypeSchema {
     text: Schema.Attribute.RichText;
     title: Schema.Attribute.String;
     translations: Schema.Attribute.Component<
-      'shared.locale-field-comment',
+      'shared.locale-field-review',
       true
     >;
     updatedAt: Schema.Attribute.DateTime;

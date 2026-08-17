@@ -35,6 +35,14 @@
 		"sendErrorOccurred": "Возникла ошибка при отправке"
 	},
 
+	"reviews": {
+		"grade": "Оценка",
+		"underReview": "На проверке",
+		"star": "звезда",
+		"stars": "звезды",
+		"stars_": "звезд"
+	},
+
 	"buttons": {
 		"showMore": "Показать больше",
 		"resetFilters": "Сбросить все фильтры",

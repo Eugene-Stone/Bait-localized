@@ -2,8 +2,11 @@ import { SectionsReviews } from '@backend-types/sectionsReviews';
 import ReviewsSlider from './ReviewsSlider';
 import './index.scss';
 import { BACKEND_URL } from '@/constants';
+import { Locale } from '@/i18n/config';
+import { getDictionary } from '@/i18n/getDictionary';
 
 type Props = {
+	locale: Locale;
 	data: SectionsReviews;
 };
 
@@ -19,9 +22,12 @@ export async function getReviewsData() {
 	return response.json();
 }
 
-export default async function Reviews({ data }: Props) {
+export default async function Reviews({ locale, data }: Props) {
 	const { anchor, title } = data;
 	const reviewsData = await getReviewsData();
+	const dict = await getDictionary(locale);
+
+	const localePack = { locale, dict };
 
 	return (
 		<section id={anchor} className="sect-reviews">
@@ -33,7 +39,7 @@ export default async function Reviews({ data }: Props) {
 				</div>
 			</div>
 
-			<ReviewsSlider reviewsData={reviewsData} />
+			<ReviewsSlider localePack={localePack} reviewsData={reviewsData} />
 		</section>
 	);
 }

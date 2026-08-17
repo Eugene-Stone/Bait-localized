@@ -1,5 +1,5 @@
 {
-  "collectionName": "components_shared_locale_field_comments",
+  "collectionName": "components_shared_locale_field_reviews",
   "info": {
     "displayName": "Locale Field Review"
   },
@@ -10,11 +10,11 @@
       "default": "en",
       "required": true
     },
-    "localTitle": {
+    "localeTitle": {
       "type": "string",
       "required": true
     },
-    "localText": {
+    "localeText": {
       "type": "richtext",
       "required": true
     }

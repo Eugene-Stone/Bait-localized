@@ -22,7 +22,7 @@
     },
     "translations": {
       "type": "component",
-      "component": "shared.locale-field-comment",
+      "component": "shared.locale-field-review",
       "repeatable": true
     },
     "isApproved": {
