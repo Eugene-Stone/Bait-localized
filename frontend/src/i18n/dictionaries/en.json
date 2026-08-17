@@ -22,10 +22,24 @@
 		}
 	},
 
+	"comments": {
+		"leaveComment": "Leave a comment",
+		"yourComment": "Your comment",
+		"send": "Send",
+		"cancel": "Cancel",
+		"edit": "Edit",
+		"delete": "Delete",
+		"fillFieldBeforeSending": "Please fill in the field before sending",
+		"errorOccurred": "An error occurred",
+		"reviewUnderModeration": "Your review is under moderation",
+		"sendErrorOccurred": "An error occurred while sending"
+	},
+
 	"buttons": {
 		"showMore": "Show more",
 		"resetFilters": "Reset all filters",
 		"search": "Search",
 		"send": "Submit application"
-	}
+	},
+	"confirm": "Are you sure?"
 }

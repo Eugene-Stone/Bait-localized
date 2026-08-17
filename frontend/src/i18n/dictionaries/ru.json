@@ -22,10 +22,24 @@
 		}
 	},
 
+	"comments": {
+		"leaveComment": "Оставить комментарий",
+		"yourComment": "Ваш комментарий",
+		"send": "Отправить",
+		"cancel": "Отмена",
+		"edit": "Изменить",
+		"delete": "Удалить",
+		"fillFieldBeforeSending": "Перед отправкой заполните поле",
+		"errorOccurred": "Возникла ошибка",
+		"reviewUnderModeration": "Ваш отзыв на модерации",
+		"sendErrorOccurred": "Возникла ошибка при отправке"
+	},
+
 	"buttons": {
 		"showMore": "Показать больше",
 		"resetFilters": "Сбросить все фильтры",
 		"search": "Найти",
 		"send": "Отправить заявку"
-	}
+	},
+	"confirm": "Вы уверены?"
 }

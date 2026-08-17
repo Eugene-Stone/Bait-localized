@@ -10,13 +10,15 @@ import CommentDeleteButton from './CommentDeleteButton';
 import Link from 'next/link';
 import { BACKEND_URL } from '@/constants';
 import { defaultLocale, Locale } from '@/i18n/config';
+import { Dictionary } from '@/i18n/getDictionary';
 
 type Props = {
 	locale: Locale;
+	dict: Dictionary;
 	user?: User;
 	comment: CommentType;
 };
-export default function Comment({ locale, user, comment }: Props) {
+export default function Comment({ locale, dict, user, comment }: Props) {
 	// const locale = 'en';
 	const isDefaultLocale = locale === defaultLocale;
 
@@ -48,8 +50,12 @@ export default function Comment({ locale, user, comment }: Props) {
 
 			{comment.user?.username === user?.username && (
 				<div className="edit-comment-line">
-					<CommentEditButton user={user} comment={comment} />
-					<CommentDeleteButton id={comment.documentId!} />
+					<CommentEditButton user={user} comment={comment}>
+						{dict.comments.edit}
+					</CommentEditButton>
+					<CommentDeleteButton locale={locale} dict={dict} id={comment.documentId!}>
+						{dict.comments.delete}
+					</CommentDeleteButton>
 				</div>
 			)}
 		</li>

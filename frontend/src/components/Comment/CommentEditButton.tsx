@@ -18,8 +18,9 @@ import { useState } from 'react';
 type Props = {
 	user?: User;
 	comment: CommentExtended;
+	children: React.ReactNode;
 };
-export default function CommentEditButton({ user, comment }: Props) {
+export default function CommentEditButton({ user, comment, children }: Props) {
 	const pathname = usePathname();
 
 	const dispatch = useDispatch();
@@ -42,12 +43,12 @@ export default function CommentEditButton({ user, comment }: Props) {
 		<div className="edit">
 			{pathname.startsWith('/profile/comments') ? (
 				<Modal
-					title="Изменить коментарий"
+					title={`${children}`}
 					trigger={
 						<button
 							className="edit-btn"
 							onClick={() => editComment(comment.documentId || '1')}>
-							Изменить
+							{children}
 						</button>
 					}
 					open={open}
@@ -59,6 +60,7 @@ export default function CommentEditButton({ user, comment }: Props) {
 					}}>
 					{user && (
 						<CommentForm
+							locale={'en'}
 							user={user}
 							course={comment.course! as CourseExtended}
 							setOpen={setOpen}
@@ -67,7 +69,7 @@ export default function CommentEditButton({ user, comment }: Props) {
 				</Modal>
 			) : (
 				<button className="edit-btn" onClick={() => editComment(comment.documentId || '1')}>
-					Изменить
+					{children}
 				</button>
 			)}
 		</div>

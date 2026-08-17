@@ -244,6 +244,7 @@ export default async function CourseBySlug({
 										<Comment
 											key={i}
 											locale={locale}
+											dict={dict}
 											user={user}
 											comment={comment}
 										/>
@@ -254,7 +255,7 @@ export default async function CourseBySlug({
 					)}
 
 					{user ? (
-						<CommentForm locale={locale} user={user} course={page} />
+						<CommentForm locale={locale} dict={dict} user={user} course={page} />
 					) : (
 						<div className="reviews__leave-notice">
 							<p>

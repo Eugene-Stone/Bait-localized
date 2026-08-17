@@ -14,9 +14,11 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import { clearCommentEditableId } from '@/redux/slices/commentSlice';
 import { defaultLocale, Locale } from '@/i18n/config';
+import { Dictionary } from '@/i18n/getDictionary';
 
 type Props = {
 	locale: Locale;
+	dict: Dictionary;
 	user: User;
 	course: CourseExtended;
 	setOpen?: Dispatch<SetStateAction<boolean>>;
@@ -24,7 +26,7 @@ type Props = {
 type FormValues = {
 	comment: string;
 };
-export default function CommentForm({ locale, user, course, setOpen }: Props) {
+export default function CommentForm({ locale, dict, user, course, setOpen }: Props) {
 	const [status, setStatus] = useState<FormStatus>('idle');
 	const [serverError, setServerError] = useState('');
 
@@ -157,30 +159,30 @@ export default function CommentForm({ locale, user, course, setOpen }: Props) {
 	return (
 		<div id="comment-form-area" className="nw-comments-area">
 			<div className="nw-comment-form-wrapper">
-				<h4 className="nw-widget-title">Оставить комментарий</h4>
+				<h4 className="nw-widget-title">{dict.comments.leaveComment}</h4>
 				<form
 					className={status === 'loading' ? 'nw-comment-form sending' : 'nw-comment-form'}
 					onSubmit={handleSubmit(onSubmit)}>
 					<div className="nw-comment-field-group">
 						<label className="nw-comment-label" htmlFor="comment-message">
-							Ваш комментарий *
+							{dict.comments.yourComment} *
 						</label>
 						<textarea
 							{...register('comment', {
-								required: 'Перед отправкой заполните поле',
+								required: dict.comments.fillFieldBeforeSending,
 							})}
 							className="nw-comment-textarea"
 							id="comment-message"
 						/>
 						{errors.comment && (
 							<span className="error-field">
-								{errors.comment?.message || 'Возщникла ошибка'}
+								{errors.comment?.message || dict.comments.errorOccurred}
 							</span>
 						)}
 					</div>
 					<div style={{ display: 'flex', gap: 10 }}>
 						<button className="nw-comment-submit-button" type="submit">
-							Отправить
+							{dict.comments.send}
 						</button>
 						{isValid && (
 							<button
@@ -193,16 +195,16 @@ export default function CommentForm({ locale, user, course, setOpen }: Props) {
 									dispatch(clearCommentEditableId());
 									setOpen?.(false);
 								}}>
-								Отмена
+								{dict.comments.cancel}
 							</button>
 						)}
 					</div>
 
 					{status === 'success' && (
-						<p className="success-field">Ваш отзыв на модерации</p>
+						<p className="success-field">{dict.comments.reviewUnderModeration}</p>
 					)}
 					{status === 'error' && (
-						<p className="error-field">Возникла ошибка при отправке</p>
+						<p className="error-field">{dict.comments.sendErrorOccurred}</p>
 					)}
 				</form>
 			</div>

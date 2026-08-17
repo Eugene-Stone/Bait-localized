@@ -151,7 +151,7 @@ export async function editComment(commentData: CommentDataRequest, commentId: st
 		headers: {
 			'Content-Type': 'application/json',
 		},
-		body: JSON.stringify({ data: { ...commentData, isApproved: true }, id: commentId }),
+		body: JSON.stringify({ data: { ...commentData, isApproved: false }, id: commentId }),
 	});
 
 	const data = await response.json();
