@@ -1,19 +1,27 @@
 import { getMe } from '@/api/api-server';
 import ProfileEdit from '@/components/profile/ProfileEdit';
 import { BACKEND_URL } from '@/constants';
+import { Locale } from '@/i18n/config';
+import { getDictionary } from '@/i18n/getDictionary';
 import { UserExtended } from '@/types';
 import { redirect } from 'next/navigation';
 
-export default async function ProfileInfo() {
+type Props = {
+	params: Promise<{ locale: Locale }>;
+};
+export default async function ProfileInfo({ params }: Props) {
+	const { locale } = await params;
+	const dict = await getDictionary(locale);
+
 	const user: UserExtended = await getMe();
 
 	if (!user) {
-		redirect('/login');
+		redirect(`/${locale}/login`);
 	}
 
 	return (
 		<>
-			<ProfileEdit user={user} />
+			<ProfileEdit localePack={{ locale, dict }} user={user} />
 		</>
 	);
 }

@@ -1,12 +1,18 @@
 'use client';
 
 import { updateProfile, uploadFile } from '@/api/api-client';
+import { Locale } from '@/i18n/config';
+import { Dictionary } from '@/i18n/getDictionary';
 import { FormStatus, UpdateProfilePayload, UserExtended } from '@/types';
 import { useRouter } from 'next/navigation';
 import { Dispatch, SetStateAction, useState } from 'react';
 import { useForm } from 'react-hook-form';
 
 type Props = {
+	localePack: {
+		locale: Locale;
+		dict: Dictionary;
+	};
 	user: UserExtended;
 	isEditingData: boolean;
 	setIsEditingData: Dispatch<SetStateAction<boolean>>;
@@ -18,9 +24,16 @@ type FormValues = {
 	avatarFile?: FileList;
 };
 
-export default function ProfileEditData({ user, isEditingData, setIsEditingData }: Props) {
+export default function ProfileEditData({
+	localePack,
+	user,
+	isEditingData,
+	setIsEditingData,
+}: Props) {
 	const router = useRouter();
 	const { avatar, username, email } = user;
+
+	const { locale, dict } = localePack;
 
 	const [status, setStatus] = useState<FormStatus>();
 	const [serverError, setServerError] = useState('');
@@ -87,16 +100,16 @@ export default function ProfileEditData({ user, isEditingData, setIsEditingData 
 			className={status === 'loading' ? 'nw-auth-form sending' : 'nw-auth-form'}
 			onSubmit={handleSubmit(onSubmit)}>
 			<div className="nw-auth-group">
-				<label className="nw-auth-label">Новый аватар</label>
+				<label className="nw-auth-label">{dict.profile.avatar}</label>
 				<input {...register('avatarFile')} accept="image/*" type="file" />
 			</div>
 			<div className="nw-auth-group">
 				<label className="nw-auth-label" htmlFor="profile-firstname">
-					Никнейм
+					{dict.profile.nickname}
 				</label>
 				<input
 					{...register('username', {
-						required: 'Обязательное поле',
+						required: dict.profile.requiredField,
 					})}
 					className="nw-auth-input"
 					id="profile-firstname"
@@ -105,17 +118,17 @@ export default function ProfileEditData({ user, isEditingData, setIsEditingData 
 				/>
 				{errors.username && (
 					<span className="error-field">
-						{errors.username?.message || 'Возникла ошибка'}
+						{errors.username?.message || dict.errors.errorMinor}
 					</span>
 				)}
 			</div>
 			<div className="nw-auth-group">
 				<label className="nw-auth-label" htmlFor="profile-email">
-					Электронная почта
+					{dict.profile.email}
 				</label>
 				<input
 					{...register('email', {
-						required: 'Обязательное поле',
+						required: dict.profile.requiredField,
 					})}
 					className="nw-auth-input"
 					id="profile-email"
@@ -124,25 +137,27 @@ export default function ProfileEditData({ user, isEditingData, setIsEditingData 
 				/>
 				{errors.email && (
 					<span className="error-field">
-						{errors.email?.message || 'Возникла ошибка'}
+						{errors.email?.message || dict.errors.errorMinor}
 					</span>
 				)}
 			</div>
 
 			<div style={{ display: 'flex', gap: 10 }}>
 				<button className="nw-auth-button" type="submit">
-					Сохранить данные
+					{dict.profile.saveData}
 				</button>
 				<button
 					className="nw-auth-button"
 					type="button"
 					onClick={() => setIsEditingData(false)}>
-					Отмена
+					{dict.profile.cancel}
 				</button>
 			</div>
 
-			{status === 'success' && <p className="success-field">Данные успешно изменены</p>}
-			{status === 'error' && <p className="error-field">Возникла ошибка при отправке</p>}
+			{status === 'success' && (
+				<p className="success-field">{dict.profile.dataUpdatedSuccessfully}</p>
+			)}
+			{status === 'error' && <p className="error-field">{dict.profile.sendErrorOccurred}</p>}
 		</form>
 	);
 }

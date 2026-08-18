@@ -82,6 +82,33 @@
 		"emailConfirmed": "Your email has been confirmed"
 	},
 	"errors": {
+		"errorRequired": "Required field",
+		"errorMinor": "An error occurred",
 		"needToLogin": "Login required"
+	},
+	"profile":{
+		"personalAccount": "Personal account",
+		"avatar": "Avatar",
+		"nickname": "Nickname",
+		"email": "Email",
+		"editData": "Edit profile",
+		"changePassword": "Change password",
+		"currentPassword": "Current password",
+		"requiredField": "Required field",
+		"newPassword": "New password",
+		"confirmNewPassword": "Confirm new password",
+		"updatePassword": "Update password",
+		"saveData": "Save changes",
+		"cancel": "Cancel",
+		"dataUpdatedSuccessfully": "Data updated successfully",
+		"passwordsDoNotMatch": "Passwords do not match",
+		"incorrectPassword": "Incorrect password",
+		"sendErrorOccurred": "An error occurred while sending",
+		"menu": {
+			"profile": "Profile",
+			"reviewsHistory": "Review history",
+			"commentsHistory": "Comment history",
+			"logout": "Log out"
+		}
 	}
 }

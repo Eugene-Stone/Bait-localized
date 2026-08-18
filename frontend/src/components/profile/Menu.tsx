@@ -4,26 +4,32 @@ import { usePathname } from 'next/navigation';
 import LogoutButton from './LogoutButton';
 import { Locale } from '@/i18n/config';
 import { detectActiveLink } from '@/utils/detectActiveLink';
+import { Dictionary } from '@/i18n/getDictionary';
 
 type Props = {
-	locale: Locale;
+	localePack: {
+		locale: Locale;
+		dict: Dictionary;
+	};
 };
 
-export default function Menu({ locale }: Props) {
+export default function Menu({ localePack }: Props) {
 	const pathname = usePathname();
+
+	const { locale, dict } = localePack;
 
 	const menu = [
 		{
-			title: 'Профиль',
-			href: '/profile/info',
+			title: dict.profile.menu.profile,
+			href: `/${locale}/profile/info`,
 		},
 		{
-			title: 'История отзывов',
-			href: '/profile/reviews',
+			title: dict.profile.menu.reviewsHistory,
+			href: `/${locale}/profile/reviews`,
 		},
 		{
-			title: 'История коментариев',
-			href: '/profile/comments',
+			title: dict.profile.menu.commentsHistory,
+			href: `/${locale}/profile/comments`,
 		},
 	];
 
@@ -43,7 +49,7 @@ export default function Menu({ locale }: Props) {
 						}>
 						<Link
 							className="nw-profile-menu-link"
-							href={`/${locale}/${item.href}`}
+							href={`${item.href}`}
 							data-discover="true">
 							{item.title}
 						</Link>
@@ -52,7 +58,7 @@ export default function Menu({ locale }: Props) {
 			})}
 
 			<li className="nw-profile-menu-item">
-				<LogoutButton />
+				<LogoutButton locale={locale}>{dict.profile.menu.logout}</LogoutButton>
 			</li>
 		</ul>
 	);

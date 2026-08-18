@@ -3,6 +3,7 @@ import { redirect } from 'next/navigation';
 import { ViewTransition } from 'react';
 import Menu from '@/components/profile/Menu';
 import { Locale } from '@/i18n/config';
+import { getDictionary } from '@/i18n/getDictionary';
 // import { logout } from '@/api/api-client';
 
 export default async function RootLayout({
@@ -10,21 +11,24 @@ export default async function RootLayout({
 	params,
 }: Readonly<{
 	children: React.ReactNode;
-	params: Promise<{ locale: string }>;
+	params: Promise<{ locale: Locale }>;
 }>) {
 	const { locale } = await params;
+
 	const user = await getMe();
 	if (!user) {
-		redirect('/login');
+		redirect(`/${locale}/login`);
 	}
+
+	const dict = await getDictionary(locale);
 
 	return (
 		<section className="nw-profile-section">
 			<div className="nw-profile-container">
-				<h2 className="nw-auth-title">Личный кабинет</h2>
+				<h2 className="nw-auth-title">{dict.profile.personalAccount}</h2>
 				<div className="nw-profile-grid">
 					<aside className="nw-profile-sidebar">
-						<Menu locale={locale as Locale} />
+						<Menu localePack={{ locale, dict }} />
 					</aside>
 					<div className="nw-profile-content">
 						{/* <ViewTransition>{children}</ViewTransition> */}

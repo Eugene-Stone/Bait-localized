@@ -1,10 +1,16 @@
 import { changePassword } from '@/api/api-client';
+import { Locale } from '@/i18n/config';
+import { Dictionary } from '@/i18n/getDictionary';
 import { FormStatus, UserExtended } from '@/types';
 import { useRouter } from 'next/navigation';
 import { Dispatch, SetStateAction, useState } from 'react';
 import { useForm } from 'react-hook-form';
 
 type Props = {
+	localePack: {
+		locale: Locale;
+		dict: Dictionary;
+	};
 	user: UserExtended;
 	isEditingPassword: boolean;
 	setIsEditingPassword: Dispatch<SetStateAction<boolean>>;
@@ -17,10 +23,13 @@ type FormValues = {
 };
 
 export default function ProfileEditPassword({
+	localePack,
 	user,
 	isEditingPassword,
 	setIsEditingPassword,
 }: Props) {
+	const { locale, dict } = localePack;
+
 	const router = useRouter();
 	const [status, setStatus] = useState<FormStatus>();
 	const [serverError, setServerError] = useState('');
@@ -60,7 +69,7 @@ export default function ProfileEditPassword({
 
 	return (
 		<>
-			<h3 className="nw-password-change-title">Изменение пароля</h3>
+			<h3 className="nw-password-change-title">{dict.profile.changePassword}</h3>
 
 			<form
 				className={
@@ -71,11 +80,11 @@ export default function ProfileEditPassword({
 				onSubmit={handleSubmit(onSubmit)}>
 				<div className="nw-password-change-group">
 					<label className="nw-password-change-label" htmlFor="password-current">
-						Текущий пароль
+						{dict.profile.currentPassword}
 					</label>
 					<input
 						{...register('currentPassword', {
-							required: 'Обязательное поле',
+							required: dict.profile.requiredField,
 						})}
 						className="nw-password-change-input"
 						id="password-current"
@@ -85,11 +94,11 @@ export default function ProfileEditPassword({
 				</div>
 				<div className="nw-password-change-group">
 					<label className="nw-password-change-label" htmlFor="password-new">
-						Новый пароль
+						{dict.profile.newPassword}
 					</label>
 					<input
 						{...register('password', {
-							required: 'Обязательное поле',
+							required: dict.profile.requiredField,
 						})}
 						className="nw-password-change-input"
 						id="password-new"
@@ -99,11 +108,11 @@ export default function ProfileEditPassword({
 				</div>
 				<div className="nw-password-change-group">
 					<label className="nw-password-change-label" htmlFor="password-confirm">
-						Подтвердите новый пароль
+						{dict.profile.confirmNewPassword}
 					</label>
 					<input
 						{...register('passwordConfirmation', {
-							required: 'Обязательное поле',
+							required: dict.profile.requiredField,
 						})}
 						className="nw-password-change-input"
 						id="password-confirm"
@@ -114,23 +123,25 @@ export default function ProfileEditPassword({
 
 				<div style={{ display: 'flex', gap: 10 }}>
 					<button className="nw-auth-button" type="submit">
-						Обновить пароль
+						{dict.profile.updatePassword}
 					</button>
 					<button
 						className="nw-auth-button"
 						type="button"
 						onClick={() => setIsEditingPassword(false)}>
-						Отмена
+						{dict.profile.cancel}
 					</button>
 				</div>
-				{status === 'success' && <p className="success-field">Данные успешно изменены</p>}
+				{status === 'success' && (
+					<p className="success-field">{dict.profile.dataUpdatedSuccessfully}</p>
+				)}
 				{status === 'error' && (
 					<p className="error-field">
 						{serverError === 'Passwords do not match'
-							? 'Пароли не совпадают'
+							? dict.profile.passwordsDoNotMatch
 							: serverError === 'The provided current password is invalid'
-								? 'Пароль неверный'
-								: serverError || 'Возникла ошибка при отправке'}
+								? dict.profile.incorrectPassword
+								: serverError || dict.profile.sendErrorOccurred}
 					</p>
 				)}
 			</form>

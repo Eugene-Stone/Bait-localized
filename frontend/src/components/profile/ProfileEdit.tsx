@@ -5,13 +5,21 @@ import ProfileEditData from './ProfileEditData';
 import ProfileEditPassword from './ProfileEditPassword';
 import { UserExtended } from '@/types';
 import { BACKEND_URL } from '@/constants';
+import { Locale } from '@/i18n/config';
+import { Dictionary } from '@/i18n/getDictionary';
 
 type Props = {
+	localePack: {
+		locale: Locale;
+		dict: Dictionary;
+	};
 	user: UserExtended;
 };
 
-export default function ProfileEdit({ user }: Props) {
+export default function ProfileEdit({ localePack, user }: Props) {
 	const { avatar, username, email } = user;
+
+	const { locale, dict } = localePack;
 
 	const [isEditingData, setIsEditingData] = useState(false);
 	const [isEditingPassword, setIsEditingPassword] = useState(false);
@@ -19,6 +27,7 @@ export default function ProfileEdit({ user }: Props) {
 	if (isEditingData) {
 		return (
 			<ProfileEditData
+				localePack={localePack}
 				user={user}
 				isEditingData={isEditingData}
 				setIsEditingData={setIsEditingData}
@@ -27,6 +36,7 @@ export default function ProfileEdit({ user }: Props) {
 	} else if (isEditingPassword) {
 		return (
 			<ProfileEditPassword
+				localePack={localePack}
 				user={user}
 				isEditingPassword={isEditingPassword}
 				setIsEditingPassword={setIsEditingPassword}
@@ -37,19 +47,19 @@ export default function ProfileEdit({ user }: Props) {
 			<div className="nw-auth-form">
 				<div className="nw-auth-group">
 					<label className="nw-auth-label" htmlFor="profile-firstname">
-						Аватар
+						{dict.profile.avatar}
 					</label>
 					<img className="nw-auth-image" alt={username} src={BACKEND_URL + avatar?.url} />
 				</div>
 				<div className="nw-auth-group">
 					<label className="nw-auth-label" htmlFor="profile-firstname">
-						Никнейм
+						{dict.profile.nickname}
 					</label>
 					<strong>{username}</strong>
 				</div>
 				<div className="nw-auth-group">
 					<label className="nw-auth-label" htmlFor="profile-email">
-						Электронная почта
+						{dict.profile.email}
 					</label>
 					<strong>{email}</strong>
 				</div>
@@ -59,13 +69,13 @@ export default function ProfileEdit({ user }: Props) {
 						className="nw-auth-button"
 						type="button"
 						onClick={() => setIsEditingData(true)}>
-						Редактировать данные
+						{dict.profile.editData}
 					</button>
 					<button
 						className="nw-auth-button"
 						type="button"
 						onClick={() => setIsEditingPassword(true)}>
-						Сменить пароль
+						{dict.profile.changePassword}
 					</button>
 				</div>
 			</div>

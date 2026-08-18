@@ -2,18 +2,23 @@
 
 import { useRouter } from 'next/navigation';
 import { logout } from '@/api/api-client';
+import { Locale } from '@/i18n/config';
 
-export default function LogoutButton() {
+type Props = {
+	locale: Locale;
+	children: React.ReactNode;
+};
+export default function LogoutButton({ locale, children }: Props) {
 	const router = useRouter();
 
 	async function handleClick() {
 		await logout();
-		router.push('/login');
+		router.push(`/${locale}/login`);
 		router.refresh();
 	}
 	return (
 		<button className="nw-profile-menu-link" onClick={handleClick}>
-			Выйти
+			{children}
 		</button>
 	);
 }

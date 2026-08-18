@@ -82,6 +82,33 @@
 		"emailConfirmed": "Ваша почта подтверждена"
 	},
 	"errors": {
+		"errorRequired": "Обязательное поле",
+		"errorMinor": "Возникла ошибка",
 		"needToLogin": "Необходимо авторизоваться"
+	},
+	"profile":{
+		"personalAccount": "Личный кабинет",
+		"avatar": "Аватар",
+		"nickname": "Никнейм",
+		"email": "Электронная почта",
+		"editData": "Редактировать данные",
+		"changePassword": "Изменение пароля",
+		"currentPassword": "Текущий пароль",
+		"requiredField": "Обязательное поле",
+		"newPassword": "Новый пароль",
+		"confirmNewPassword": "Подтвердите новый пароль",
+		"updatePassword": "Обновить пароль",
+		"saveData": "Сохранить данные",
+		"cancel": "Отмена",
+		"dataUpdatedSuccessfully": "Данные успешно изменены",
+		"passwordsDoNotMatch": "Пароли не совпадают",
+		"incorrectPassword": "Пароль неверный",
+		"sendErrorOccurred": "Возникла ошибка при отправке",
+		"menu": {
+			"profile": "Профиль",
+			"reviewsHistory": "История отзывов",
+			"commentsHistory": "История комментариев",
+			"logout": "Выход"
+		}
 	}
 }
