@@ -38,7 +38,11 @@ export default function Review({ localePack, tagName = 'div', user, review }: Pr
 	return (
 		<Tag className="review-slide-inner">
 			<div className="review-slide-top-line">
-				{user && <ReviewDeleteButton id={review.documentId!} />}
+				{user && (
+					<ReviewDeleteButton id={review.documentId!} localePack={{ locale, dict }}>
+						{dict.reviews.deleteReview}
+					</ReviewDeleteButton>
+				)}
 
 				<div className="review-slide-author">{review.user?.username}</div>
 				<div className="review-slide-date">
@@ -57,7 +61,9 @@ export default function Review({ localePack, tagName = 'div', user, review }: Pr
 				{user && (
 					<>
 						<br />
-						<ReviewEditButton reviewId={review.documentId!} />
+						<ReviewEditButton reviewId={review.documentId!}>
+							{dict.reviews.editReview}
+						</ReviewEditButton>
 					</>
 				)}
 			</div>

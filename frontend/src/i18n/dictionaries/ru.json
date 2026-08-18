@@ -1,4 +1,14 @@
 {
+	"metadata": {
+		"siteTitle": "БАЙТ | Школа программирования",
+		"siteDescription": "Школа программирования БАЙТ. Обучаем Python, JavaScript и веб-разработке.",
+		"keywords": [
+			"школа программирования",
+			"Python",
+			"JavaScript",
+			"веб-разработка"
+		]
+	},
 	"titles": {
 		"courses": "Курсы",
 		"search": "Поиск",
@@ -44,8 +54,20 @@
 		"grade": "Оценка",
 		"underReview": "На проверке",
 		"star": "звезда",
-		"stars": "звезды",
-		"stars_": "звезд"
+		"stars": "звезд",
+		"stars_": "звезды",
+		"yourReviews": "Ваши отзывы",
+		"noReviewsYet": "Ты пока не оставил ни одного отзыва. Запишись на курс, пройди обучение и поделись впечатлениями!",
+		"leaveReview": "Оставить отзыв",
+		"verdict": "Вердикт",
+		"yourReview": "Ваш отзыв",
+		"editReview": "Изменить отзыв",
+		"deleteReview": "Удалить отзыв",
+		"cancel": "Отмена",
+		"reviewUnderModeration": "Ваш отзыв на модерации",
+		"sendErrorOccurred": "Возникла ошибка при отправке",
+		"deleteConfirmation": "Вы уверены, что хотите удалить этот отзыв?",
+		"delete": "Удалить"
 	},
 
 	"buttons": {
@@ -86,7 +108,7 @@
 		"errorMinor": "Возникла ошибка",
 		"needToLogin": "Необходимо авторизоваться"
 	},
-	"profile":{
+	"profile": {
 		"personalAccount": "Личный кабинет",
 		"avatar": "Аватар",
 		"nickname": "Никнейм",

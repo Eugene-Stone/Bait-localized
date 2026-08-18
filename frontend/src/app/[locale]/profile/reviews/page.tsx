@@ -2,9 +2,15 @@ import { getMe } from '@/api/api-server';
 import Review from '@/components/Review';
 import ReviewForm from '@/components/Review/ReviewForm';
 import { BACKEND_URL } from '@/constants';
+import { Locale } from '@/i18n/config';
+import { getDictionary } from '@/i18n/getDictionary';
 import { Review as ReviewType } from '@backend-types/review';
 import { User } from '@backend-types/user';
 import { redirect } from 'next/navigation';
+
+type Props = {
+	params: Promise<{ locale: Locale }>;
+};
 
 async function getReviews(userId: number) {
 	const response = await fetch(
@@ -20,11 +26,13 @@ async function getReviews(userId: number) {
 	return response.json();
 }
 
-export default async function Reviews() {
+export default async function Reviews({ params }: Props) {
 	const user = await getMe();
+	const { locale } = await params;
+	const dict = await getDictionary(locale);
 
 	if (!user) {
-		redirect('/login');
+		redirect(`/${locale}/login`);
 	}
 
 	const reviewsData = await getReviews(user.id);
@@ -35,24 +43,27 @@ export default async function Reviews() {
 			{reviews.length > 0 ? (
 				<>
 					<h3 className="nw-comments-title" style={{ marginTop: 0 }}>
-						Ваши отзывы
+						{dict.reviews.yourReviews}
 					</h3>
 					<ul className="reviews__list">
 						{reviews.map((review, i) => {
 							return (
-								<Review key={i} tagName="li" user={user as User} review={review} />
+								<Review
+									key={i}
+									localePack={{ locale, dict }}
+									tagName="li"
+									user={user as User}
+									review={review}
+								/>
 							);
 						})}
 					</ul>
 				</>
 			) : (
-				<p>
-					Ты пока не оставил ни одного отзыва. Запишись на курс, пройди обучение и
-					поделись впечатлениями!
-				</p>
+				<p>{dict.reviews.noReviewsYet}</p>
 			)}
 
-			<ReviewForm user={user as User} />
+			<ReviewForm localePack={{ locale, dict }} user={user as User} />
 		</>
 	);
 }

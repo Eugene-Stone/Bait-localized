@@ -10,8 +10,14 @@ import { useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { clearReviewEditableId } from '@/redux/slices/reviewSlice';
+import { Locale } from '@/i18n/config';
+import { Dictionary } from '@/i18n/getDictionary';
 
 type Props = {
+	localePack: {
+		locale: Locale;
+		dict: Dictionary;
+	};
 	user: User;
 };
 
@@ -20,11 +26,13 @@ type FormValues = {
 	rating: number;
 	text: string;
 };
-export default function ReviewForm({ user }: Props) {
+export default function ReviewForm({ localePack, user }: Props) {
 	const [status, setStatus] = useState<FormStatus>();
 	const [serverError, setServerError] = useState('');
 	const formRef = useRef<HTMLFormElement | null>(null);
 	const dispatch = useDispatch();
+
+	const { locale, dict } = localePack;
 
 	const { statusEditableReview, reviewEditableId } = useSelector(
 		(state: RootState) => state.reviewReducer,
@@ -168,31 +176,31 @@ export default function ReviewForm({ user }: Props) {
 					: 'nw-auth-form nw-review-form'
 			}
 			onSubmit={handleSubmit(onSubmit)}>
-			<h3>Оставить отзыв</h3>
+			<h3>{dict.reviews.leaveReview}</h3>
 			<div className="nw-auth-group">
 				<label className="nw-auth-label" htmlFor="profile-firstname">
-					Вердикт
+					{dict.reviews.verdict}
 				</label>
 				<input
 					{...register('title', {
-						required: 'Заполните поле',
+						required: dict.errors.errorRequired,
 					})}
 					className="nw-auth-input"
 					type="text"
 				/>
 				{errors.title && (
 					<span className="error-field">
-						{errors.title?.message || 'Возникла ошибка'}
+						{errors.title?.message || dict.errors.errorMinor}
 					</span>
 				)}
 			</div>
 			<div className="nw-auth-group">
 				<label className="nw-auth-label" htmlFor="profile-firstname">
-					Оценка
+					{dict.reviews.grade}
 				</label>
 				<input
 					{...register('rating', {
-						required: 'Заполните поле',
+						required: dict.errors.errorRequired,
 						valueAsNumber: true,
 					})}
 					className="nw-auth-input"
@@ -202,29 +210,31 @@ export default function ReviewForm({ user }: Props) {
 				/>
 				{errors.rating && (
 					<span className="error-field">
-						{errors.rating?.message || 'Возникла ошибка'}
+						{errors.rating?.message || dict.errors.errorMinor}
 					</span>
 				)}
 			</div>
 			<div className="nw-auth-group">
 				<label className="nw-auth-label" htmlFor="profile-firstname">
-					Ваш коментарий
+					{dict.reviews.yourReview}
 				</label>
 				<textarea
 					{...register('text', {
-						required: 'Заполните поле',
+						required: dict.errors.errorRequired,
 					})}
 					className="nw-auth-input"
 					rows={6}
 					defaultValue={''}
 				/>
 				{errors.text && (
-					<span className="error-field">{errors.text?.message || 'Возникла ошибка'}</span>
+					<span className="error-field">
+						{errors.text?.message || dict.errors.errorMinor}
+					</span>
 				)}
 			</div>
 			<div style={{ display: 'flex', gap: 10 }}>
 				<button className="nw-auth-button" type="submit">
-					Оставить комментарий
+					{dict.reviews.leaveReview}
 				</button>
 
 				{isDirty && (
@@ -239,13 +249,15 @@ export default function ReviewForm({ user }: Props) {
 								text: '',
 							});
 						}}>
-						Отмена
+						{dict.reviews.cancel}
 					</button>
 				)}
 			</div>
 
-			{status === 'success' && <p className="success-field">Ваш отзыв на модерации</p>}
-			{status === 'error' && <p className="error-field">Возникла ошибка при отправке</p>}
+			{status === 'success' && (
+				<p className="success-field">{dict.reviews.reviewUnderModeration}</p>
+			)}
+			{status === 'error' && <p className="error-field">{dict.reviews.sendErrorOccurred}</p>}
 		</form>
 	);
 }

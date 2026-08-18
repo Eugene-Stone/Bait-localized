@@ -16,6 +16,7 @@ import '../../styles/dark.scss';
 import ProviderRedux from '@/redux/ProviderRedux';
 import { Locale, locales } from '@/i18n/config';
 import { resolveLocale } from '@/utils/resolveLocale';
+import { getDictionary } from '@/i18n/getDictionary';
 
 const themeInitializerScript = `
   (function() {
@@ -52,44 +53,55 @@ export function generateStaticParams() {
 	}));
 }
 
-export const metadata: Metadata = {
-	metadataBase: new URL(FRONTEND_URL),
-
-	// title: {
-	// 	default: 'БАЙТ | Школа программирования',
-	// 	template: `%s | ${SITE_TITLE}`,
-	// },
-	title: 'БАЙТ | Школа программирования',
-
-	description: 'Школа программирования БАЙТ. Обучаем Python, JavaScript и веб-разработке.',
-	keywords: ['школа программирования', 'Python', 'JavaScript', 'веб-разработка'],
-	icons: {
-		icon: '/images/favicon.png',
-	},
-	// alternates: {
-	// 	canonical: FRONTEND_URL,
-	// },
-
-	robots: {
-		index: true,
-		follow: true,
-	},
-
-	openGraph: {
-		title: SITE_TITLE,
-		siteName: SITE_TITLE,
-		type: 'website',
-		// locale: 'ru_RU',
-		description: 'Школа программирования БАЙТ. Обучаем Python, JavaScript и веб-разработке.',
-		images: [
-			{
-				url: '/images/logo.png',
-				width: 1000,
-				height: 500,
-			},
-		],
-	},
+type LayoutMetaProps = {
+	children: React.ReactNode;
+	params: Promise<{ locale: string }>;
 };
+
+export async function generateMetadata({ params }: LayoutMetaProps): Promise<Metadata> {
+	const locale = await resolveLocale(params);
+	const dict = await getDictionary(locale);
+
+	// const title = dict.metadata.siteTitle;
+	// const description = dict.metadata.siteDescription;
+
+	return {
+		metadataBase: new URL(FRONTEND_URL),
+		title: dict.metadata.siteTitle,
+		description: dict.metadata.siteDescription,
+		keywords: dict.metadata.keywords,
+		icons: {
+			icon: '/images/favicon.png',
+		},
+		// Указываем языковые альтернативы для SEO (hreflang)
+		alternates: {
+			canonical: `${FRONTEND_URL}/${locale}`,
+			languages: {
+				ru: `${FRONTEND_URL}/ru`,
+				en: `${FRONTEND_URL}/en`,
+				'x-default': `${FRONTEND_URL}/ru`,
+			},
+		},
+		robots: {
+			index: true,
+			follow: true,
+		},
+		openGraph: {
+			title: dict.metadata.siteTitle,
+			siteName: dict.metadata.siteTitle,
+			type: 'website',
+			locale: locale === 'ru' ? 'ru_RU' : 'en_US',
+			description: dict.metadata.siteDescription,
+			images: [
+				{
+					url: '/images/logo.png',
+					width: 1000,
+					height: 500,
+				},
+			],
+		},
+	};
+}
 
 export default async function RootLayout({
 	children,

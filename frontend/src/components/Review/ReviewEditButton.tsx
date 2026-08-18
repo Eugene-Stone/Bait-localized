@@ -5,9 +5,10 @@ import { useDispatch } from 'react-redux';
 
 type Props = {
 	reviewId: string;
+	children: React.ReactNode;
 };
 
-export default function ReviewEditButton({ reviewId }: Props) {
+export default function ReviewEditButton({ reviewId, children }: Props) {
 	const dispatch = useDispatch();
 
 	function editReview(value: string) {
@@ -16,7 +17,7 @@ export default function ReviewEditButton({ reviewId }: Props) {
 
 	return (
 		<button className="edit" type="button" onClick={() => editReview(reviewId)}>
-			Изменить отзыв
+			{children}
 		</button>
 	);
 }

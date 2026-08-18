@@ -4,13 +4,23 @@ import { deleteReview } from '@/api/api-client';
 import { useRouter } from 'next/navigation';
 import Modal from '../Modal';
 import { useState } from 'react';
+import { Locale } from '@/i18n/config';
+import { Dictionary } from '@/i18n/getDictionary';
 
 type Props = {
+	localePack: {
+		locale: Locale;
+		dict: Dictionary;
+	};
+	children: React.ReactNode;
 	id: string;
 };
-export default function ReviewDeleteButton({ id }: Props) {
+export default function ReviewDeleteButton({ id, localePack, children }: Props) {
 	const router = useRouter();
 	const [isOpen, setIsOpen] = useState(false);
+
+	const { locale, dict } = localePack;
+	console.log(children);
 
 	async function removeReview(value: string) {
 		try {
@@ -34,7 +44,7 @@ export default function ReviewDeleteButton({ id }: Props) {
 
 	return (
 		<Modal
-			title="Удалить отзыв"
+			title={children as string}
 			open={isOpen}
 			onOpenChange={(value) => {
 				setIsOpen(value);
@@ -44,17 +54,17 @@ export default function ReviewDeleteButton({ id }: Props) {
 					X
 				</button>
 			}>
-			<p>Вы уверены, что хотите удалить этот отзыв?</p>
+			<p>{dict.reviews.deleteConfirmation}</p>
 
 			<div className="modal-actions" style={{ display: 'flex', gap: 10 }}>
 				<button
 					className="nw-comment-submit-button"
 					type="button"
 					onClick={() => setIsOpen(false)}>
-					Отмена
+					{dict.reviews.cancel}
 				</button>
 				<button className="nw-comment-submit-button" type="button" onClick={handleDelete}>
-					Удалить
+					{dict.reviews.delete}
 				</button>
 			</div>
 		</Modal>
