@@ -1,15 +1,27 @@
 'use client';
+
 import { resetPassword } from '@/api/api-client';
+import { Locale } from '@/i18n/config';
+import { Dictionary } from '@/i18n/getDictionary';
 import { FormStatus, ResetPasswordForm as ResetPasswordFormType } from '@/types';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useState, Suspense } from 'react';
 import { useForm } from 'react-hook-form';
 
-export default function ResetPasswordForm() {
+type Props = {
+	localePack: {
+		locale: Locale;
+		dict: Dictionary;
+	};
+};
+
+export default function ResetPasswordForm({ localePack }: Props) {
 	const [status, setStatus] = useState<FormStatus>('idle');
 	const [serverError, setServerError] = useState('');
 	const router = useRouter();
 	const searchParams = useSearchParams();
+
+	const { locale, dict } = localePack;
 
 	const code = searchParams.get('code');
 
@@ -31,7 +43,7 @@ export default function ResetPasswordForm() {
 
 		try {
 			if (!code) {
-				setServerError('Некорректная ссылка для восстановления пароля.');
+				setServerError(dict.auth.invalidResetLink);
 				setStatus('error');
 				return;
 			}
@@ -43,7 +55,7 @@ export default function ResetPasswordForm() {
 			setStatus('success');
 			setTimeout(() => {
 				reset();
-				router.push('/login');
+				router.push(`/${locale}/login`);
 				router.refresh();
 			}, 500);
 		} catch (error) {
@@ -63,14 +75,14 @@ export default function ResetPasswordForm() {
 			autoComplete="off">
 			<div className="nw-auth-group">
 				<label className="nw-auth-label" htmlFor="reset-password-new">
-					Новый пароль
+					{dict.auth.newPassword}
 				</label>
 				<input
 					{...register('password', {
 						required: 'This field is required',
 						minLength: {
 							value: 6,
-							message: 'Минимум 6 символов',
+							message: dict.auth.minCharacters,
 						},
 					})}
 					className="nw-auth-input"
@@ -85,12 +97,12 @@ export default function ResetPasswordForm() {
 			</div>
 			<div className="nw-auth-group">
 				<label className="nw-auth-label" htmlFor="reset-password-confirm">
-					Подтвердите пароль
+					{dict.auth.confirmPassword}
 				</label>
 				<input
 					{...register('passwordConfirmation', {
 						required: 'This field is required',
-						validate: (value) => value === password || 'Пароли не совпадают',
+						validate: (value) => value === password || dict.auth.passwordsDoNotMatch,
 					})}
 					className="nw-auth-input"
 					type="password"
@@ -104,10 +116,10 @@ export default function ResetPasswordForm() {
 				)}
 			</div>
 			<button className="nw-auth-button" type="submit">
-				Сохранить изменения
+				{dict.auth.saveChanges}
 			</button>
 
-			{status === 'success' && <p className="success-field">Ваш пароль изменен</p>}
+			{status === 'success' && <p className="success-field">{dict.auth.passwordChanged}</p>}
 			{status === 'error' && <p className="error-field">{serverError || 'Error Message'}</p>}
 		</form>
 	);

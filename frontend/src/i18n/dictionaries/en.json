@@ -32,7 +32,12 @@
 		"fillFieldBeforeSending": "Please fill in the field before sending",
 		"errorOccurred": "An error occurred",
 		"reviewUnderModeration": "Your review is under moderation",
-		"sendErrorOccurred": "An error occurred while sending"
+		"sendErrorOccurred": "An error occurred while sending",
+		"toAskOrComment": "To ask a question or leave a comment",
+		"logIn": "log in",
+		"signUp": "sign up",
+		"onSite": "on the website",
+		"or": "or"
 	},
 
 	"reviews": {
@@ -49,5 +54,34 @@
 		"search": "Search",
 		"send": "Submit application"
 	},
-	"confirm": "Are you sure?"
+	"confirm": "Are you sure?",
+	"auth": {
+		"login": "Log in",
+		"email": "Email",
+		"password": "Password",
+		"signIn": "Sign in",
+		"forgotPassword": "Forgot password?",
+		"createAccount": "Create account",
+		"passwordRecovery": "Password recovery",
+		"resetPassword": "Reset password",
+		"backToLogin": "Back to login",
+		"registration": "Registration",
+		"name": "Name",
+		"register": "Register",
+		"alreadyHaveAccount": "Already have an account? Log in",
+		"checkEmailToConfirm": "Please check your email to confirm your registration",
+		"resetInstructionsSent": "If an account with this email address exists, we have sent instructions to reset your password",
+		"newPassword": "New password",
+		"confirmPassword": "Confirm password",
+		"saveChanges": "Save changes",
+		"minCharacters": "Minimum 6 characters",
+		"passwordsDoNotMatch": "Passwords do not match",
+		"passwordChanged": "Your password has been changed",
+		"invalidResetLink": "Invalid password reset link",
+		"confirmationError": "Confirmation error",
+		"emailConfirmed": "Your email has been confirmed"
+	},
+	"errors": {
+		"needToLogin": "Login required"
+	}
 }

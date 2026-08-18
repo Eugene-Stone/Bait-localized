@@ -1,20 +1,29 @@
 import { BACKEND_URL } from '@/constants';
+import { Locale } from '@/i18n/config';
+import { getDictionary } from '@/i18n/getDictionary';
 import { redirect } from 'next/navigation';
 
-export const dynamic = 'force-dynamic';
+export const dynamic = 'force-dynamic'; // 'force-dynamic' || 'force-static';
 export const revalidate = 60; // Пересборка каждые 60 секунд
 
 interface Props {
+	params: Promise<{
+		locale: Locale;
+	}>;
 	searchParams: Promise<{
 		confirmation?: string;
 	}>;
 }
 
-export default async function Page({ searchParams }: Props) {
+export default async function Page({ params, searchParams }: Props) {
 	const { confirmation } = await searchParams;
 
+	const { locale } = await params;
+
+	const dict = await getDictionary(locale);
+
 	if (!confirmation) {
-		redirect('/login');
+		redirect(`/${locale}/login`);
 	}
 
 	const response = await fetch(
@@ -28,7 +37,7 @@ export default async function Page({ searchParams }: Props) {
 					<div className="container">
 						<div className="title-sect">
 							<h2 className="h1-title">
-								<span>Ошибка подтверждения</span>
+								<span>{dict.auth.confirmationError}</span>
 							</h2>
 						</div>
 					</div>
@@ -37,5 +46,24 @@ export default async function Page({ searchParams }: Props) {
 		);
 	}
 
-	redirect('/login');
+	return (
+		<>
+			{/* Автоматический перенос через 1 секунду на стороне браузера */}
+			<meta httpEquiv="refresh" content={`1;url=/${locale}/login`} />
+
+			<section className="sect-txt">
+				<div className="sect-inner">
+					<div className="container">
+						<div className="title-sect">
+							<h2 className="h1-title">
+								<span>{dict.auth.emailConfirmed}</span>
+							</h2>
+						</div>
+					</div>
+				</div>
+			</section>
+		</>
+	);
+
+	// redirect('/login');
 }

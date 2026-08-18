@@ -32,6 +32,7 @@ body {
 	background-image:
 		radial-gradient(circle, rgba(0, 0, 0, 0.03) 1px, transparent 1px);
 	background-size: 20px 20px;
+
 	&::before {
 		content: '';
 		display: block;
@@ -437,6 +438,7 @@ strong {
 		// box-shadow: $nb-shadow-lg;
 		margin: 2rem 0;
 	}
+
 	a {
 		color: $nb-orange;
 	}
@@ -572,10 +574,12 @@ strong {
 	justify-content: center;
 	position: relative;
 	transition: 0.15s;
+
 	&:active {
 		transform: scale(1.05);
 		opacity: 0.75;
 	}
+
 	svg {
 		width: 30px;
 		height: 30px;
@@ -598,6 +602,7 @@ body.is-dark {
 			// display: block;
 			visibility: visible;
 		}
+
 		.sun-icon {
 			// display: none;
 			visibility: hidden;
@@ -702,6 +707,7 @@ body.is-dark {
 		margin-right: -5px;
 	}
 }
+
 @media (min-width: 992px) and (max-width: 1199px) {
 	.login-link {
 		margin-right: -10px;
@@ -907,11 +913,13 @@ body.is-dark {
 .yarl__flex_center {
 	flex-direction: column;
 	justify-content: center;
+
 	.yarl__slide_description_container {
 		color: $nb-white;
 		padding-top: 5px;
 	}
 }
+
 .sect-gallery {
 	background: $nb-white;
 
@@ -1495,6 +1503,50 @@ body.is-dark {
 .nw-auth-form {
 	display: flex;
 	flex-direction: column;
+	position: relative;
+
+	// Стили при отправке
+	&.sending {
+		pointer-events: none; // Блокируем взаимодействие с формой
+
+		// Полупрозрачная подложка
+		&::before {
+			content: '';
+			position: absolute;
+			inset: -10px;
+			background-color: rgba(255, 255, 255, 0.75);
+			backdrop-filter: blur(2px);
+			z-index: 10;
+		}
+
+		// Спиннер
+		&::after {
+			content: '';
+			position: absolute;
+			top: 50%;
+			left: 50%;
+			width: 44px;
+			height: 44px;
+			margin-top: -22px;
+			margin-left: -22px;
+			border: 6px solid #000000;
+			border-top-color: #f7d000; // Желтый акцентный цвет кнопки
+			border-radius: 50%;
+			// box-shadow: 3px 3px 0 #000000;
+			z-index: 11;
+			animation: nw-spinner 1s linear infinite;
+		}
+	}
+}
+
+@keyframes nw-spinner {
+	0% {
+		transform: rotate(0deg);
+	}
+
+	100% {
+		transform: rotate(360deg);
+	}
 }
 
 .nw-auth-group {
@@ -1846,6 +1898,7 @@ body.is-dark {
 	font-weight: 700;
 	cursor: pointer;
 	font-family: $font-mono;
+
 	&:has(input:disabled) {
 		color: #ccc;
 		cursor: default;
@@ -2118,6 +2171,7 @@ body.is-dark {
 		transform: translate(2px, 2px);
 		box-shadow: $nb-shadow-hover;
 	}
+
 	&[disabled] {
 		pointer-events: none;
 		opacity: 0.25;
@@ -2180,6 +2234,7 @@ body.is-dark {
 	background: $nb-white;
 	box-shadow: $nb-shadow-sm;
 }
+
 .nw-blog-section {
 	.nw-comment-item {
 		.nw-comment-course {
@@ -2665,6 +2720,7 @@ body.is-dark {
 
 	.delete {
 		transition: 0.15s;
+
 		&:hover {
 			color: rgb(255, 136, 0);
 		}
@@ -2673,13 +2729,14 @@ body.is-dark {
 
 .edit-btn {
 	color: rgb(255, 136, 0);
+
 	&:hover {
 		text-decoration: underline;
 	}
 }
 
 [role="dialog"] {
-	&[class*="Modal-"]{
+	&[class*="Modal-"] {
 		#comment-form-area {
 			margin-top: 0;
 			padding-top: 0;

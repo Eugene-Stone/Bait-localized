@@ -1,9 +1,17 @@
 import { BACKEND_URL } from '@/constants';
+import { defaultLocale, Locale } from '@/i18n/config';
+import { getDictionary } from '@/i18n/getDictionary';
 import { revalidatePath } from 'next/cache';
 import { cookies } from 'next/headers';
 import { NextResponse } from 'next/server';
 
 export async function POST(request: Request) {
+	// Берем locale из Cookie, если middleware(proxy.ts) сохраняет текущую локаль в куки
+	const cookieStore = await cookies();
+	const locale = (cookieStore.get('NEXT_LOCALE')?.value as Locale) || defaultLocale;
+
+	const dict = await getDictionary(locale);
+
 	const body = await request.json();
 	const token = (await cookies()).get('jwt')?.value;
 
@@ -11,7 +19,7 @@ export async function POST(request: Request) {
 		return NextResponse.json(
 			{
 				error: {
-					message: 'Необходимо авторизоваться',
+					message: dict.errors.needToLogin,
 				},
 			},
 			{
@@ -38,7 +46,10 @@ export async function POST(request: Request) {
 	}
 
 	// Сбрасываем кэш страниц
-	revalidatePath('/profile/reviews', 'page');
+	revalidatePath(`/${locale}/profile/reviews`, 'page');
+
+	// Сбросит кэш ВСЕХ страниц внутри группы [locale]
+	// revalidatePath('/[locale]', 'layout');
 
 	return NextResponse.json(data);
 }

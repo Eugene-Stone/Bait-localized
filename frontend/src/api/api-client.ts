@@ -71,7 +71,9 @@ export async function forgotPassword(dataForgot: ForgotPasswordRequest) {
 		}),
 	});
 
-	const data = await response.json();
+	// const data = await response.json();
+	const text = await response.text();
+	const data = text ? JSON.parse(text) : {};
 
 	if (!response.ok) {
 		throw new Error(data.error?.message ?? 'forgot-password error');
@@ -95,7 +97,9 @@ export async function resetPassword(dataReset: ResetPasswordRequest) {
 		}),
 	});
 
-	const data = await response.json();
+	// const data = await response.json();
+	const text = await response.text();
+	const data = text ? JSON.parse(text) : {};
 
 	if (!response.ok) {
 		throw new Error(data.error?.message ?? 'reset-password error');

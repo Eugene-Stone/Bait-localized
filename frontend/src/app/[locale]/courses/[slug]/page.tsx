@@ -259,14 +259,15 @@ export default async function CourseBySlug({
 					) : (
 						<div className="reviews__leave-notice">
 							<p>
-								Чтобы задать вопрос или оставить комментарий,{' '}
+								{dict.comments.toAskOrComment}{' '}
 								{/* Символ # в query-параметрах отсекается браузером как хэш текущего URL, если его не закодировать. Нужно завернуть значение callbackUrl в encodeURIComponent: */}
 								<Link
 									href={`/${locale}/login?callbackUrl=${encodeURIComponent(`/${locale}/courses/${slug}#comment-form-area`)}`}>
-									авторизируйтесь
+									{dict.comments.logIn}
 								</Link>{' '}
-								или <Link href={`/${locale}/registration`}>зарегистрируйтесь</Link>{' '}
-								на&nbsp;сайте.
+								{dict.comments.or}{' '}
+								<Link href={`/${locale}/registration`}>{dict.comments.signUp}</Link>{' '}
+								{dict.comments.onSite}
 							</p>
 						</div>
 					)}

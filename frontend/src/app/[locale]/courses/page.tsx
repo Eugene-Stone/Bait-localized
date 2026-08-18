@@ -13,7 +13,7 @@ import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { Suspense } from 'react';
 
-export const dynamic = 'force-dynamic';
+export const dynamic = 'force-dynamic'; // 'force-dynamic' || 'force-static';
 export const revalidate = 60; // Пересборка каждые 60 секунд
 
 export async function generateMetadata({

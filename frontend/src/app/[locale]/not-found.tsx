@@ -1,6 +1,6 @@
 import Link from 'next/link';
 
-export const dynamic = 'force-dynamic';
+export const dynamic = 'force-dynamic'; // 'force-dynamic' || 'force-static';
 export const revalidate = 60; // Пересборка каждые 60 секунд
 
 export default function NotFound() {

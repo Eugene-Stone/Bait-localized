@@ -32,7 +32,12 @@
 		"fillFieldBeforeSending": "Перед отправкой заполните поле",
 		"errorOccurred": "Возникла ошибка",
 		"reviewUnderModeration": "Ваш отзыв на модерации",
-		"sendErrorOccurred": "Возникла ошибка при отправке"
+		"sendErrorOccurred": "Возникла ошибка при отправке",
+		"toAskOrComment": "Чтобы задать вопрос или оставить комментарий",
+		"logIn": "авторизируйтесь",
+		"signUp": "зарегистрируйтесь",
+		"onSite": "на сайте",
+		"or": "или"
 	},
 
 	"reviews": {
@@ -49,5 +54,34 @@
 		"search": "Найти",
 		"send": "Отправить заявку"
 	},
-	"confirm": "Вы уверены?"
+	"confirm": "Вы уверены?",
+	"auth": {
+		"login": "Вход",
+		"email": "Электронная почта",
+		"password": "Пароль",
+		"signIn": "Войти",
+		"forgotPassword": "Забыли пароль?",
+		"createAccount": "Создать аккаунт",
+		"passwordRecovery": "Восстановление пароля",
+		"resetPassword": "Сбросить пароль",
+		"backToLogin": "Вернуться к авторизации",
+		"registration": "Регистрация",
+		"name": "Имя",
+		"register": "Зарегистрироваться",
+		"alreadyHaveAccount": "Уже есть аккаунт? Войти",
+		"checkEmailToConfirm": "Проверьте почту и подтвердите регистрацию",
+		"resetInstructionsSent": "Если аккаунт с такой электронной почтой существует, мы отправили инструкции для восстановления пароля",
+		"newPassword": "Новый пароль",
+		"confirmPassword": "Подтвердите пароль",
+		"saveChanges": "Сохранить изменения",
+		"minCharacters": "Минимум 6 символов",
+		"passwordsDoNotMatch": "Пароли не совпадают",
+		"passwordChanged": "Ваш пароль изменен",
+		"invalidResetLink": "Некорректная ссылка для восстановления пароля",
+		"confirmationError": "Ошибка подтверждения",
+		"emailConfirmed": "Ваша почта подтверждена"
+	},
+	"errors": {
+		"needToLogin": "Необходимо авторизоваться"
+	}
 }

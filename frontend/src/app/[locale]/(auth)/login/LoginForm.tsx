@@ -1,15 +1,25 @@
 'use client';
 
 import { login } from '@/api/api-client';
+import { Locale } from '@/i18n/config';
+import { Dictionary } from '@/i18n/getDictionary';
 import { FormStatus, LoginRequest } from '@/types';
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 
-export default function LoginForm() {
+type Props = {
+	localePack: {
+		locale: Locale;
+		dict: Dictionary;
+	};
+};
+export default function LoginForm({ localePack }: Props) {
 	const [status, setStatus] = useState<FormStatus>('idle');
 	const [serverError, setServerError] = useState('');
+
+	const { locale, dict } = localePack;
 
 	const router = useRouter();
 	const searchParams = useSearchParams();
@@ -44,7 +54,7 @@ export default function LoginForm() {
 				reset();
 
 				// Если callbackUrl передан — идем по нему, иначе по умолчанию в профиль
-				const targetUrl = callbackUrl || '/profile/info';
+				const targetUrl = callbackUrl || `/${locale}/profile/info`;
 
 				router.push(targetUrl);
 
@@ -67,7 +77,7 @@ export default function LoginForm() {
 				onSubmit={handleSubmit(onSubmit)}>
 				<div className="nw-auth-group">
 					<label className="nw-auth-label" htmlFor="login-email">
-						Электронная почта
+						{dict.auth.email}
 					</label>
 					<input
 						{...register('identifier', {
@@ -86,7 +96,7 @@ export default function LoginForm() {
 				</div>
 				<div className="nw-auth-group">
 					<label className="nw-auth-label" htmlFor="login-password">
-						Пароль
+						{dict.auth.password}
 					</label>
 					<input
 						{...register('password', {
@@ -104,7 +114,7 @@ export default function LoginForm() {
 					)}
 				</div>
 				<button className="nw-auth-button" type="submit">
-					Войти
+					{dict.auth.signIn}
 				</button>
 
 				{status === 'success' && <p className="success-field">Success Message</p>}
@@ -113,11 +123,17 @@ export default function LoginForm() {
 				)}
 			</form>
 			<div className="nw-auth-links">
-				<Link className="nw-auth-link" href="/forgot-password" data-discover="true">
-					Забыли пароль?
+				<Link
+					className="nw-auth-link"
+					href={`/${locale}/forgot-password`}
+					data-discover="true">
+					{dict.auth.forgotPassword}
 				</Link>
-				<Link className="nw-auth-link" href="/registration" data-discover="true">
-					Создать аккаунт
+				<Link
+					className="nw-auth-link"
+					href={`/${locale}/registration`}
+					data-discover="true">
+					{dict.auth.createAccount}
 				</Link>
 			</div>
 		</>

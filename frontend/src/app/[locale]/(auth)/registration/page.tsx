@@ -1,132 +1,31 @@
-'use client';
+import { Locale } from '@/i18n/config';
+import RegistrationForm from './RegistrationForm';
+import { getMe } from '@/api/api-server';
+import { getDictionary } from '@/i18n/getDictionary';
+import { redirect } from 'next/navigation';
 
-import { registerUser } from '@/api/api-client';
-import { FormStatus, RegisterRequest } from '@/types';
-import Link from 'next/link';
-import { useRouter } from 'next/navigation';
-import { useState } from 'react';
-import { useForm } from 'react-hook-form';
+export const dynamic = 'force-dynamic'; // 'force-dynamic' || 'force-static';
+export const revalidate = 60; // Пересборка каждые 60 секунд
 
-export default function Registration() {
-	const [status, setStatus] = useState<FormStatus>('idle');
-	const [serverError, setServerError] = useState('');
-	const router = useRouter();
+type Props = {
+	params: Promise<{ locale: Locale; slug: string }>;
+};
 
-	const {
-		register,
-		handleSubmit,
-		reset,
-		setError,
-		formState: { errors, isValid },
-	} = useForm<RegisterRequest>({
-		mode: 'onChange',
-	});
+export default async function Registration({ params }: Props) {
+	const { locale } = await params;
+	const dict = await getDictionary(locale);
 
-	async function onSubmit(dataAuth: RegisterRequest) {
-		setServerError('');
-		setStatus('loading');
-
-		try {
-			console.log(dataAuth);
-			const response = await registerUser(dataAuth);
-
-			setStatus('success');
-			setTimeout(() => {
-				reset();
-				// router.push(`/profile/info`);
-				// router.refresh();
-			}, 500);
-		} catch (error) {
-			if (error instanceof Error) {
-				setServerError(error.message);
-				console.log(error.message);
-			}
-
-			setStatus('error');
-		}
+	const user = await getMe();
+	if (user) {
+		redirect(`/${locale}/profile`);
 	}
 
 	return (
 		<section className="nw-auth-section">
 			<div className="nw-auth-container">
-				<h2 className="nw-auth-title">Регистрация</h2>
-				<form
-					className={status === 'loading' ? 'nw-auth-form sending' : 'nw-auth-form'}
-					onSubmit={handleSubmit(onSubmit)}
-					autoComplete="off">
-					<div className="nw-auth-group">
-						<label className="nw-auth-label" htmlFor="register-name">
-							Имя
-						</label>
-						<input
-							{...register('username', {
-								required: 'This field is required',
-							})}
-							className="nw-auth-input"
-							id="register-name"
-							type="text"
-							autoComplete="username"
-						/>
-						{errors.username && (
-							<span className="error-field">
-								{errors.username?.message || `username field error message.`}
-							</span>
-						)}
-					</div>
-					<div className="nw-auth-group">
-						<label className="nw-auth-label" htmlFor="register-email">
-							Электронная почта
-						</label>
-						<input
-							{...register('email', {
-								required: 'This field is required',
-							})}
-							className="nw-auth-input"
-							id="register-email"
-							type="email"
-							autoComplete="email"
-						/>
-						{errors.email && (
-							<span className="error-field">
-								{errors.email?.message || `email field error message.`}
-							</span>
-						)}
-					</div>
-					<div className="nw-auth-group">
-						<label className="nw-auth-label" htmlFor="register-password">
-							Пароль
-						</label>
-						<input
-							{...register('password', {
-								required: 'This field is required',
-							})}
-							className="nw-auth-input"
-							id="register-password"
-							type="password"
-							autoComplete="new-password"
-						/>
-						{errors.password && (
-							<span className="error-field">
-								{errors.password?.message || `password field error message.`}
-							</span>
-						)}
-					</div>
-					<button className="nw-auth-button" type="submit">
-						Зарегистрироваться
-					</button>
+				<h2 className="nw-auth-title">{dict.auth.registration}</h2>
 
-					{status === 'success' && (
-						<p className="success-field">Проверьте почту и подтвердите регистрацию</p>
-					)}
-					{status === 'error' && (
-						<p className="error-field">{serverError || 'Error Message'}</p>
-					)}
-				</form>
-				<div className="nw-auth-links">
-					<Link className="nw-auth-link" href="/login" data-discover="true">
-						Уже есть аккаунт? Войти
-					</Link>
-				</div>
+				<RegistrationForm localePack={{ locale, dict }} />
 			</div>
 		</section>
 	);
