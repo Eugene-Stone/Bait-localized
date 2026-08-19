@@ -3,9 +3,9 @@ import { getPageBySlug } from '@/api/api-server';
 import { SharedSeo } from '@backend-types/sharedSeo';
 import { BACKEND_URL, SITE_TITLE } from '@/constants';
 import DynamicSections from '@/components/sections/DynamicSections';
-import { notFound } from 'next/navigation';
+import { notFound, redirect } from 'next/navigation';
 import { Media } from '@backend-types/media';
-import { defaultLocale, Locale, locales } from '@/i18n/config';
+import { defaultLocale, Locale, locales, ogLocale } from '@/i18n/config';
 import { CourseExtended } from '@/types';
 
 export async function generateMetadata({
@@ -91,7 +91,7 @@ export async function generateMetadata({
 			// eslint-disable-next-line
 			type: (ogType as any) || 'website',
 			// locale: 'ru_RU',
-			locale: locale === 'ru' ? 'ru_RU' : locale === 'en' ? 'en_EN' : 'ru_RU',
+			locale: ogLocale(locale),
 			images: [
 				{
 					url: ogImageUrl,
@@ -121,15 +121,22 @@ export default async function PageBySlug({
 
 	const dataPage = await getPageBySlug(locale, slug, isDefaultLocale);
 
-	// const page = dataPage.data?.[0];
-	let page;
-	page = isDefaultLocale
-		? dataPage.data?.[0]
-		: // eslint-disable-next-line
-			dataPage.data?.[0].localizations?.find((loc: any) => loc.locale === locale);
+	const localizationCurrentPage = dataPage.data?.[0].localizations?.find(
+		// eslint-disable-next-line
+		(loc: any) => loc.locale === locale,
+	);
+
+	let page = isDefaultLocale ? dataPage.data?.[0] : localizationCurrentPage;
 
 	if (!page && slug === dataPage.data?.[0].slug) {
-		page = dataPage.data?.[0];
+		// page = dataPage.data?.[0];
+
+		const localizationDefaultPage = dataPage.data?.[0].localizations.find(
+			// eslint-disable-next-line
+			(loc: any) => loc.locale === defaultLocale,
+		);
+
+		redirect(`/${locale}/${localizationDefaultPage.slug}`);
 	} else if (!page) {
 		notFound();
 	}

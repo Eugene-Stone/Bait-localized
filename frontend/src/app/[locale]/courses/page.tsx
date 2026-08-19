@@ -22,9 +22,10 @@ export async function generateMetadata({
 	params: Promise<{ locale: Locale }>;
 }): Promise<Metadata> {
 	const { locale } = await params;
+	const dict = await getDictionary(locale);
 
 	return {
-		title: locale === 'ru' ? 'Наши курсы' : locale === 'en' ? 'Our courses' : 'Наши курсы',
+		title: dict.courses.courses,
 	};
 }
 

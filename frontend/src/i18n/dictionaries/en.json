@@ -18,6 +18,7 @@
 	},
 
 	"courses": {
+		"courses": "Our courses",
 		"published": "Published",
 		"currency": "UAH",
 		"readMore": "Learn more",

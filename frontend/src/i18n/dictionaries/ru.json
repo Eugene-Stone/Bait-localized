@@ -18,6 +18,7 @@
 	},
 
 	"courses": {
+		"courses": "Наши курсы",
 		"published": "Опубликовано",
 		"currency": "грн",
 		"readMore": "Подробнее о курсе",

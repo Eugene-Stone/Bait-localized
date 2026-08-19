@@ -2,7 +2,7 @@ import { getHomePageData } from '@/api/api-server';
 import DynamicSections from '@/components/sections/DynamicSections';
 
 import { BACKEND_URL, FRONTEND_URL, SITE_TITLE } from '@/constants';
-import { Locale, locales } from '@/i18n/config';
+import { Locale, locales, ogLocale } from '@/i18n/config';
 import HomeDetect from '@/utils/HomeDetect';
 import { Media } from '@backend-types/media';
 import { SharedSeo } from '@backend-types/sharedSeo';
@@ -85,7 +85,7 @@ export async function generateMetadata({
 			siteName: SITE_TITLE,
 			// eslint-disable-next-line
 			type: (ogType as any) || 'website',
-			locale: locale === 'ru' ? 'ru_RU' : 'en_US',
+			locale: ogLocale(locale),
 			images: [
 				{
 					url: ogImageUrl,

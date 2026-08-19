@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import type { SharedSeo } from '@backend-types/sharedSeo';
 import { BACKEND_URL, FRONTEND_URL, SITE_TITLE } from '@/constants';
 import DynamicSections from '@/components/sections/DynamicSections';
-import { notFound } from 'next/navigation';
+import { notFound, redirect } from 'next/navigation';
 import Link from 'next/link';
 import type { Course } from '@backend-types/course';
 import RichText from '@/utils/RichText';
@@ -15,7 +15,7 @@ import { getCourseBySlug } from '@/api/api-server';
 import Comment from '@/components/Comment';
 import CommentForm from '@/components/Comment/CommentForm';
 import { Media } from '@backend-types/media';
-import { defaultLocale, Locale, locales } from '@/i18n/config';
+import { defaultLocale, Locale, locales, ogLocale } from '@/i18n/config';
 import { getDictionary } from '@/i18n/getDictionary';
 import { CommentExtended, CourseExtended } from '@/types';
 
@@ -106,7 +106,7 @@ export async function generateMetadata({
 			siteName: SITE_TITLE,
 			// eslint-disable-next-line
 			type: (ogType as any) || 'website',
-			locale: locale === 'ru' ? 'ru_RU' : locale === 'en' ? 'en_EN' : 'ru_RU',
+			locale: ogLocale(locale),
 			images: [
 				{
 					url: ogImageUrl,
@@ -142,33 +142,19 @@ export default async function CourseBySlug({
 		// eslint-disable-next-line
 		(loc: any) => loc.locale === locale,
 	);
-	// console.log('localization', localization);
 
-	// const page: CourseExtended = dataPage.data?.[0];
-	// const page: CourseExtended = isDefaultLocale
-	// 	? dataPage.data?.[0]
-	// 	: dataPage.data?.[0].localizations?.find((loc: CourseExtended) => loc.locale === locale);
+	let page: CourseExtended = isDefaultLocale ? dataPage.data?.[0] : localizationCurrentPage;
 
-	// if (!page) {
-	// 	notFound();
-	// }
+	if (!page && slug === dataPage.data?.[0].slug) {
+		// page = dataPage.data?.[0];
 
-	// let page: CourseExtended;
-	// page = isDefaultLocale
-	// 	? dataPage.data?.[0]
-	// 	: // eslint-disable-next-line
-	// 		dataPage.data?.[0].localizations?.find((loc: any) => loc.locale === locale);
+		const localizationDefaultPage = dataPage.data?.[0].localizations.find(
+			// eslint-disable-next-line
+			(loc: any) => loc.locale === defaultLocale,
+		);
 
-	// if (!page && slug === dataPage.data?.[0].slug) {
-	// 	page = dataPage.data?.[0];
-	// } else if (!page) {
-	// 	notFound();
-	// }
-
-	const page: CourseExtended = isDefaultLocale
-		? dataPage.data?.[0]
-		: (localizationCurrentPage ?? dataPage.data?.[0]);
-	if (!page) {
+		redirect(`/${locale}/courses/${localizationDefaultPage.slug}`);
+	} else if (!page) {
 		notFound();
 	}
 

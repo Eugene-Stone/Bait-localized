@@ -14,7 +14,7 @@ import ThemeContextProvider from '@/context/ThemeContext';
 import '../../styles/style.scss';
 import '../../styles/dark.scss';
 import ProviderRedux from '@/redux/ProviderRedux';
-import { Locale, locales } from '@/i18n/config';
+import { Locale, locales, ogLocale } from '@/i18n/config';
 import { resolveLocale } from '@/utils/resolveLocale';
 import { getDictionary } from '@/i18n/getDictionary';
 
@@ -90,13 +90,13 @@ export async function generateMetadata({ params }: LayoutMetaProps): Promise<Met
 			title: dict.metadata.siteTitle,
 			siteName: dict.metadata.siteTitle,
 			type: 'website',
-			locale: locale === 'ru' ? 'ru_RU' : 'en_US',
+			locale: ogLocale(locale),
 			description: dict.metadata.siteDescription,
 			images: [
 				{
 					url: '/images/logo.png',
-					width: 1000,
-					height: 500,
+					// width: 1200,
+					// height: 630,
 				},
 			],
 		},
