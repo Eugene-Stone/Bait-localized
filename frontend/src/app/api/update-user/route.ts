@@ -35,9 +35,19 @@ export async function PUT(request: Request) {
 		);
 	}
 
-	const { userId, ...dataWithoutId } = body;
+	const meResponse = await fetch(`${BACKEND_URL}/api/users/me`, {
+		headers: { Authorization: `Bearer ${token}` },
+		cache: 'no-store',
+	});
 
-	const response = await fetch(`${BACKEND_URL}/api/users/${userId}?populate:*`, {
+	if (!meResponse.ok) {
+		return NextResponse.json({ error: { message: dict.errors.needToLogin } }, { status: 401 });
+	}
+
+	const currentUser = await meResponse.json();
+	const { userId: _ignoredUserId, ...dataWithoutId } = body;
+
+	const response = await fetch(`${BACKEND_URL}/api/users/${currentUser.id}?populate=*`, {
 		method: 'PUT',
 		headers: {
 			Authorization: `Bearer ${token}`,

@@ -2,14 +2,23 @@ import { BACKEND_URL } from '@/constants';
 import { defaultLocale, Locale } from '@/i18n/config';
 import { getDictionary } from '@/i18n/getDictionary';
 import { validateRequestOrigin } from '@/validation/csrf';
+import { validateRateLimit } from '@/validation/rate-limit';
 import { cookies } from 'next/headers';
 import { NextResponse } from 'next/server';
 
 export async function POST(request: Request) {
 	const originError = validateRequestOrigin(request);
+	const rateLimitError = validateRateLimit(request, {
+		name: 'leave-comment',
+		limit: 10,
+		windowMs: 15 * 60 * 1000,
+	});
 
 	if (originError) {
 		return originError;
+	}
+	if (rateLimitError) {
+		return rateLimitError;
 	}
 
 	// Берем locale из Cookie, если middleware(proxy.ts) сохраняет текущую локаль в куки

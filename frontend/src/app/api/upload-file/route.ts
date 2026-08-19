@@ -2,15 +2,24 @@ import { BACKEND_URL } from '@/constants';
 import { defaultLocale, Locale } from '@/i18n/config';
 import { getDictionary } from '@/i18n/getDictionary';
 import { validateRequestOrigin } from '@/validation/csrf';
+import { validateRateLimit } from '@/validation/rate-limit';
 import { revalidatePath } from 'next/cache';
 import { cookies } from 'next/headers';
 import { NextResponse } from 'next/server';
 
 export async function POST(request: Request) {
 	const originError = validateRequestOrigin(request);
+	const rateLimitError = validateRateLimit(request, {
+		name: 'upload-file',
+		limit: 20,
+		windowMs: 60 * 60 * 1000,
+	});
 
 	if (originError) {
 		return originError;
+	}
+	if (rateLimitError) {
+		return rateLimitError;
 	}
 
 	// Берем locale из Cookie, если middleware(proxy.ts) сохраняет текущую локаль в куки

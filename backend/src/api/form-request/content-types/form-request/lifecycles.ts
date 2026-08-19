@@ -1,15 +1,34 @@
 // Скрипт отправки Email
+function escapeHtml(value: unknown): string {
+	return String(value ?? '')
+		.replace(/&/g, '&amp;')
+		.replace(/</g, '&lt;')
+		.replace(/>/g, '&gt;')
+		.replace(/"/g, '&quot;')
+		.replace(/'/g, '&#039;');
+}
+
 export default {
 	async afterCreate(event: any) {
 		const { result } = event;
+		let formData: Record<string, unknown> = {};
+
+		try {
+			formData =
+				typeof result.formData === 'string'
+					? JSON.parse(result.formData)
+					: (result.formData ?? {});
+		} catch {
+			formData = { value: result.formData };
+		}
 
 		// Сначала формируем строки для полей формы
-		const fieldsHtml = Object.entries(result.formData)
+		const fieldsHtml = Object.entries(formData)
 			.map(([key, value]) => {
 				if (Array.isArray(value)) {
-					return `<p><b>${key}</b>: ${value.join(', ')}</p>`;
+					return `<p><b>${escapeHtml(key)}</b>: ${escapeHtml(value.join(', '))}</p>`;
 				}
-				return `<p><b>${key}</b>: ${value}</p>`;
+				return `<p><b>${escapeHtml(key)}</b>: ${escapeHtml(value)}</p>`;
 			})
 			.join('');
 

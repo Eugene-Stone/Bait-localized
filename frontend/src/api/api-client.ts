@@ -205,6 +205,8 @@ export async function leaveReview(reviewData: ReviewDataRequest) {
 }
 
 export async function editReview(reviewData: ReviewDataRequest, reviewId: string) {
+	console.log('reviewData', reviewData);
+	console.log('reviewId', reviewId);
 	const response = await fetch('/api/edit-review', {
 		method: 'PUT',
 		headers: {
@@ -222,6 +224,7 @@ export async function editReview(reviewData: ReviewDataRequest, reviewId: string
 }
 
 export async function deleteReview(reviewId: string) {
+	console.log('reviewId', reviewId);
 	const response = await fetch('/api/delete-review', {
 		method: 'DELETE',
 		headers: {

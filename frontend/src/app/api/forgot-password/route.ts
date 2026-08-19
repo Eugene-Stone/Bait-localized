@@ -1,7 +1,19 @@
 import { BACKEND_URL } from '@/constants';
+import { validateRequestOrigin } from '@/validation/csrf';
+import { validateRateLimit } from '@/validation/rate-limit';
 import { NextResponse } from 'next/server';
 
 export async function POST(request: Request) {
+	const originError = validateRequestOrigin(request);
+	const rateLimitError = validateRateLimit(request, {
+		name: 'forgot-password',
+		limit: 5,
+		windowMs: 15 * 60 * 1000,
+	});
+
+	if (originError) return originError;
+	if (rateLimitError) return rateLimitError;
+
 	try {
 		const body = await request.json();
 

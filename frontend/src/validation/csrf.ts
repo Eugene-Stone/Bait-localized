@@ -6,7 +6,10 @@ export function validateRequestOrigin(request: Request) {
 	const origin = request.headers.get('origin') || request.headers.get('referer');
 
 	if (!origin) {
-		return null; // Если заголовок отсутствует (например, запрос с сервера или Postman)
+		return NextResponse.json(
+			{ error: { message: 'Request origin is required' } },
+			{ status: 403 },
+		);
 	}
 
 	try {
