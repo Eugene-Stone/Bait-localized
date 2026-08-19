@@ -1,0 +1,24 @@
+{
+    "collectionName": "components_sections_galleries",
+    "info": {
+        "displayName": "Gallery"
+    },
+    "options": {},
+    "attributes": {
+        "title": {
+            "type": "string"
+        },
+        "description": {
+            "type": "text"
+        },
+        "gallery": {
+            "type": "relation",
+            "relation": "oneToOne",
+            "target": "api::gallery.gallery"
+        },
+        "anchor": {
+            "type": "string"
+        }
+    },
+    "config": {}
+}

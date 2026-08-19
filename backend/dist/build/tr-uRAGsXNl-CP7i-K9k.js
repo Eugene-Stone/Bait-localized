@@ -1,0 +1,1 @@
+const a={"form.button.draft":"Taslak önizlemesini aç","form.button.published":"Canlı görünümü aç","form.button.copy-link":"Bağlantıyı kopyala","form.button.copy-link.draft":"Önizleme bağlantısını kopyala","list-view.column-header":"Önizleme","notification.success.link-copied":"Bağlantı panoya kopyalandı"};export{a as default};

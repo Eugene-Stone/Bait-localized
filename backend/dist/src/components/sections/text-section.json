@@ -1,0 +1,26 @@
+{
+    "collectionName": "components_sections_text_sections",
+    "info": {
+        "displayName": "Text Section"
+    },
+    "options": {},
+    "attributes": {
+        "title": {
+            "type": "string"
+        },
+        "description": {
+            "type": "text"
+        },
+        "text": {
+            "type": "customField",
+            "customField": "plugin::ckeditor5.CKEditor",
+            "options": {
+                "preset": "defaultHtml"
+            }
+        },
+        "anchor": {
+            "type": "string"
+        }
+    },
+    "config": {}
+}

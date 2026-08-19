@@ -1,0 +1,19 @@
+{
+    "collectionName": "components_shared_locale_fields",
+    "info": {
+        "displayName": "Locale Field"
+    },
+    "options": {},
+    "attributes": {
+        "localeKey": {
+            "type": "string",
+            "default": "en",
+            "required": true
+        },
+        "localeValue": {
+            "type": "text",
+            "required": true
+        }
+    },
+    "config": {}
+}

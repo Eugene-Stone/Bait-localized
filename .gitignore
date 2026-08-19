@@ -11,7 +11,7 @@ lerna-debug.log*
 /backend/.env
 /frontend/.env
 node_modules
-dist
+# dist
 dist-ssr
 *.local
 /.idea

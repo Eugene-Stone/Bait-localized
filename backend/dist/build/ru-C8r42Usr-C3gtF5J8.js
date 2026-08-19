@@ -1,0 +1,1 @@
+const o={"form.button.draft":"Открыть превью черновика","form.button.published":"Открыть превью","form.button.copy-link":"Копировать ссылку","form.button.copy-link.draft":"Копировать ссылку превью","list-view.column-header":"Связь","notification.success.link-copied":"Ссылка скопирована в буфер"};export{o as default};

@@ -1,0 +1,1 @@
+const o={"form.button.draft":"Abrir vista previa","form.button.published":"Abrir vista en vivo","form.button.copy-link":"Copiar enlace","form.button.copy-link.draft":"Copiar enlace de vista previa","list-view.column-header":"Avance","notification.success.link-copied":"Enlace copiado al portapapeles"};export{o as default};

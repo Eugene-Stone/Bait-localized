@@ -1,0 +1,22 @@
+{
+    "kind": "collectionType",
+    "collectionName": "forms_requests",
+    "info": {
+        "singularName": "form-request",
+        "pluralName": "forms-requests",
+        "displayName": "Forms requests"
+    },
+    "options": {
+        "draftAndPublish": true
+    },
+    "pluginOptions": {},
+    "attributes": {
+        "formTitle": {
+            "type": "string"
+        },
+        "formData": {
+            "type": "customField",
+            "customField": "plugin::strapi-code-editor-custom-field.code-editor-json"
+        }
+    }
+}

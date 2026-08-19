@@ -1,0 +1,19 @@
+{
+    "collectionName": "components_sections_reviews",
+    "info": {
+        "displayName": "Reviews"
+    },
+    "options": {},
+    "attributes": {
+        "title": {
+            "type": "text"
+        },
+        "description": {
+            "type": "text"
+        },
+        "anchor": {
+            "type": "string"
+        }
+    },
+    "config": {}
+}

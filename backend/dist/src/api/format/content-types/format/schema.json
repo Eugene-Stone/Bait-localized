@@ -1,0 +1,27 @@
+{
+    "kind": "collectionType",
+    "collectionName": "formats",
+    "info": {
+        "singularName": "format",
+        "pluralName": "formats",
+        "displayName": "Formats"
+    },
+    "options": {
+        "draftAndPublish": true
+    },
+    "pluginOptions": {},
+    "attributes": {
+        "title": {
+            "type": "string"
+        },
+        "slug": {
+            "type": "uid",
+            "targetField": "title"
+        },
+        "translations": {
+            "type": "component",
+            "component": "shared.locale-field",
+            "repeatable": true
+        }
+    }
+}

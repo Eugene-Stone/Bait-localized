@@ -1,0 +1,39 @@
+{
+    "kind": "collectionType",
+    "collectionName": "reviews",
+    "info": {
+        "singularName": "review",
+        "pluralName": "reviews",
+        "displayName": "Reviews"
+    },
+    "options": {
+        "draftAndPublish": true
+    },
+    "pluginOptions": {},
+    "attributes": {
+        "title": {
+            "type": "string"
+        },
+        "rating": {
+            "type": "integer"
+        },
+        "text": {
+            "type": "richtext"
+        },
+        "translations": {
+            "type": "component",
+            "component": "shared.locale-field-review",
+            "repeatable": true
+        },
+        "isApproved": {
+            "type": "boolean",
+            "default": false
+        },
+        "user": {
+            "type": "relation",
+            "relation": "manyToOne",
+            "target": "plugin::users-permissions.user",
+            "inversedBy": "reviews"
+        }
+    }
+}

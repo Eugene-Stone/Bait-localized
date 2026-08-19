@@ -1,0 +1,23 @@
+{
+    "collectionName": "components_shared_locale_field_reviews",
+    "info": {
+        "displayName": "Locale Field Review"
+    },
+    "options": {},
+    "attributes": {
+        "localeKey": {
+            "type": "string",
+            "default": "en",
+            "required": true
+        },
+        "localeTitle": {
+            "type": "string",
+            "required": true
+        },
+        "localeText": {
+            "type": "richtext",
+            "required": true
+        }
+    },
+    "config": {}
+}

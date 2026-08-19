@@ -1,0 +1,1 @@
+const e={"form.button.draft":"Open draft preview","form.button.published":"Open live view","form.button.copy-link":"Copy link","form.button.copy-link.draft":"Copy preview link","list-view.column-header":"Preview","notification.success.link-copied":"Link copied to the clipboard"};export{e as default};
