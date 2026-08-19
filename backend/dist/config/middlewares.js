@@ -17,13 +17,13 @@ const config = [
         },
     },
     // 'strapi::cors',
-    // Настройка для безопасности
+    // Настройка CORS для безопасности
     {
         name: 'strapi::cors',
         config: {
             origin: process.env.ALLOWED_ORIGINS
                 ? process.env.ALLOWED_ORIGINS.split(',')
-                    .map((s) => s.trim())
+                    .map((s) => s.trim().replace(/\/$/, '')) // удаляем закрывающий слэш, если он есть
                     .filter(Boolean)
                 : ['http://localhost:3000'],
             methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
