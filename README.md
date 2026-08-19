@@ -1,93 +1,39 @@
-# Bait
+# Bait-localized
 
-`Bait` — это современная digital-платформа на стеке `Next.js + Strapi`.
-- `Next.js 16` с App Router, динамическими метаданными и серверными запросами.
-- `React 19` + `TypeScript` + `Redux Toolkit`.
-- `Strapi 5` как headless CMS для управления контентом.
-- Авторизация через Strapi и хранение JWT в защищённом cookie.
-- Серверная защита страниц, профиль пользователя и комментарии.
+Двуязычная платформа школы программирования на `Next.js` и `Strapi`. В проекте есть публичные страницы из CMS, курсы, отзывы и комментарии, регистрация и вход, личный кабинет, SEO-метаданные и переключение темы.
 
+## Архитектура
 
-## Описание проекта
+Проект разделён на два приложения:
 
-Проект состоит из двух основных частей:
+- `frontend/` — `Next.js 16.2.10`, App Router, React 19.2.4, TypeScript, SCSS, Redux Toolkit.
+- `backend/` — `Strapi 5.50.1`, SQLite по умолчанию и API для страниц, курсов, меню, форм, отзывов, комментариев и пользователей.
 
-1. **Фронтенд** — `frontend/`
-   - `Next.js 16.2.10` с App Router
-   - `React 19.2.4` + `TypeScript`
-   - `SCSS` стили
-   - `Redux Toolkit` для управления состоянием
-   - `Radix UI`, `Swiper`, `yet-another-react-lightbox`
-   - SEO и Open Graph метаданные
-   - авторизация и защищённые маршруты
+Фронтенд выступает BFF-слоем для операций авторизации и пользовательских действий: серверные route handlers обращаются к Strapi, а JWT хранится в `httpOnly` cookie. CMS-контент запрашивается с сервера Next.js; главная страница кэшируется на 10 минут.
 
-2. **Бэкенд** — `backend/`
-   - `Strapi 5.50.1`
-   - `SQLite` для локального хранения данных
-   - плагины Strapi: SEO, навигация, превью, sitemap, CKEditor и другие
-   - API для страниц, курсов, комментариев, меню и пользователей
+Основные зависимости фронтенда: Radix UI, Swiper, `react-hook-form`, `yet-another-react-lightbox` и `qs`. В Strapi используются плагины SEO, навигации, sitemap, CKEditor, предпросмотра, генерации типов и перевода.
 
-## Технологии
+## Локализация
 
-- Next.js
-- React
-- TypeScript
-- Redux Toolkit
-- SCSS
-- Strapi
-- SQLite
-- Radix UI
-- Swiper
-- HTTP cookie auth
+Поддерживаются две локали:
 
-## Что реализовано
+- `ru` — локаль по умолчанию;
+- `en` — английская версия.
 
-- Динамическая загрузка контента из Strapi
-- Главная страница с секциями, управляемыми CMS
-- Страница профиля пользователя с комментариями
-- Авторизация через `api/auth/local` Strapi
-- Сохранение JWT в `httpOnly` cookie
-- Серверная проверка авторизации через `cookies()`
-- SEO и Open Graph
-- Тёмная/светлая тема с сохранением в `localStorage`
+Локаль является частью URL: `/ru/...` и `/en/...`. `frontend/src/proxy.ts` сохраняет выбранную локаль в cookie `NEXT_LOCALE` на год и перенаправляет URL без локали на сохранённую локаль либо на `ru`.
+
+Интерфейс локализуется статическими словарями `frontend/src/i18n/dictionaries/ru.json` и `en.json`. Их структура согласована: в обоих словарях есть разделы для метаданных, курсов, комментариев, отзывов, авторизации, ошибок и профиля.
+
+Контент страниц и курсов локализуется отдельно через Strapi: запросы передают `locale`, а записи используют `localizations`. Для части страниц предусмотрен fallback к записи базовой локали. Поэтому наличие английского интерфейса не гарантирует, что весь редакционный контент заполнен на английском: это нужно проверять в CMS для каждой страницы, курса, меню, SEO-поля и изображения Open Graph.
 
 
-## Запуск проекта
+## Структура
 
-### 1. Фронтенд
-
-```bash
-cd frontend
-npm install
-npm run dev
-```
-
-### 2. Бэкенд
-
-```bash
-cd backend
-npm install
-npm run develop
-```
-
-### 3. Переменные окружения
-
-- `NEXT_PUBLIC_BACKEND_URL` — адрес Strapi API, например `http://localhost:1337`
-- `NEXT_PUBLIC_SITE_TITLE` — заголовок сайта
-- `NEXT_PUBLIC_SITE_URL` — URL фронтенда
-
-### 4. Проверка
-
-- Откройте `http://localhost:3000`
-- Проверьте работу входа и профиля
-- Убедитесь, что данные подтягиваются из Strapi
-
-## Структура репозитория
-
-- `frontend/` — Next.js приложение
-- `backend/` — Strapi CMS
-- `frontend/src/app/` — маршруты App Router
-- `frontend/src/api/` — запросы к CMS
-- `frontend/src/redux/` — Redux store
-- `frontend/src/components/` — компоненты UI
-- `frontend/src/styles/` — SCSS стили
+- `frontend/src/app/` — маршруты App Router, страницы и API route handlers.
+- `frontend/src/api/` — серверные и клиентские запросы к backend.
+- `frontend/src/i18n/` — конфигурация локалей и JSON-словари.
+- `frontend/src/components/` — UI-компоненты.
+- `frontend/src/redux/` — Redux store.
+- `frontend/src/styles/` — SCSS.
+- `backend/src/api/` — Strapi content types, controllers, routes и services.
+- `backend/config/` — конфигурация сервера, базы данных, middleware и plugins.

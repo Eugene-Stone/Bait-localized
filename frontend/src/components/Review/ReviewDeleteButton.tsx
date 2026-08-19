@@ -20,7 +20,7 @@ export default function ReviewDeleteButton({ id, localePack, children }: Props) 
 	const [isOpen, setIsOpen] = useState(false);
 
 	const { locale, dict } = localePack;
-	console.log(children);
+	// console.log(children);
 
 	async function removeReview(value: string) {
 		try {

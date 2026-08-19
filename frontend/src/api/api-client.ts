@@ -210,7 +210,7 @@ export async function editReview(reviewData: ReviewDataRequest, reviewId: string
 		headers: {
 			'Content-Type': 'application/json',
 		},
-		body: JSON.stringify({ data: { ...reviewData, isApproved: false }, id: reviewId }),
+		body: JSON.stringify({ data: { ...reviewData, isApproved: true }, id: reviewId }),
 	});
 
 	const data = await response.json();

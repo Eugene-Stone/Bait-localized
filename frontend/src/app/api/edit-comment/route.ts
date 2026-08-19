@@ -1,11 +1,18 @@
 import { BACKEND_URL } from '@/constants';
 import { defaultLocale, Locale } from '@/i18n/config';
 import { getDictionary } from '@/i18n/getDictionary';
+import { validateRequestOrigin } from '@/validation/csrf';
 import { revalidatePath } from 'next/cache';
 import { cookies } from 'next/headers';
 import { NextResponse } from 'next/server';
 
 export async function PUT(request: Request) {
+	const originError = validateRequestOrigin(request);
+
+	if (originError) {
+		return originError;
+	}
+
 	// Берем locale из Cookie, если middleware(proxy.ts) сохраняет текущую локаль в куки
 	const cookieStore = await cookies();
 	const locale = (cookieStore.get('NEXT_LOCALE')?.value as Locale) || defaultLocale;
@@ -48,8 +55,8 @@ export async function PUT(request: Request) {
 	}
 
 	// Сбрасываем кэш страниц
-	revalidatePath(`/${locale}/courses/[slug]`, 'page');
-	revalidatePath(`/${locale}/profile/comments`, 'page');
+	revalidatePath(`/[locale]/courses/[slug]`, 'page');
+	revalidatePath(`/[locale]/profile/comments`, 'page');
 
 	// Сбросит кэш ВСЕХ страниц внутри группы [locale]
 	// revalidatePath('/[locale]', 'layout');
