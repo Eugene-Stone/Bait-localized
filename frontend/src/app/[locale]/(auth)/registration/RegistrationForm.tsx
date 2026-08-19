@@ -41,11 +41,11 @@ export default function RegistrationForm({ localePack }: Props) {
 			console.log(dataAuth);
 			const response = await registerUser(dataAuth);
 
-			setStatus('success');
 			setTimeout(() => {
 				reset();
 				// router.push(`/profile/info`);
 				// router.refresh();
+				setStatus('success');
 			}, 500);
 		} catch (error) {
 			if (error instanceof Error) {

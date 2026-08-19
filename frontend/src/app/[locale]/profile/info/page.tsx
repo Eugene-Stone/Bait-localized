@@ -20,8 +20,8 @@ export default async function ProfileInfo({ params }: Props) {
 	}
 
 	return (
-		<>
+		<div className="nw-profile-content">
 			<ProfileEdit localePack={{ locale, dict }} user={user} />
-		</>
+		</div>
 	);
 }

@@ -30,10 +30,9 @@ export default async function RootLayout({
 					<aside className="nw-profile-sidebar">
 						<Menu localePack={{ locale, dict }} />
 					</aside>
-					<div className="nw-profile-content">
-						{/* <ViewTransition>{children}</ViewTransition> */}
-						{children}
-					</div>
+
+					{/* <ViewTransition>{children}</ViewTransition> */}
+					{children}
 				</div>
 			</div>
 		</section>

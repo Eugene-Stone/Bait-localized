@@ -47,7 +47,9 @@
 		"logIn": "авторизируйтесь",
 		"signUp": "зарегистрируйтесь",
 		"onSite": "на сайте",
-		"or": "или"
+		"or": "или",
+		"yourCourseComments": "Ваши комментарии к курсам",
+		"noCommentsYet": "Ты пока не оставил ни одного комментария"
 	},
 
 	"reviews": {
@@ -106,7 +108,12 @@
 	"errors": {
 		"errorRequired": "Обязательное поле",
 		"errorMinor": "Возникла ошибка",
-		"needToLogin": "Необходимо авторизоваться"
+		"needToLogin": "Необходимо авторизоваться",
+		"problemsOccurred": "Возникли проблемы",
+		"tryAgain": "Попробовать снова",
+		"siteTemporarilyUnavailable": "Сайт временно недоступен",
+		"notFound": "404 страница не найдена",
+		"goToHome": "На главную"
 	},
 	"profile": {
 		"personalAccount": "Личный кабинет",

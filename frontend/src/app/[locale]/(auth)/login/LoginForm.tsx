@@ -49,7 +49,6 @@ export default function LoginForm({ localePack }: Props) {
 			// console.log(dataAuth);
 			// console.log(response);
 
-			setStatus('success');
 			setTimeout(() => {
 				reset();
 
@@ -59,6 +58,7 @@ export default function LoginForm({ localePack }: Props) {
 				router.push(targetUrl);
 
 				router.refresh();
+				setStatus('success');
 			}, 500);
 		} catch (error) {
 			if (error instanceof Error) {

@@ -13,7 +13,7 @@ export default function LogoutButton({ locale, children }: Props) {
 
 	async function handleClick() {
 		await logout();
-		router.push(`/${locale}/login`);
+		router.push(`/${locale}/`);
 		router.refresh();
 	}
 	return (

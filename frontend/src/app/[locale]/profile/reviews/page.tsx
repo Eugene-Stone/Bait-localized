@@ -39,7 +39,7 @@ export default async function Reviews({ params }: Props) {
 	const reviews: ReviewType[] = reviewsData.data ?? [];
 
 	return (
-		<>
+		<div className="nw-profile-content">
 			{reviews.length > 0 ? (
 				<>
 					<h3 className="nw-comments-title" style={{ marginTop: 0 }}>
@@ -64,6 +64,6 @@ export default async function Reviews({ params }: Props) {
 			)}
 
 			<ReviewForm localePack={{ locale, dict }} user={user as User} />
-		</>
+		</div>
 	);
 }

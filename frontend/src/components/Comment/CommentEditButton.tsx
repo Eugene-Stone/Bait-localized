@@ -14,13 +14,20 @@ import { User } from '@backend-types/user';
 
 import { clearCommentEditableId } from '@/redux/slices/commentSlice';
 import { useState } from 'react';
+import { Locale } from '@/i18n/config';
+import { Dictionary } from '@/i18n/getDictionary';
 
 type Props = {
+	localePack: {
+		locale: Locale;
+		dict: Dictionary;
+	};
 	user?: User;
 	comment: CommentExtended;
 	children: React.ReactNode;
 };
-export default function CommentEditButton({ user, comment, children }: Props) {
+export default function CommentEditButton({ localePack, user, comment, children }: Props) {
+	const { locale, dict } = localePack;
 	const pathname = usePathname();
 
 	const dispatch = useDispatch();
@@ -41,9 +48,9 @@ export default function CommentEditButton({ user, comment, children }: Props) {
 
 	return (
 		<div className="edit">
-			{pathname.startsWith('/profile/comments') ? (
+			{pathname.startsWith(`/${locale}/profile/comments`) ? (
 				<Modal
-					title={`${children}`}
+					title=""
 					trigger={
 						<button
 							className="edit-btn"
@@ -60,7 +67,8 @@ export default function CommentEditButton({ user, comment, children }: Props) {
 					}}>
 					{user && (
 						<CommentForm
-							locale={'en'}
+							locale={locale}
+							dict={dict}
 							user={user}
 							course={comment.course! as CourseExtended}
 							setOpen={setOpen}

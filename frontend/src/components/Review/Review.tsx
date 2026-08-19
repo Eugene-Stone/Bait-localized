@@ -1,3 +1,4 @@
+'use client';
 import { Review as ReviewType } from '@backend-types/review';
 import './index.scss';
 import { User } from '@backend-types/user';
@@ -5,6 +6,7 @@ import ReviewDeleteButton from './ReviewDeleteButton';
 import ReviewEditButton from './ReviewEditButton';
 import { defaultLocale, Locale } from '@/i18n/config';
 import { Dictionary, getDictionary } from '@/i18n/getDictionary';
+import { usePathname } from 'next/navigation';
 
 type Props = {
 	localePack: {
@@ -17,6 +19,7 @@ type Props = {
 };
 
 export default function Review({ localePack, tagName = 'div', user, review }: Props) {
+	const pathname = usePathname();
 	const Tag = tagName;
 	const date = new Date(review.createdAt!).toLocaleDateString('uk-UA');
 
@@ -29,11 +32,13 @@ export default function Review({ localePack, tagName = 'div', user, review }: Pr
 		(loc: any) => loc.localeKey === locale,
 	);
 
-	const reviewCurrentText = isDefaultLocale
+	let reviewCurrentText = isDefaultLocale
 		? review.text
 		: (localizationCurrentReview?.localeText ?? review.text);
 
-	// console.log('reviewCurrentText', reviewCurrentText);
+	if (pathname.startsWith(`/${locale}/profile/reviews`)) {
+		reviewCurrentText = review.text;
+	}
 
 	return (
 		<Tag className="review-slide-inner">

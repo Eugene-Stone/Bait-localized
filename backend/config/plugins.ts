@@ -52,53 +52,64 @@ const config = ({ env }: Core.Config.Shared.ConfigParams): Core.Config.Plugin =>
 		enabled: true,
 	},
 	// Когда включена мультиязычность работает неккоректно
-	// 'preview-button': {
-	// 	config: {
-	// 		enabled: true,
-	// 		contentTypes: [
-	// 			{
-	// 				uid: 'api::homepage.homepage',
-	// 				draft: {
-	// 					url: `${process.env.FRONTEND}`,
-	// 				},
-	// 				published: {
-	// 					url: `${process.env.FRONTEND}`,
-	// 				},
-	// 			},
-	// 			{
-	// 				uid: 'api::page.page',
-	// 				draft: {
-	// 					url: `${process.env.FRONTEND}/{slug}`,
-	// 				},
-	// 				published: {
-	// 					url: `${process.env.FRONTEND}/{slug}`,
-	// 				},
-	// 			},
-	// 			{
-	// 				uid: 'api::course.course',
-	// 				draft: {
-	// 					url: `${process.env.FRONTEND}/{slug}`,
-	// 				},
-	// 				published: {
-	// 					url: `${process.env.FRONTEND}/{slug}`,
-	// 				},
-	// 			},
-	// 			// {
-	// 			// 	uid: 'api::post.post',
-	// 			// 	draft: {
-	// 			// 		url: 'http://localhost:3000/api/preview',
-	// 			// 		query: {
-	// 			// 			type: 'post',
-	// 			// 			slug: '{slug}',
-	// 			// 		},
-	// 			// 	},
-	// 			// 	published: {
-	// 			// 		url: 'http://localhost:3000/blog/{slug}',
-	// 			// 	},
-	// 			// },
-	// 		],
-	// 	},
-	// },
+	'preview-button': {
+		config: {
+			enabled: true,
+			contentTypes: [
+				{
+					uid: 'api::homepage.homepage',
+					draft: {
+						// Стандарт
+						// url: `${process.env.FRONTEND}`,
+
+						// Для мультиязычного сайта
+						url: `${process.env.FRONTEND}{locale}`,
+					},
+					published: {
+						// Стандарт
+						// url: `${process.env.FRONTEND}`,
+
+						// Для мультиязычного сайта
+						url: `${process.env.FRONTEND}{locale}`,
+					},
+				},
+				{
+					uid: 'api::page.page',
+					draft: {
+						// Стандарт
+						// url: `${process.env.FRONTEND}/{slug}`,
+
+						// Для мультиязычного сайта
+						url: `${process.env.FRONTEND}{locale}/{slug}`,
+					},
+					published: {
+						// Стандарт
+						// url: `${process.env.FRONTEND}/{slug}`,
+
+						// Для мультиязычного сайта
+						url: `${process.env.FRONTEND}{locale}/{slug}`,
+					},
+				},
+				{
+					uid: 'api::course.course',
+					draft: {
+						// Стандарт
+						// url: `${process.env.FRONTEND}/{slug}`,
+
+						// Для мультиязычного сайта
+						url: `${process.env.FRONTEND}{locale}/courses/{slug}`,
+					},
+					published: {
+						// Стандарт
+						// url: `${process.env.FRONTEND}/{slug}`,
+
+						// Для мультиязычного сайта
+						url: `${process.env.FRONTEND}{locale}/courses/{slug}`,
+					},
+				},
+			],
+		},
+	},
 	email: {
 		config: {
 			provider: '@strapi/provider-email-nodemailer',

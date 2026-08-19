@@ -47,7 +47,9 @@
 		"logIn": "log in",
 		"signUp": "sign up",
 		"onSite": "on the website",
-		"or": "or"
+		"or": "or",
+		"yourCourseComments": "Your course comments",
+		"noCommentsYet": "You haven't left any comments yet"
 	},
 
 	"reviews": {
@@ -106,7 +108,12 @@
 	"errors": {
 		"errorRequired": "Required field",
 		"errorMinor": "An error occurred",
-		"needToLogin": "Login required"
+		"needToLogin": "Login required",
+		"problemsOccurred": "Problems occurred",
+		"tryAgain": "Try again",
+		"siteTemporarilyUnavailable": "Site temporarily unavailable",
+		"notFound": "404 not found",
+		"goToHome": "Go to home"
 	},
 	"profile": {
 		"personalAccount": "Personal account",
