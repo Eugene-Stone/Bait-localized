@@ -34,7 +34,7 @@ export default {
 
 		// Собираем итоговое тело письма: добавляем заголовок сверху
 		const html = `
-			<h2>Форма - ${result.formTitle}</h2>
+			<h2>Форма - ${escapeHtml(result.formTitle)}</h2>
 			<hr />
 			${fieldsHtml}
 		`;
