@@ -25,7 +25,7 @@ const config: Core.Config.Middlewares = [
 				? process.env.ALLOWED_ORIGINS.split(',')
 						.map((s) => s.trim().replace(/\/$/, '')) // удаляем закрывающий слэш, если он есть
 						.filter(Boolean)
-				: ['http://localhost:3000'],
+				: ['https://bait-alpha.vercel.app'],
 			methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
 			headers: ['Content-Type', 'Authorization', 'Accept', 'X-Requested-With'],
 			credentials: true,
