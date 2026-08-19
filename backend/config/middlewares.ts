@@ -25,7 +25,7 @@ const config: Core.Config.Middlewares = [
 				? process.env.ALLOWED_ORIGINS.split(',')
 						.map((s) => s.trim().replace(/\/$/, '')) // удаляем закрывающий слэш, если он есть
 						.filter(Boolean)
-				: ['https://bait-alpha.vercel.app'],
+				: ['http://localhost:3000'],
 			methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
 			headers: ['Content-Type', 'Authorization', 'Accept', 'X-Requested-With'],
 			credentials: true,
@@ -41,8 +41,10 @@ const config: Core.Config.Middlewares = [
 		config: {
 			cookie: {
 				httpOnly: true,
-				secure: process.env.NODE_ENV === 'production',
-				sameSite: 'lax',
+				secure: true,
+				sameSite: 'none',
+				// secure: process.env.NODE_ENV === 'production',
+				// sameSite: 'lax',
 			},
 		},
 	},

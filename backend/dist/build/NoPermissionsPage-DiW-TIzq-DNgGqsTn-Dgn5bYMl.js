@@ -1,1 +1,0 @@
-import{aJ as t,j as s,aX as e,di as n,aG as o}from"./strapi-DpeDZP07.js";const i=()=>{const{formatMessage:a}=t();return s.jsxs(s.Fragment,{children:[s.jsx(e.Header,{title:a({id:n("header.name"),defaultMessage:"Content"})}),s.jsx(e.Content,{children:s.jsx(o.NoPermissions,{})})]})};export{i as NoPermissions};
