@@ -3,8 +3,8 @@ import { getDictionary } from '@/i18n/getDictionary';
 import { cookies } from 'next/headers';
 import Link from 'next/link';
 
-export const dynamic = 'force-dynamic'; // 'force-dynamic' || 'force-static';
-export const revalidate = 60; // Пересборка каждые 60 секунд
+export const dynamic = 'force-static'; // 'force-dynamic' || 'force-static';
+// export const revalidate = 60; // Пересборка каждые 60 секунд, работает если выбрано 'force-static'
 
 export default async function NotFound() {
 	// Получаем локаль из кук, сформированных в middleware (proxy)

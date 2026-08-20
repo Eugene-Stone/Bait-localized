@@ -11,7 +11,7 @@ import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 
 export const dynamic = 'force-dynamic'; // 'force-dynamic' || 'force-static';
-export const revalidate = 60; // Пересборка каждые 60 секунд
+export const revalidate = 60; // Пересборка каждые 60 секунд, работает если выбрано 'force-static'
 
 export async function generateMetadata({
 	params,
