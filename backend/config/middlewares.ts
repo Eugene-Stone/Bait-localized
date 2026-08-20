@@ -41,10 +41,10 @@ const config: Core.Config.Middlewares = [
 		config: {
 			cookie: {
 				httpOnly: true,
-				secure: true,
-				sameSite: 'none',
-				// secure: process.env.NODE_ENV === 'production',
-				// sameSite: 'lax',
+				// secure: true,
+				// sameSite: 'none',
+				secure: process.env.NODE_ENV === 'production',
+				sameSite: 'lax',
 			},
 		},
 	},
