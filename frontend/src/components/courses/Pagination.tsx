@@ -1,105 +1,96 @@
 'use client';
 
-import { useTransition } from 'react';
-import { Pagination as PaginationType } from '@/types';
+import { useOptimistic, useTransition } from 'react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-// import { useCourseOverlayContext } from './CourseOverlayContext';
-import { useLoadingContext } from '@/context/LoadingContext';
+import { Pagination as PaginationType } from '@/types';
+import { Locale } from '@/i18n/config';
+import { Dictionary } from '@/i18n/getDictionary';
 
 type Props = {
+	locale: Locale;
+	dict: Dictionary;
 	pagination: PaginationType;
 	pageSize: number;
 };
 
-export default function Pagination({ pagination, pageSize }: Props) {
+export default function PaginationClient({ locale, dict, pagination, pageSize }: Props) {
 	const pathname = usePathname();
 	const router = useRouter();
 	const searchParams = useSearchParams();
+	const [, startTransition] = useTransition();
 
-	const [isPending, startTransition] = useTransition();
-	// Старый вариант
-	// const { startLoading } = useLoadingContext();
+	const { page: serverPage, pageCount } = pagination;
 
-	const { page, pageCount, total } = pagination;
+	// Оптимистичное состояние: мгновенно меняет подсвеченную страницу до ответа сервера
+	const [optimisticPage, setOptimisticPage] = useOptimistic(
+		serverPage,
+		(_, newPage: number) => newPage,
+	);
 
-	// console.log(pathname);
+	function reloadParamsPagination(newPage: number) {
+		if (newPage === optimisticPage) return;
 
-	function reloadParamsPagination(value: string) {
-		const params = new URLSearchParams(searchParams);
+		const params = new URLSearchParams(searchParams.toString());
+		params.set('page', String(newPage));
 
-		params.set('page', value);
-
-		// startTransition держит isPending = true до полного получения ответа от сервера
+		// 1. Мгновенно обновляем UI на клиенте
 		startTransition(() => {
+			setOptimisticPage(newPage);
+
+			localStorage.setItem(
+				'paginationCourse',
+				JSON.stringify({ ...pagination, page: newPage }),
+			);
+
+			// 2. Отправляем запрос на сервер без блокировки UI
 			router.replace(`${pathname}?${params.toString()}`, { scroll: false });
+
+			// // Для пагинации replace
+			// router.replace(`${pathname}?${params}`, {
+			// 	scroll: false,
+			// });
+
+			// Для фильтров push
+			// router.push(`${pathname}?${params}`);
+
+			// Анимация
+			// startTransition(() => {
+			// 	router.replace(`${pathname}?${params}`);
 		});
-
-		// Старый вариант
-
-		// // Включаем оверлей мгновенно
-		// startLoading();
-
-		// // Для пагинации replace
-		// router.replace(`${pathname}?${params}`, {
-		// 	scroll: false,
-		// });
-
-		// Для фильтров push
-		// router.push(`${pathname}?${params}`);
-
-		// Анимация
-		// startTransition(() => {
-		// 	router.replace(`${pathname}?${params}`);
-		// });
 	}
 
-	function prevPage() {
-		if (page > 1) {
-			reloadParamsPagination(String(page - 1));
-		}
-	}
-	function nextPage() {
-		if (page < pageCount) {
-			reloadParamsPagination(String(page + 1));
-		}
-	}
-	function handleCurrent(value: number) {
-		reloadParamsPagination(String(value));
-	}
+	if (pageCount <= 1) return null;
 
 	return (
-		<nav
-			className={`nw-pagination ${isPending ? 'is-loading' : ''}`}
-			aria-label="Навигация по курсам">
+		<nav className="nw-pagination" aria-label="Навигация по курсам">
 			<button
 				className="nw-pagination-item nw-pagination-arrow"
-				onClick={prevPage}
+				onClick={() => reloadParamsPagination(optimisticPage - 1)}
 				type="button"
-				disabled={page === 1 || isPending}
+				disabled={optimisticPage === 1}
 				aria-label="Предыдущая страница">
 				‹
 			</button>
 
-			{pagination &&
-				Array.from({ length: pagination?.pageCount }, (_, i) => (
+			{Array.from({ length: pageCount }, (_, i) => {
+				const pageNum = i + 1;
+				const isActive = pageNum === optimisticPage;
+
+				return (
 					<button
-						key={i}
-						disabled={isPending}
-						className={
-							page === i + 1
-								? 'nw-pagination-item nw-pagination-item-active'
-								: 'nw-pagination-item'
-						}
-						onClick={() => handleCurrent(i + 1)}>
-						{i + 1}
+						key={pageNum}
+						className={`nw-pagination-item ${isActive ? 'nw-pagination-item-active' : ''}`}
+						onClick={() => reloadParamsPagination(pageNum)}>
+						{pageNum}
 					</button>
-				))}
+				);
+			})}
 
 			<button
 				className="nw-pagination-item nw-pagination-arrow"
-				onClick={nextPage}
+				onClick={() => reloadParamsPagination(optimisticPage + 1)}
 				type="button"
-				disabled={page === pageCount || isPending}
+				disabled={optimisticPage === pageCount}
 				aria-label="Следующая страница">
 				›
 			</button>

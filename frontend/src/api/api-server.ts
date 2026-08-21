@@ -331,6 +331,139 @@ export async function getCourseBySlug(
 	return result;
 }
 
+export async function getCoursesData(
+	locale: Locale = 'ru',
+	params: {
+		search?: string;
+		sort?: string;
+		page?: string;
+		direction?: string | string[];
+		level?: string | string[];
+	},
+) {
+	const filtersDirectionActive = Array.isArray(params.direction)
+		? params.direction
+		: params.direction
+			? [params.direction]
+			: [];
+	const filtersLevelActive = Array.isArray(params.level)
+		? params.level
+		: params.level
+			? [params.level]
+			: [];
+	const searchQuery = params.search || '';
+	const sorting = params.sort || 'createdAt:desc';
+	const pageCurrent = params.page || '1';
+	const pageSize = 2;
+
+	/* 
+	Строка такого вида сохраняется в params
+	http://localhost:3000/courses?level=s-nulya&level=prodolzhayushhie
+
+	В таком виде отправляется в бекенд запрос
+	http://localhost:1337/api/courses?filters[level][slug][$in][0]=s-nulya&filters[level][slug][$in][1]=prodolzhayushhie
+	*/
+
+	const queryPage = buildQuery({
+		filters: {
+			// Поиск
+			// title: {
+			// 	$containsi: searchQuery,
+			// },
+
+			// Поиск
+			...(searchQuery && {
+				title: {
+					$containsi: searchQuery,
+				},
+			}),
+			// Фильтра
+			direction: {
+				slug: {
+					// Множество фильтров в массиве
+					$in: filtersDirectionActive,
+				},
+			},
+			level: {
+				slug: {
+					// Множество фильтров в массиве
+					$in: filtersLevelActive,
+				},
+			},
+		},
+		// Сортировка
+		sort: [sorting],
+		// Пагинация
+		pagination: {
+			page: pageCurrent,
+			pageSize: pageSize,
+		},
+		// populate: '*',
+		populate: {
+			seo: {
+				populate: {
+					ogImage: true,
+				},
+			},
+			image: {
+				populate: '*',
+			},
+			direction: true,
+			level: true,
+			formats: {
+				populate: '*',
+			},
+			comments: {
+				populate: '*',
+			},
+			localizations: {
+				// populate: '*',
+				populate: {
+					seo: {
+						populate: {
+							ogImage: true,
+						},
+					},
+					image: {
+						populate: '*',
+					},
+					direction: true,
+					level: true,
+					formats: {
+						populate: '*',
+					},
+					comments: {
+						populate: '*',
+					},
+				},
+			},
+		},
+	});
+
+	const response = await fetch(`${BACKEND_URL}/api/courses?locale=${locale}&${queryPage}`, {
+		cache: 'no-store', // Отключение кеша
+		// next: { revalidate: 600 },
+	});
+
+	if (response.status === 404) {
+		notFound();
+	}
+
+	if (!response.ok) {
+		throw new Error('Failed to fetch page data');
+	}
+
+	// return response.json(),
+
+	const dataPage = await response.json();
+	// console.log(dataPage);
+
+	return {
+		dataPage,
+		pageSize,
+	};
+}
+
 export async function getHeaderData(locale: Locale | null = 'ru') {
 	try {
 		const response = await fetch(`${BACKEND_URL}/api/header?locale=${locale}&populate=*`, {
