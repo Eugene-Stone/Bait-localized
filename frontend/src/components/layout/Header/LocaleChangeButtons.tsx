@@ -41,38 +41,38 @@ export default function LocaleChangeButtons({ locale }: { locale: Locale }) {
 	};
 
 	return (
-		<li>
-			{/* <button
+		<li style={{ opacity: isPending ? 0.5 : 1 }}>
+			<button
 				type="button"
-				className={locale === 'ru' ? 'active-lang' : ''}
-				style={{ zoom: 0.75, background: 'none', border: 'none', cursor: 'pointer' }}
+				className={locale === 'ru' ? 'menu__link active-lang' : 'menu__link'}
+				style={{ zoom: 0.75 }}
 				disabled={isPending}
 				onClick={() => handleLocaleSwitch('ru')}>
 				RU
 			</button>
 			<button
 				type="button"
-				className={locale === 'en' ? 'active-lang' : ''}
-				style={{ zoom: 0.75, background: 'none', border: 'none', cursor: 'pointer' }}
+				className={locale === 'en' ? 'menu__link active-lang' : 'menu__link'}
+				style={{ zoom: 0.75 }}
 				disabled={isPending}
 				onClick={() => handleLocaleSwitch('en')}>
 				EN
-			</button> */}
+			</button>
 
-			<Link
-				prefetch={false} // отключить фоновую предзагрузку
-				className={locale === 'ru' ? 'active-lang' : ''}
+			{/* <Link
+				prefetch={false} // отключить фоновую предзагрузку,
+				className={locale === 'ru' ? 'menu__link active-lang' : 'menu__link'}
 				style={{ zoom: 0.75 }}
 				href={getLocalizedPath('ru')}>
 				RU
 			</Link>
 			<Link
 				prefetch={false} // отключить фоновую предзагрузку
-				className={locale === 'en' ? 'active-lang' : ''}
+				className={locale === 'en' ? 'menu__link active-lang' : 'menu__link'}
 				style={{ zoom: 0.75 }}
 				href={getLocalizedPath('en')}>
 				EN
-			</Link>
+			</Link> */}
 		</li>
 	);
 }

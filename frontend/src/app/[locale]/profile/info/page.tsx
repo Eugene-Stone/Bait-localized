@@ -5,6 +5,7 @@ import { Locale } from '@/i18n/config';
 import { getDictionary } from '@/i18n/getDictionary';
 import { UserExtended } from '@/types';
 import { redirect } from 'next/navigation';
+import { Suspense } from 'react';
 
 type Props = {
 	params: Promise<{ locale: Locale }>;
@@ -21,6 +22,7 @@ export default async function ProfileInfo({ params }: Props) {
 
 	return (
 		<div className="nw-profile-content">
+			{/* <Suspense fallback={'загрузка'}></Suspense> */}
 			<ProfileEdit localePack={{ locale, dict }} user={user} />
 		</div>
 	);

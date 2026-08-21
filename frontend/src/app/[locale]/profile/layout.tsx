@@ -1,6 +1,5 @@
 import { getMe } from '@/api/api-server';
 import { redirect } from 'next/navigation';
-import { ViewTransition } from 'react';
 import Menu from '@/components/profile/Menu';
 import { Locale } from '@/i18n/config';
 import { getDictionary } from '@/i18n/getDictionary';

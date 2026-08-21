@@ -31,7 +31,6 @@ export default async function Header({ locale }: { locale: Locale }) {
 					<div className="head-line">
 						<div className="head-cell">
 							<div className="logo-wrap">
-								{/* eslint-disable-next-line */}
 								<a className="logo" href={`/${locale}/`}>
 									<Image
 										alt={title ? title : ''}
@@ -51,7 +50,7 @@ export default async function Header({ locale }: { locale: Locale }) {
 							<LoginLink locale={locale} />
 							{/* </Suspense> */}
 
-							<ThemeToggleButton />
+							{/* <ThemeToggleButton /> */}
 						</ToggleMenu>
 					</div>
 				</div>
