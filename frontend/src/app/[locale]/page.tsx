@@ -2,7 +2,7 @@ import { getHomePageData } from '@/api/api-server';
 import DynamicSections from '@/components/sections/DynamicSections';
 
 import { BACKEND_URL, FRONTEND_URL, SITE_TITLE } from '@/constants';
-import { Locale, locales, ogLocale } from '@/i18n/config';
+import { defaultLocale, Locale, locales, ogLocale } from '@/i18n/config';
 import HomeDetect from '@/utils/HomeDetect';
 import { Media } from '@backend-types/media';
 import { SharedSeo } from '@backend-types/sharedSeo';
@@ -72,6 +72,7 @@ export async function generateMetadata({
 			languages: {
 				ru: '/ru',
 				en: '/en',
+				'x-default': `/${defaultLocale}`,
 			},
 		},
 		robots: {

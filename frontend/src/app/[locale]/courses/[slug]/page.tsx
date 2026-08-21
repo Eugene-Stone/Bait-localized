@@ -89,10 +89,12 @@ export async function generateMetadata({
 		keywords: keywords,
 		// viewport: metaViewport,
 		alternates: {
-			canonical: canonicalUrl || `${FRONTEND_URL}/${locale}/courses/${slug}`,
+			// canonical: canonicalUrl || `${FRONTEND_URL}/${locale}/courses/${slug}`,
+			canonical: `${FRONTEND_URL}/${locale}/courses/${slug}`,
 			languages: {
 				ru: `/ru/courses/${slug}`,
 				en: `/en/courses/${slug}`,
+				'x-default': `/${defaultLocale}/courses/${slug}`,
 			},
 		},
 		robots: {

@@ -1,7 +1,7 @@
 import { Metadata } from 'next';
 import { getPageBySlug } from '@/api/api-server';
 import { SharedSeo } from '@backend-types/sharedSeo';
-import { BACKEND_URL, SITE_TITLE } from '@/constants';
+import { BACKEND_URL, FRONTEND_URL, SITE_TITLE } from '@/constants';
 import DynamicSections from '@/components/sections/DynamicSections';
 import { notFound, redirect } from 'next/navigation';
 import { Media } from '@backend-types/media';
@@ -77,7 +77,13 @@ export async function generateMetadata({
 		keywords: keywords,
 		// viewport: metaViewport,
 		alternates: {
-			canonical: canonicalUrl || '/',
+			// canonical: canonicalUrl || `${FRONTEND_URL}/${locale}/courses/${slug}`,
+			canonical: `${FRONTEND_URL}/${locale}/courses/${slug}`,
+			languages: {
+				ru: `/ru/courses/${slug}`,
+				en: `/en/courses/${slug}`,
+				'x-default': `/${defaultLocale}/courses/${slug}`,
+			},
 		},
 		robots: {
 			index: !isNoIndex,
