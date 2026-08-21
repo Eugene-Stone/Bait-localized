@@ -1,5 +1,6 @@
 'use client';
 
+import { useTransition } from 'react';
 import { Pagination as PaginationType } from '@/types';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 // import { useCourseOverlayContext } from './CourseOverlayContext';
@@ -14,7 +15,10 @@ export default function Pagination({ pagination, pageSize }: Props) {
 	const pathname = usePathname();
 	const router = useRouter();
 	const searchParams = useSearchParams();
-	const { startLoading } = useLoadingContext();
+
+	const [isPending, startTransition] = useTransition();
+	// Старый вариант
+	// const { startLoading } = useLoadingContext();
 
 	const { page, pageCount, total } = pagination;
 
@@ -25,13 +29,20 @@ export default function Pagination({ pagination, pageSize }: Props) {
 
 		params.set('page', value);
 
-		// Включаем оверлей мгновенно
-		startLoading();
-
-		// Для пагинации replace
-		router.replace(`${pathname}?${params}`, {
-			scroll: false,
+		// startTransition держит isPending = true до полного получения ответа от сервера
+		startTransition(() => {
+			router.replace(`${pathname}?${params.toString()}`, { scroll: false });
 		});
+
+		// Старый вариант
+
+		// // Включаем оверлей мгновенно
+		// startLoading();
+
+		// // Для пагинации replace
+		// router.replace(`${pathname}?${params}`, {
+		// 	scroll: false,
+		// });
 
 		// Для фильтров push
 		// router.push(`${pathname}?${params}`);
@@ -57,12 +68,14 @@ export default function Pagination({ pagination, pageSize }: Props) {
 	}
 
 	return (
-		<nav className="nw-pagination" aria-label="Навигация по курсам">
+		<nav
+			className={`nw-pagination ${isPending ? 'is-loading' : ''}`}
+			aria-label="Навигация по курсам">
 			<button
 				className="nw-pagination-item nw-pagination-arrow"
 				onClick={prevPage}
 				type="button"
-				disabled={page === 1}
+				disabled={page === 1 || isPending}
 				aria-label="Предыдущая страница">
 				‹
 			</button>
@@ -71,6 +84,7 @@ export default function Pagination({ pagination, pageSize }: Props) {
 				Array.from({ length: pagination?.pageCount }, (_, i) => (
 					<button
 						key={i}
+						disabled={isPending}
 						className={
 							page === i + 1
 								? 'nw-pagination-item nw-pagination-item-active'
@@ -85,7 +99,7 @@ export default function Pagination({ pagination, pageSize }: Props) {
 				className="nw-pagination-item nw-pagination-arrow"
 				onClick={nextPage}
 				type="button"
-				disabled={page === pageCount}
+				disabled={page === pageCount || isPending}
 				aria-label="Следующая страница">
 				›
 			</button>

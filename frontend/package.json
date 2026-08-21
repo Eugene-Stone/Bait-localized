@@ -6,7 +6,7 @@
 		"dev": "next dev -H 0.0.0.0",
 		"devCustom": "next dev -p 5173",
 		"build": "next build",
-		"start": "next dev",
+		"start": "next start",
 		"lint": "eslint"
 	},
 	"dependencies": {

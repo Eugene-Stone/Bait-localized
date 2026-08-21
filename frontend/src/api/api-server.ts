@@ -133,7 +133,7 @@ export async function getHomePageData(locale: Locale | null = 'ru') {
 	try {
 		const response = await fetch(`${BACKEND_URL}/api/homepage?locale=${locale}&${queryPage}`, {
 			// cache: 'no-store', // Отключение кеша
-			next: { revalidate: 600 },
+			// next: { revalidate: 600 },
 		});
 
 		if (response.status === 404) {
