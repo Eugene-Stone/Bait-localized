@@ -7,6 +7,7 @@ import Schedule from '@/components/sections/Schedule';
 import Service from '@/components/sections/Service';
 import TextSection from '@/components/sections/TextSection';
 import { Locale } from '@/i18n/config';
+import { Suspense } from 'react';
 
 type Props = {
 	locale: Locale;

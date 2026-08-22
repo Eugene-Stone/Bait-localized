@@ -1,35 +1,7 @@
-import { cookies } from 'next/headers';
 import { notFound } from 'next/navigation';
 import { BACKEND_URL } from '@/constants';
 import { buildQuery } from '@/utils/buildQuery';
 import { defaultLocale, Locale } from '@/i18n/config';
-
-export async function getMe() {
-	const cookieStore = await cookies();
-	const token = cookieStore.get('jwt')?.value;
-
-	if (!token) {
-		return null;
-	}
-
-	try {
-		const response = await fetch(`${BACKEND_URL}/api/users/me?populate=*`, {
-			headers: {
-				Authorization: `Bearer ${token}`,
-			},
-			cache: 'no-store', // Отключаем fetch-кэш
-		});
-
-		if (!response.ok) {
-			return null;
-		}
-
-		return await response.json();
-	} catch (error) {
-		console.error('Failed to fetch user:', error);
-		return null;
-	}
-}
 
 // Page sections populate
 const queryPage = buildQuery({
@@ -195,7 +167,7 @@ export async function getHomePageData(locale: Locale | null = 'ru') {
 async function fetchPageData(url: string) {
 	try {
 		const response = await fetch(url, {
-			cache: 'no-store', // Отключение кеша
+			// cache: 'no-store', // Отключение кеша
 			// next: { revalidate: 600 },
 		});
 
@@ -231,9 +203,9 @@ export async function getPageBySlug(
 	}
 
 	// Если после попыток данные так и не найдены — вызов 404
-	if (!result?.data || result.data.length === 0) {
-		notFound();
-	}
+	// if (!result?.data || result.data.length === 0) {
+	// 	notFound();
+	// }
 
 	return result;
 }
@@ -576,4 +548,35 @@ export async function getFiltersData(locale: Locale | null = 'ru') {
 
 		throw new Error('Backend unavailable');
 	}
+}
+
+// Функция, которая возвращает список всех существующих страниц для всех поддерживаемых локалей:
+export async function getAllPageSlugs(): Promise<Array<{ locale: Locale; slug: string }>> {
+	// Fetch all slugs with their localizations from Strapi
+	const response = await fetch(`${BACKEND_URL}/api/pages?populate=localizations`, {
+		next: { revalidate: 3600 },
+	});
+	const data = await response.json();
+
+	const params: Array<{ locale: Locale; slug: string }> = [];
+
+	// eslint-disable-next-line
+	data?.data?.forEach((page: any) => {
+		// Add default locale entry
+		params.push({
+			locale: defaultLocale,
+			slug: page.slug,
+		});
+
+		// Add localized entries
+		// eslint-disable-next-line
+		page.localizations?.forEach((loc: any) => {
+			params.push({
+				locale: loc.locale,
+				slug: loc.slug,
+			});
+		});
+	});
+
+	return params;
 }

@@ -13,6 +13,7 @@ import LoginLink from './LoginLink';
 import { Suspense } from 'react';
 import { Locale } from '@/i18n/config';
 import { getDictionary } from '@/i18n/getDictionary';
+import InitialUser from './InitialUser';
 
 export default async function Header({ locale }: { locale: Locale }) {
 	const menuData: TreeNavigationItem[] = await getHeaderMenu(locale);
@@ -26,6 +27,8 @@ export default async function Header({ locale }: { locale: Locale }) {
 
 	return (
 		<header className="head-general">
+			<InitialUser />
+
 			<div className="head-top">
 				<div className="container-fluid">
 					<div className="head-line">

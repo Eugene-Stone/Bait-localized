@@ -1,4 +1,4 @@
-import { getMe } from '@/api/api-server';
+import { getMe } from '@/api/api-getMe';
 import LoginForm from './LoginForm';
 import { Locale } from '@/i18n/config';
 import { getDictionary } from '@/i18n/getDictionary';

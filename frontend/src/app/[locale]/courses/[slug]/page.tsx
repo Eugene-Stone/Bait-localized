@@ -1,23 +1,20 @@
 import type { Metadata } from 'next';
 import type { SharedSeo } from '@backend-types/sharedSeo';
 import { BACKEND_URL, FRONTEND_URL, SITE_TITLE } from '@/constants';
-import DynamicSections from '@/components/sections/DynamicSections';
 import { notFound, redirect } from 'next/navigation';
 import Link from 'next/link';
-import type { Course } from '@backend-types/course';
 import RichText from '@/utils/RichText';
 import { imageSrcSet } from '@/utils/imageSrcSet';
 import Image from 'next/image';
-import { buildQuery } from '@/utils/buildQuery';
 import { formatDate } from '@/utils/formatDate';
-import { getMe } from '@/api/api-server';
+import { getMe } from '@/api/api-getMe';
 import { getCourseBySlug } from '@/api/api-server';
 import Comment from '@/components/Comment';
 import CommentForm from '@/components/Comment/CommentForm';
 import { Media } from '@backend-types/media';
 import { defaultLocale, Locale, locales, ogLocale } from '@/i18n/config';
 import { getDictionary } from '@/i18n/getDictionary';
-import { CommentExtended, CourseExtended } from '@/types';
+import { CourseExtended } from '@/types';
 
 export async function generateMetadata({
 	params,

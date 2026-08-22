@@ -1,7 +1,7 @@
 import { Locale } from '@/i18n/config';
 import ForgotPasswordForm from './ForgotPasswordForm';
 import { getDictionary } from '@/i18n/getDictionary';
-import { getMe } from '@/api/api-server';
+import { getMe } from '@/api/api-getMe';
 import { redirect } from 'next/navigation';
 
 export const dynamic = 'force-static'; // 'force-dynamic' || 'force-static';

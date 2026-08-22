@@ -9,7 +9,7 @@ import { Direction } from '@backend-types/direction';
 import { Level } from '@backend-types/level';
 import { SharedLocaleField } from '@backend-types/sharedLocaleField';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import { useState } from 'react';
+import { Suspense, useState } from 'react';
 
 type Props = {
 	locale: Locale;
@@ -21,7 +21,10 @@ type Props = {
 	};
 };
 
-export default function CoursesSidebar({ locale, dict, filters }: Props) {
+// Каждый клиентский компонент, в котором есть useSearchParams, нужно переписать по следующей схеме — вынести работу с хуком во внутренний подкомпонент и обернуть его в <Suspense>:
+
+// 1. Выносим логику с хуком в отдельный внутренний компонент
+function CoursesSidebarContent({ locale, dict, filters }: Props) {
 	const pathname = usePathname();
 	const router = useRouter();
 	const searchParams = useSearchParams();
@@ -290,5 +293,14 @@ export default function CoursesSidebar({ locale, dict, filters }: Props) {
 				</div>
 			)}
 		</aside>
+	);
+}
+
+// 2. Основной экспорт оборачиваем в Suspense
+export default function CoursesSidebar({ locale, dict, filters }: Props) {
+	return (
+		<Suspense fallback={null}>
+			<CoursesSidebarContent locale={locale} dict={dict} filters={filters} />
+		</Suspense>
 	);
 }

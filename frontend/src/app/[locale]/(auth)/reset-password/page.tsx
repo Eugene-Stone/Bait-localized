@@ -2,7 +2,7 @@ import { Locale } from '@/i18n/config';
 import ResetPasswordForm from './ResetPasswordForm';
 import { Suspense } from 'react';
 import { getDictionary } from '@/i18n/getDictionary';
-import { getMe } from '@/api/api-server';
+import { getMe } from '@/api/api-getMe';
 import { redirect } from 'next/navigation';
 
 export const dynamic = 'force-static'; // 'force-dynamic' || 'force-static';
@@ -27,9 +27,9 @@ export default async function ResetPassword({ params }: Props) {
 				<h2 className="nw-auth-title">{dict.auth.newPassword}</h2>
 
 				{/* При вызове useSearchParams() в клиентском компоненте Next.js может потребовать обернуть этот компонент в <Suspense></Suspense> */}
-				<Suspense fallback={<div>Loading...</div>}>
-					<ResetPasswordForm localePack={{ locale, dict }} />
-				</Suspense>
+				{/* <Suspense fallback={<div>Loading...</div>}> */}
+				<ResetPasswordForm localePack={{ locale, dict }} />
+				{/* </Suspense> */}
 			</div>
 		</section>
 	);

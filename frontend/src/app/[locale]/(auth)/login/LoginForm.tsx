@@ -6,7 +6,7 @@ import { Dictionary } from '@/i18n/getDictionary';
 import { FormStatus, LoginRequest } from '@/types';
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { useState } from 'react';
+import { Suspense, useState } from 'react';
 import { useForm } from 'react-hook-form';
 
 type Props = {
@@ -15,7 +15,11 @@ type Props = {
 		dict: Dictionary;
 	};
 };
-export default function LoginForm({ localePack }: Props) {
+
+// Каждый клиентский компонент, в котором есть useSearchParams, нужно переписать по следующей схеме — вынести работу с хуком во внутренний подкомпонент и обернуть его в <Suspense>:
+
+// 1. Выносим логику с хуком в отдельный внутренний компонент
+function LoginFormContent({ localePack }: Props) {
 	const [status, setStatus] = useState<FormStatus>('idle');
 	const [serverError, setServerError] = useState('');
 
@@ -137,5 +141,14 @@ export default function LoginForm({ localePack }: Props) {
 				</Link>
 			</div>
 		</>
+	);
+}
+
+// 2. Основной экспорт оборачиваем в Suspense
+export default function LoginForm({ localePack }: Props) {
+	return (
+		<Suspense fallback={null}>
+			<LoginFormContent localePack={localePack} />
+		</Suspense>
 	);
 }

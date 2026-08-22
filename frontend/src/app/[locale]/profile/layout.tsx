@@ -1,4 +1,4 @@
-import { getMe } from '@/api/api-server';
+import { getMe } from '@/api/api-getMe';
 import { redirect } from 'next/navigation';
 import Menu from '@/components/profile/Menu';
 import { Locale } from '@/i18n/config';

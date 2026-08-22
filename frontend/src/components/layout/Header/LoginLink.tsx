@@ -1,10 +1,10 @@
 import Link from 'next/link';
-import { getMe } from '@/api/api-server';
+import { getMe } from '@/api/api-getMe';
 import { Locale } from '@/i18n/config';
 
 export default async function LoginLink({ locale }: { locale: Locale }) {
 	const user = await getMe();
-	// console.log(user);
+	// console.log('user', user);
 
 	return (
 		<div className="login-link">

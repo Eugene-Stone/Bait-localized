@@ -15,7 +15,10 @@ type Props = {
 	};
 };
 
-export default function ResetPasswordForm({ localePack }: Props) {
+// Каждый клиентский компонент, в котором есть useSearchParams, нужно переписать по следующей схеме — вынести работу с хуком во внутренний подкомпонент и обернуть его в <Suspense>:
+
+// 1. Выносим логику с хуком в отдельный внутренний компонент
+function ResetPasswordFormContent({ localePack }: Props) {
 	const [status, setStatus] = useState<FormStatus>('idle');
 	const [serverError, setServerError] = useState('');
 	const router = useRouter();
@@ -122,5 +125,14 @@ export default function ResetPasswordForm({ localePack }: Props) {
 			{status === 'success' && <p className="success-field">{dict.auth.passwordChanged}</p>}
 			{status === 'error' && <p className="error-field">{serverError || 'Error Message'}</p>}
 		</form>
+	);
+}
+
+// 2. Основной экспорт оборачиваем в Suspense
+export default function ResetPasswordForm({ localePack }: Props) {
+	return (
+		<Suspense fallback={null}>
+			<ResetPasswordFormContent localePack={localePack} />
+		</Suspense>
 	);
 }

@@ -3,9 +3,12 @@
 import { Locale } from '@/i18n/config';
 import Link from 'next/link';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import { useTransition } from 'react';
+import { Suspense, useTransition } from 'react';
 
-export default function LocaleChangeButtons({ locale }: { locale: Locale }) {
+// Каждый клиентский компонент, в котором есть useSearchParams, нужно переписать по следующей схеме — вынести работу с хуком во внутренний подкомпонент и обернуть его в <Suspense>:
+
+// 1. Выносим логику с хуком в отдельный внутренний компонент
+function LocaleChangeButtonsContent({ locale }: { locale: Locale }) {
 	const pathname = usePathname();
 	const searchParams = useSearchParams();
 
@@ -74,5 +77,14 @@ export default function LocaleChangeButtons({ locale }: { locale: Locale }) {
 				EN
 			</Link> */}
 		</li>
+	);
+}
+
+// 2. Основной экспорт оборачиваем в Suspense
+export default function LocaleChangeButtons({ locale }: { locale: Locale }) {
+	return (
+		<Suspense fallback={null}>
+			<LocaleChangeButtonsContent locale={locale} />
+		</Suspense>
 	);
 }

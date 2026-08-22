@@ -52,7 +52,7 @@ export default async function Courses({
 	return (
 		// <Suspense fallback={<Preloader />}></Suspense>
 
-		// При вызове useSearchParams() в клиентском компоненте Next.js может потребовать обернуть этот компонент в <Suspense></Suspense>
+		// При вызове useSearchParams() в клиентском компоненте Next.js может потребовать обернуть этот компонент в <Suspense fallback={<Fallback />}></Suspense>
 
 		// Если убрать key, React не будет полностью уничтожать старый DOM-дерево компонента во время перехода, а сохранит его до тех пор, пока сервер не пришлет новые данные.
 

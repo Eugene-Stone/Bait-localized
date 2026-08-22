@@ -1,6 +1,6 @@
 import { Locale } from '@/i18n/config';
 import RegistrationForm from './RegistrationForm';
-import { getMe } from '@/api/api-server';
+import { getMe } from '@/api/api-getMe';
 import { getDictionary } from '@/i18n/getDictionary';
 import { redirect } from 'next/navigation';
 

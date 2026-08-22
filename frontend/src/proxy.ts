@@ -13,6 +13,14 @@ export function proxy(request: NextRequest) {
 
 	// 1. Если локаль есть в URL — пропускаем запрос и записываем локаль в куки
 	if (currentLocale) {
+		const savedLocale = request.cookies.get('NEXT_LOCALE')?.value;
+
+		// Если кука уже совпадает с текущей локалью в URL — отдаем чистый NextResponse.next() БЕЗ установки куки!
+		if (savedLocale === currentLocale) {
+			return NextResponse.next();
+		}
+
+		// Обновляем куку только если она отличается от локали в URL
 		const response = NextResponse.next();
 
 		response.cookies.set('NEXT_LOCALE', currentLocale, {

@@ -1,4 +1,4 @@
-import { getMe } from '@/api/api-server';
+import { getMe } from '@/api/api-getMe';
 import Review from '@/components/Review';
 import ReviewForm from '@/components/Review/ReviewForm';
 import { BACKEND_URL } from '@/constants';
@@ -16,7 +16,7 @@ async function getReviews(userId: number) {
 	const response = await fetch(
 		`${BACKEND_URL}/api/reviews?filters[user][id][$eq]=${userId}&populate=*`,
 		{
-			next: { revalidate: 600 },
+			next: { revalidate: 3600 },
 		},
 	);
 

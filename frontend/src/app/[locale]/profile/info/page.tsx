@@ -1,4 +1,4 @@
-import { getMe } from '@/api/api-server';
+import { getMe } from '@/api/api-getMe';
 import ProfileEdit from '@/components/profile/ProfileEdit';
 import { BACKEND_URL } from '@/constants';
 import { Locale } from '@/i18n/config';

@@ -1,4 +1,4 @@
-import { getMe } from '@/api/api-server';
+import { getMe } from '@/api/api-getMe';
 import Comment from '@/components/Comment';
 import { BACKEND_URL } from '@/constants';
 import { Locale } from '@/i18n/config';
@@ -11,7 +11,7 @@ async function getComments(userId: number) {
 	const response = await fetch(
 		`${BACKEND_URL}/api/comments?filters[user][id][$eq]=${userId}&populate=*`,
 		{
-			next: { revalidate: 600 },
+			next: { revalidate: 3600 },
 		},
 	);
 

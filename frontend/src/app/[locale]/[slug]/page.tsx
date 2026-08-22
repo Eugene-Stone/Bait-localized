@@ -1,12 +1,32 @@
 import { Metadata } from 'next';
-import { getPageBySlug } from '@/api/api-server';
+import { getPageBySlug, getAllPageSlugs } from '@/api/api-server';
 import { SharedSeo } from '@backend-types/sharedSeo';
 import { BACKEND_URL, FRONTEND_URL, SITE_TITLE } from '@/constants';
 import DynamicSections from '@/components/sections/DynamicSections';
 import { notFound, redirect } from 'next/navigation';
 import { Media } from '@backend-types/media';
 import { defaultLocale, Locale, locales, ogLocale } from '@/i18n/config';
-import { CourseExtended } from '@/types';
+import { Suspense } from 'react';
+
+// Сборщик выдаст ошибку с указанием конкретной строки и функции, из-за которой страница переводится в Dynamic
+// export const dynamic = 'error';
+
+// 1. Set background revalidation interval (3600 sec = 1 hour)
+export const revalidate = 3600;
+
+// 2. Allow dynamic generation for newly created CMS pages not built during compile time
+export const dynamicParams = true;
+
+// 3. Pre-render static HTML for all existing slugs during build
+export async function generateStaticParams() {
+	try {
+		const paths = await getAllPageSlugs();
+		return paths;
+	} catch (error) {
+		console.error('Failed to generate static params:', error);
+		return [];
+	}
+}
 
 export async function generateMetadata({
 	params,
@@ -127,23 +147,29 @@ export default async function PageBySlug({
 
 	const dataPage = await getPageBySlug(locale, slug, isDefaultLocale);
 
-	const localizationCurrentPage = dataPage.data?.[0].localizations?.find(
-		// eslint-disable-next-line
-		(loc: any) => loc.locale === locale,
-	);
+	let page;
 
-	let page = isDefaultLocale ? dataPage.data?.[0] : localizationCurrentPage;
-
-	if (!page && slug === dataPage.data?.[0].slug) {
-		// page = dataPage.data?.[0];
-
-		const localizationDefaultPage = dataPage.data?.[0].localizations.find(
+	try {
+		const localizationCurrentPage = dataPage.data?.[0].localizations?.find(
 			// eslint-disable-next-line
-			(loc: any) => loc.locale === defaultLocale,
+			(loc: any) => loc.locale === locale,
 		);
 
-		redirect(`/${locale}/${localizationDefaultPage.slug}`);
-	} else if (!page) {
+		page = isDefaultLocale ? dataPage.data?.[0] : localizationCurrentPage;
+
+		if (!page && slug === dataPage.data?.[0].slug) {
+			// page = dataPage.data?.[0];
+
+			const localizationDefaultPage = dataPage.data?.[0].localizations.find(
+				// eslint-disable-next-line
+				(loc: any) => loc.locale === defaultLocale,
+			);
+
+			redirect(`/${locale}/${localizationDefaultPage.slug}`);
+		} else if (!page) {
+			notFound();
+		}
+	} catch (error) {
 		notFound();
 	}
 
